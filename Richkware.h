@@ -1,5 +1,5 @@
 /*
- *      Author: Riccardo Melioli
+ *      Copyright 2016 Riccardo Melioli. All Rights Reserved.
  */
 
 #ifndef FUNCTIONS_H_

