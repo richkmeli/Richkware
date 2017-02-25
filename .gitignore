@@ -29,3 +29,6 @@
 *.app
 /Debug/
 /Release/
+/Project1
+/main.cpp
+/Richkware

