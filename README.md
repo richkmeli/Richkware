@@ -14,7 +14,14 @@ This software is able to:
 * Move the mouse cursor randomly;
 * Require administrator privileges.
 	
-## **COMPILE**
-	g++ -O0 -g3 -Wall -c -fmessage-length=0 -o Richkware.o Richkware.cpp
+##COMPILE
+
+###Using g++ compiler (GCC, GNU Compiler Collection)
+
+	g++ -O3 -c -o Richkware.o Richkware.cpp
 
 	g++ -static-libgcc -static-libstdc++ -o Richkware.exe Richkware.o main.o -lws2_32 
+
+###Using Microsoft C++ compiler (Visual Studio)
+- C/C++ > Proprocessor > Proprocessor Definitions, add "\_CRT\_SECURE\_NO\_WARNINGS" 
+- Linker > Input > Additional Dipendencies, add "Ws2_32.lib"
