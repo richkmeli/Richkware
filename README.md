@@ -11,7 +11,7 @@ to assume behaviors associable to the following types of malware:
 - Worms
 - Bot
 - Spyware
-- Keylogge
+- Keylogger
 - Scareware
 
 ##FUNCTIONS
