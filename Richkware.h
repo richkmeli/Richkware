@@ -2,8 +2,8 @@
  *      Copyright 2016 Riccardo Melioli. All Rights Reserved.
  */
 
-#ifndef FUNCTIONS_H_
-#define FUNCTIONS_H_
+#ifndef RICHKWARE_H_
+#define RICHKWARE_H_
 
 #define _WIN32_WINNT  0x501
 #define MAX_THREAD 8
@@ -32,6 +32,8 @@
 #include <iterator>
 #include <list>
 #include <map>
+
+#include "crypto.h"
 
 class Richkware {
 private:
@@ -81,4 +83,4 @@ DWORD WINAPI ClientSocketThread(void* arg);
 DWORD WINAPI BlockAppsThread(void* arg);
 DWORD WINAPI KeyloggerThread(void* arg);
 
-#endif /* FUNCTIONS_H_ */
+#endif /* RICHKWARE_H_ */

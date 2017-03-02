@@ -2,7 +2,7 @@
  *      Copyright 2016 Riccardo Melioli. All Rights Reserved.
  */
 
-#include "Richkware.h"
+#include "richkware.h"
 
 void Richkware::SaveInfo(const char* key, const char* value){
 	LoadSession(EncryptionKey);
@@ -468,18 +468,6 @@ void Richkware::RandMouse() {
 
 	// move cursor
 	SetCursorPos((rand() % horizontal + 1), (rand() % vertical + 1));
-}
-
-// XOR
-std::string EncryptDecrypt(std::string input, const char* key) {
-	int ikey = 5;/////////////////////////////////////////////
-	std::string output;
-
-	for (std::string::iterator it = input.begin(); it != input.end(); ++it) {
-		output += (*it) ^ ikey;
-	}
-
-	return output;
 }
 
 void Richkware::SaveSession(const char* EncryptionKey) {
