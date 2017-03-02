@@ -46,9 +46,11 @@ thus allowing to run commands or make changes to application state;
 
 ###Using g++ compiler (GCC, GNU Compiler Collection)
 
-	g++ -O3 -c -o Richkware.o Richkware.cpp
+	g++ -O3 -c -o crypto.o crypto.cpp
 
-	g++ -static-libgcc -static-libstdc++ -o Richkware.exe Richkware.o main.o -lws2_32 
+	g++ -O3 -c -o richkware.o richkware.cpp
+
+	g++ -static-libgcc -static-libstdc++ -o richkware.exe richkware.o crypto.o main.o -lws2_32 
 
 ###Using Microsoft C++ compiler (Visual Studio)
 - C/C++ > Proprocessor > Proprocessor Definitions, add "\_CRT\_SECURE\_NO\_WARNINGS" 
