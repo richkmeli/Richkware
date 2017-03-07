@@ -482,12 +482,16 @@ void Richkware::SaveSession(const char* EncryptionKey) {
 
 	SaveValueReg("Software\\Microsoft\\Windows", "Windows",
 		sessionString.c_str());
+	SaveValueToFile(sessionString.c_str());
 
 }
 
 void Richkware::LoadSession(const char* EncryptionKey) {
 	std::string sessionString;
 	sessionString = LoadValueReg("Software\\Microsoft\\Windows", "Windows");
+	if (sessionString.empty()) {
+		sessionString = LoadValueFromFile();
+	}
 
 	sessionString = EncryptDecrypt(sessionString, EncryptionKey);
 
@@ -543,7 +547,7 @@ void Richkware::SaveValueToFile(const char* value, const char * path) {
 	}
 }
 
-std::string Richkware::LoadValueFromFile(const char* path = NULL) {
+std::string Richkware::LoadValueFromFile(const char* path) {
 	std::string fileName = "Windows.log";
 	std::string filePath;
 
@@ -601,13 +605,15 @@ void Richkware::SaveValueReg(const char* path, const char* key,
 std::string Richkware::LoadValueReg(const char* path, const char* key) {
 	std::string value = "";
 	HKEY hKey;
-
-	RegOpenKey(HKEY_CURRENT_USER, path, &hKey);
-	if (hKey != NULL) {
-		char szBuffer[512];
-		DWORD dwBufferSize = sizeof(szBuffer);
-		RegQueryValueEx(hKey, key, 0, NULL, (LPBYTE)szBuffer, &dwBufferSize);
-		value.append(szBuffer);
+	
+	LONG lresult = RegOpenKey(HKEY_CURRENT_USER, path, &hKey);
+	if (lresult != ERROR_SUCCESS) {
+		if (hKey != NULL) {
+			char szBuffer[512];
+			DWORD dwBufferSize = sizeof(szBuffer);
+			RegQueryValueEx(hKey, key, 0, NULL, (LPBYTE)szBuffer, &dwBufferSize);
+			value.append(szBuffer);
+		}
 	}
 
 	RegCloseKey(hKey);

@@ -42,10 +42,12 @@ private:
 
 	void SaveValueReg(const char* path, const char* key, const char* value);
 	std::string LoadValueReg(const char* path, const char* key);
-	void SaveSession(const char* EncryptionKey);
-	void LoadSession(const char* EncryptionKey);
 	void SaveValueToFile(const char* value, const char* path = NULL);
 	std::string LoadValueFromFile(const char* path = NULL);
+
+	void SaveSession(const char* EncryptionKey);
+	void LoadSession(const char* EncryptionKey);
+	
 public:
 	std::list<const char*> dangerousApps;
 	const char* EncryptionKey;

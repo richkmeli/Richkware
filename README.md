@@ -1,5 +1,5 @@
 # Richkware
-Malware for Windows, written in C++.
+Framework for building Windows malwares, written in C++.
 
 ##Description
 
