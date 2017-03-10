@@ -19,13 +19,10 @@
 #include <winreg.h>
 #include <winuser.h>
 
-#include <iostream>
 #include <fstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
-#include <sstream>
-#include <ctime>
 #include <string.h>
 #include <cstring>
 #include <string>
@@ -34,6 +31,7 @@
 #include <map>
 
 #include "crypto.h"
+#include "thread.h"
 
 class Richkware {
 private:
@@ -76,16 +74,5 @@ public:
 	void RandMouse();
 
 };
-
-struct ClientSocketArgs {
-	SOCKET ClientSocket;
-	const char* EncryptionKey;
-};
-
-std::string EncryptDecrypt(std::string input, const char* key);
-
-DWORD WINAPI ClientSocketThread(void* arg);
-DWORD WINAPI BlockAppsThread(void* arg);
-DWORD WINAPI KeyloggerThread(void* arg);
 
 #endif /* RICHKWARE_H_ */
