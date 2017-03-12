@@ -46,20 +46,24 @@ thus allowing to run commands or make changes to application state;
 
 ###Using MinGW cross compiler for Windows
 
-	g++ -O3 -c -o crypto.o crypto.cpp
-	
-	g++ -O3 -c -o thread.o thread.cpp
+	g++ -O3 -c -o yourMain.o yourMain.cpp
 
+	g++ -O3 -c -o crypto.o crypto.cpp
+	g++ -O3 -c -o thread.o thread.cpp
+	g++ -O3 -c -o sharedList.o sharedList.cpp
+	g++ -O3 -c -o blockApps.o blockApps.cpp
 	g++ -O3 -c -o richkware.o richkware.cpp
 
 	g++ -static-libgcc -static-libstdc++ -o richkware.exe richkware.o crypto.o thread.o main.o -lws2_32 
 
 ###Using MinGW cross compiler for Linux build environment
 
-	x86_64-w64-mingw32-g++ -O3 -c -o crypto.o crypto.cpp
-	
-	x86_64-w64-mingw32-g++ -O3 -c -o thread.o thread.cpp
+	x86_64-w64-mingw32-g++ -O3 -c -o yourMain.o yourMain.cpp
 
+	x86_64-w64-mingw32-g++ -O3 -c -o crypto.o crypto.cpp
+	x86_64-w64-mingw32-g++ -O3 -c -o thread.o thread.cpp
+	x86_64-w64-mingw32-g++ -O3 -c -o sharedList.o sharedList.cpp
+	x86_64-w64-mingw32-g++ -O3 -c -o blockApps.o blockApps.cpp
 	x86_64-w64-mingw32-g++ -O3 -c -o richkware.o richkware.cpp
 
 	x86_64-w64-mingw32-g++ -static-libgcc -static-libstdc++ -o richkware.exe richkware.o crypto.o main.o -lws2_32
