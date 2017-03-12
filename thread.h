@@ -5,7 +5,7 @@
 #ifndef THREAD_H_
 #define THREAD_H_
 
-#include <WS2tcpip.h>
+#include <ws2tcpip.h>
 #include <shellapi.h>
 #include <winbase.h>
 #include <windef.h>

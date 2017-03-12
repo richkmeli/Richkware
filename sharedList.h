@@ -5,7 +5,7 @@
 #ifndef SHAREDLIST_H_
 #define SHAREDLIST_H_
 
-#include<Windows.h>
+#include<windows.h>
 #include <list>
 
 class Slock {

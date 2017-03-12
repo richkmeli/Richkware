@@ -5,12 +5,15 @@
 #ifndef RICHKWARE_H_
 #define RICHKWARE_H_
 
+#ifndef _WIN32_WINNT
 #define _WIN32_WINNT  0x501
+#endif
+
 #define MAX_THREAD 8
 
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include <Windows.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <windows.h>
 #include <shellapi.h>
 #include <winbase.h>
 #include <windef.h>
@@ -33,7 +36,7 @@
 #include "crypto.h"
 #include "sharedList.h"
 #include "thread.h"
-#include "blockapps.h"
+#include "blockApps.h"
 
 class Richkware {
 private:
