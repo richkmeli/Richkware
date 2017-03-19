@@ -5,7 +5,6 @@
 #ifndef BLOCKAPPS_H_
 #define BLOCKAPPS_H_
 
-#include "thread.h"
 #include "sharedList.h"
 
 class BlockApps {
@@ -17,5 +16,7 @@ public:
 	void stop();
 	HANDLE getHandleThread();
 };
+
+DWORD WINAPI BlockAppsThread(void* arg);
 
 #endif /* BLOCKAPPS_H_ */

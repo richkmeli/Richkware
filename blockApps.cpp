@@ -21,3 +21,25 @@ void BlockApps::stop() {
 HANDLE BlockApps::getHandleThread() {
 	return hBlockAppsTh;
 }
+
+
+DWORD WINAPI BlockAppsThread(void* arg) {
+	//std::list<const char*>* dangApps = (std::list<const char*> *) arg;
+	SharedList<const char*> Sl = *((SharedList<const char*>*)arg);
+	std::list<const char*> dangApps = Sl.getCopy();
+	HWND app_heandler;
+
+	while (true) {
+		for (std::list<const char*>::iterator it = (dangApps).begin();
+			it != (dangApps).end(); ++it) {
+
+			app_heandler = FindWindow(NULL, *it);
+			if (app_heandler != NULL)
+				PostMessage(app_heandler, WM_CLOSE, (LPARAM)0, (WPARAM)0);
+		}
+
+		Sleep(100);
+		dangApps = Sl.getCopy();
+	}
+
+}
