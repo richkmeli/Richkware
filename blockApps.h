@@ -12,6 +12,7 @@ private:
 	HANDLE hBlockAppsTh;
 public:
 	SharedList<const char*> dangerousApps;
+
 	HANDLE start();
 	void stop();
 	HANDLE getHandleThread();

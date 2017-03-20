@@ -243,9 +243,9 @@ DWORD WINAPI ServerThread(void* arg) {
 //	SharedList<HANDLE> hClientThreadArray = (SharedList<HANDLE>)((*((ServerThreadArgs*)arg)).hClientThreadArray);		 BUG1
 	HANDLE hClientThreadArray[MAX_THREAD];
 
-//	SOCKET ListenSocket = (SOCKET)((*((ServerThreadArgs*)arg)).ListenSocket);
-//	SOCKET ClientSocket = INVALID_SOCKET;
-
+	SOCKET ListenSocket = (SOCKET)((*((ServerThreadArgs*)arg)).ListenSocket);
+	SOCKET ClientSocket = INVALID_SOCKET;
+/*
 	WSADATA wsaData;
 	
 	SOCKET ListenSocket = INVALID_SOCKET;
@@ -267,7 +267,7 @@ DWORD WINAPI ServerThread(void* arg) {
 	bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
 	freeaddrinfo(result);
 	listen(ListenSocket, SOMAXCONN);
-
+*/
 	// multi-thread
 	DWORD dwThreadIdArray[MAX_THREAD];
 
@@ -275,8 +275,8 @@ DWORD WINAPI ServerThread(void* arg) {
 		// Accept a client socket
 
 		MessageBox(NULL,"pre", " ", 0);
-	//	ClientSocket = accept(ListenSocket, NULL, NULL);
-		ClientSocket = accept(ListenSocket, result->ai_addr, (int*)result->ai_addrlen);
+		ClientSocket = accept(ListenSocket, NULL, NULL);
+	//	ClientSocket = accept(ListenSocket, result->ai_addr, (int*)result->ai_addrlen);
 		MessageBox(NULL,"post", " ", 0);
 		if (ClientSocket == INVALID_SOCKET) {
 			MessageBox(NULL,"error listening", " ", 0);

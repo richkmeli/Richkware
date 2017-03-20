@@ -33,6 +33,8 @@ public:
 	Server() {}
 	Server(const char* encryptionKeyArg);
 	Server& operator=(const Server& server);
+	//~Server();
+
 	void Start(const char* port, bool encrypted = false);
 	void Stop();
 	HANDLE getHhread();
@@ -44,9 +46,12 @@ private:
 	const char* encryptionKey;
 public:
 	Server server;
+	
 	Network() {}
 	Network(const char* encryptionKeyArg);
 	Network& operator=(const Network& network);
+	//~Network();
+
 	const char* RawRequest(const char* serverAddress, const char* port, const char* request);
 	bool UploadInfoToRichkwareManagerServer(const char * serverAddress, const char* port);
 };
@@ -56,8 +61,11 @@ private:
 	std::string name;
 	std::string serverPort;
 public:
+	Device() {}
 	Device(std::string nameArg, std::string serverPort);
 	Device& operator=(const Device& device);
+	//~Device();
+
 	std::string getName();
 	std::string getServerPort();
 	void setName(std::string nameArg);

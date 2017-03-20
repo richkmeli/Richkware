@@ -7,7 +7,7 @@ endif
 CFLAGS= -c -O3 -Wall
 LDFLAGS= -static-libgcc -static-libstdc++ -Wall
 EFLAG= -lws2_32
-SOURCES=main.cpp crypto.cpp sharedList.cpp blockApps.cpp richkware.cpp network.cpp
+SOURCES=main.cpp crypto.cpp sharedList.cpp blockApps.cpp richkware.cpp network.cpp storage.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=Richkware.exe
 
