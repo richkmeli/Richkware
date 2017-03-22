@@ -33,7 +33,6 @@ public:
 	Server() {}
 	Server(const char* encryptionKeyArg);
 	Server& operator=(const Server& server);
-	//~Server();
 
 	void Start(const char* port, bool encrypted = false);
 	void Stop();
@@ -50,7 +49,6 @@ public:
 	Network() {}
 	Network(const char* encryptionKeyArg);
 	Network& operator=(const Network& network);
-	//~Network();
 
 	const char* RawRequest(const char* serverAddress, const char* port, const char* request);
 	bool UploadInfoToRichkwareManagerServer(const char * serverAddress, const char* port);

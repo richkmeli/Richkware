@@ -27,7 +27,6 @@ public:
 	SystemStorage() {}
 	SystemStorage(std::string appName);
 	SystemStorage& operator=(const SystemStorage& systemStorage);
-	//~SystemStorage();
 
 	void SaveValueReg(const char* path, const char* key, const char* value);
 	std::string LoadValueReg(const char* path, const char* key);
@@ -53,7 +52,6 @@ public:
 	Session() {}
 	Session(const char* encryptionKey, std::string appName);
 	Session& operator=(const Session& session);
-	//~Session();
 
 	void SaveInfo(const char* key, const char* value);
 	std::string FindInfo(const char* key);
