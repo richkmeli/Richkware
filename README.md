@@ -2,12 +2,6 @@
 
 Framework for building Windows malwares, written in C++.
 
-## Related Projects
-
-[Richkware-Manager-Server](https://github.com/richkmeli/Richkware-Manager-Server): Service for management of hosts where is present a malware developped using **Richkware** framework.
-
-[Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client): Client of **Richkware-Manager-Server**, that obtains list of all hosts and is able to send commands to do at each of them.
-
 ## Description
 
 It's a library of network and OS functions, that you can use to create a malware.
@@ -21,7 +15,13 @@ to assume behaviors associable to the following types of malware:
 - Keylogger
 - Scareware
 
-## FUNCTIONS
+## Related Projects
+
+[Richkware-Manager-Server](https://github.com/richkmeli/Richkware-Manager-Server): Service for management of hosts where is present a malware developped using **Richkware** framework.
+
+[Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client): Client of **Richkware-Manager-Server**, that obtains list of all hosts and is able to send commands to do at each of them.
+
+## Functions
 
 ### Network
 
@@ -49,7 +49,7 @@ thus allowing to run commands or make changes to application state;
 - **RandMouse**: move randomly the mouse cursor
 - **Hibernation**: hibernate system;
 
-## COMPILE
+## Compile
 
 After **main.cpp** implementation, you can compile as follows.
 
@@ -62,7 +62,7 @@ After **main.cpp** implementation, you can compile as follows.
 - Linker > Input > Additional Dipendencies, add "Ws2_32.lib"
 
 
-## REMOTELY COMMAND EXECUTION
+## Remotely command ececution
 
 Call function **StartServer** in the main, that starts server on port 8000.
 
