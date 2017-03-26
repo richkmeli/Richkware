@@ -6,13 +6,15 @@
 
 Server::Server(const char* encryptionKeyArg) {
 	encryptionKey = encryptionKeyArg;
+	hThread = NULL;
+	//condWhile = true;
 }
 
 Server& Server::operator=(const Server& server) {
 	encryptionKey = server.encryptionKey;
 	hThread = server.hThread;
-	//hClientThreadArray = server.hClientThreadArray;	 BUG1
-    return *this;
+	//condWhile = server.condWhile;
+	return *this;
 }
 
 Network& Network::operator=(const Network& network) {
@@ -147,7 +149,6 @@ bool Network::UploadInfoToRichkwareManagerServer(const char * serverAddress, con
 void Server::Start(const char* port, bool encrypted) {
 	DWORD dwThreadId;
 	ServerThreadArgs sta;
-	sta.port = port;
 	
 	if (encrypted)
 		sta.encryptionKey = encryptionKey;
@@ -158,8 +159,7 @@ void Server::Start(const char* port, bool encrypted) {
 	int iResult;
 
 	SOCKET ListenSocket = INVALID_SOCKET;
-	//SOCKET ClientSocket = INVALID_SOCKET;
-
+	
 	struct addrinfo *result = NULL;
 	struct addrinfo hints;
 
@@ -209,7 +209,7 @@ void Server::Start(const char* port, bool encrypted) {
 		//throw 1;
 	}
 
-	//sta.ListenSocket;
+	sta.ListenSocket = ListenSocket;
 
 	hThread = CreateThread(0, 0, &ServerThread,
 		(void*)&sta, 0, &dwThreadId);
@@ -217,91 +217,46 @@ void Server::Start(const char* port, bool encrypted) {
 }
 
 void Server::Stop() {
-
-/*	std::list<HANDLE> hClientThreadArraySTD = hClientThreadArray.getCopy(); 	 BUG1
-
-	for (std::list<HANDLE>::iterator it = (hClientThreadArraySTD).begin();
-		it != (hClientThreadArraySTD).end(); ++it) {
-		SuspendThread(*it);
-	}
-*/
+	//condWhile = false;
 	SuspendThread(hThread);
 }
-/*	 BUG1
-std::list<HANDLE> Server::getHClientThreadArray() {
-	std::list<HANDLE> hClientThreadArraySTD = hClientThreadArray.getCopy();
-	return hClientThreadArraySTD;
-}
-*/
+
 HANDLE Server::getHhread() {
 	return hThread;
 }
 
 DWORD WINAPI ServerThread(void* arg) {
-	const char* port = (const char*)((*((ServerThreadArgs*)arg)).port);
 	const char* encryptionKey = (const char*)((*((ServerThreadArgs*)arg)).encryptionKey);
-//	SharedList<HANDLE> hClientThreadArray = (SharedList<HANDLE>)((*((ServerThreadArgs*)arg)).hClientThreadArray);		 BUG1
-	HANDLE hClientThreadArray[MAX_THREAD];
-
+	//SharedBool cond = (SharedBool)((*((ServerThreadArgs*)arg)).condWhile);
 	SOCKET ListenSocket = (SOCKET)((*((ServerThreadArgs*)arg)).ListenSocket);
-	SOCKET ClientSocket = INVALID_SOCKET;
-/*
-	WSADATA wsaData;
 	
-	SOCKET ListenSocket = INVALID_SOCKET;
+	//HANDLE hClientThreadArray[1000];
 	SOCKET ClientSocket = INVALID_SOCKET;
-
-	struct addrinfo *result = NULL;
-	struct addrinfo hints;
-
-	WSAStartup(MAKEWORD(2, 2), &wsaData);
-
-	ZeroMemory(&hints, sizeof(hints));
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_protocol = IPPROTO_TCP;
-	hints.ai_flags = AI_PASSIVE;
-
-	getaddrinfo(NULL, port, &hints, &result);
-	ListenSocket = socket(result->ai_family, result->ai_socktype,result->ai_protocol);
-	bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
-	freeaddrinfo(result);
-	listen(ListenSocket, SOMAXCONN);
-*/
 	// multi-thread
-	DWORD dwThreadIdArray[MAX_THREAD];
-
-	for (int i = 0; i < MAX_THREAD; i++) {
+	int i = 0;
+	while (true){//cond.getValue()) {
 		// Accept a client socket
-
-		MessageBox(NULL,"pre", " ", 0);
 		ClientSocket = accept(ListenSocket, NULL, NULL);
-	//	ClientSocket = accept(ListenSocket, result->ai_addr, (int*)result->ai_addrlen);
-		MessageBox(NULL,"post", " ", 0);
 		if (ClientSocket == INVALID_SOCKET) {
-			MessageBox(NULL,"error listening", " ", 0);
 			closesocket(ListenSocket);
 			WSACleanup();
 			//throw 1;
+		} else {
+			ClientSocketThreadArgs csa;
+			csa.ClientSocket = ClientSocket;
+			csa.encryptionKey = encryptionKey;
+
+			//hClientThreadArray[i] = 
+			CreateThread(0, 0, &ClientSocketThread,(void*)&csa, 0, NULL);
+			++i;
 		}
-
-		ClientSocketThreadArgs csa;
-		csa.ClientSocket = ClientSocket;
-		csa.encryptionKey = encryptionKey;
-
-		//hClientThreadArray.add(
-		hClientThreadArray[i] = CreateThread(0, 0, &ClientSocketThread,
-			(void*)&csa, 0, &dwThreadIdArray[i]);
-		//);
 	}
 	//mainthread waits until all threads have termined
-	WaitForMultipleObjects(MAX_THREAD, hClientThreadArray, TRUE, INFINITE);
+	//WaitForMultipleObjects(MAX_THREAD, hClientThreadArray, TRUE, INFINITE);
 	
-/*	std::list<HANDLE> hClientThreadArraySTD = hClientThreadArray.getCopy(); 	 BUG1
-
-	for (std::list<HANDLE>::iterator it = (hClientThreadArraySTD).begin();
-		it != (hClientThreadArraySTD).end(); ++it) {
-		CloseHandle(*it);
+	/*for (int j = 0; j<1000 ; ++j) {
+		if (hClientThreadArray[j] != NULL)
+			CloseHandle(hClientThreadArray[j]);
 	}*/
 
 	// cleanup

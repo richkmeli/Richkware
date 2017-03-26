@@ -30,6 +30,15 @@ public:
 	~Slock();
 };
 
+class SharedBool{
+private:
+	BOOL rBool;
+	Slock sc;
+public:
+	SharedBool& operator=(const BOOL& rBool);
+	BOOL getValue();
+};
+
 template<class T>
 class SharedList {
 private:
@@ -43,6 +52,6 @@ public:
 
 };
 
-#include "sharedList.templates.h"
+#include "sharedResources.templates.h"
 
 #endif /* SHAREDLIST_H_ */
