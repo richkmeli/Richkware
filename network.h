@@ -9,8 +9,6 @@
 #define _WIN32_WINNT  0x501
 #endif
 
-#define MAX_THREAD 8
-
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
@@ -18,17 +16,15 @@
 #include <ctime>
 #include <sstream>
 #include <fstream>
-#include <list>
-#include <iterator>
 
 #include "crypto.h"
-#include "sharedList.h"
+#include "sharedResources.h"
 
 class Server {
 private:
 	const char* encryptionKey;
 	HANDLE hThread;
-	//SharedList<HANDLE> hClientThreadArray; 	 BUG1
+	//SharedBool condWhile;
 public:
 	Server() {}
 	Server(const char* encryptionKeyArg);
@@ -37,7 +33,6 @@ public:
 	void Start(const char* port, bool encrypted = false);
 	void Stop();
 	HANDLE getHhread();
-	//std::list<HANDLE> getHClientThreadArray(); 	 BUG1
 };
 
 class Network {
@@ -62,8 +57,7 @@ public:
 	Device() {}
 	Device(std::string nameArg, std::string serverPort);
 	Device& operator=(const Device& device);
-	//~Device();
-
+	
 	std::string getName();
 	std::string getServerPort();
 	void setName(std::string nameArg);
@@ -73,7 +67,7 @@ public:
 struct ServerThreadArgs {
 	const char* port;
 	const char* encryptionKey;
-	//SharedList<HANDLE> hClientThreadArray; 	 BUG1
+	//SharedBool condWhile;
 	SOCKET ListenSocket;
 };
 

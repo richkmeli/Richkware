@@ -5,7 +5,7 @@
 #ifndef BLOCKAPPS_H_
 #define BLOCKAPPS_H_
 
-#include "sharedList.h"
+#include "sharedResources.h"
 
 class BlockApps {
 private:
