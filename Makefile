@@ -1,23 +1,27 @@
 ifeq ($(OS),Windows_NT)
-    CC=g++    
+    CXX=g++    
 else
-    CC=x86_64-w64-mingw32-g++
+    CXX=x86_64-w64-mingw32-g++
 endif
 
-CFLAGS= -c -O3 -Wall
+
+CXXFLAGS= -c -O3 -Wall
 LDFLAGS= -static-libgcc -static-libstdc++ -Wall
 EFLAG= -lws2_32
-SOURCES=main.cpp crypto.cpp sharedResources.cpp blockApps.cpp richkware.cpp network.cpp storage.cpp
-OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE=Richkware.exe
 
-all: $(SOURCES) $(EXECUTABLE)
+SOURCES= main.cpp crypto.cpp sharedResources.cpp blockApps.cpp richkware.cpp network.cpp storage.cpp
+OBJECTS= $(SOURCES:.cpp=.o)
+EXECUTABLE= Richkware.exe
+
+.PHONY : all
+all: $(EXECUTABLE)
 	
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) $(EFLAG) -o  $@
+	$(CXX) $(LDFLAGS) $^ $(EFLAG) -o  $@
 
 .cpp.o:
-	$(CC) $(CFLAGS) $< -o $@
+	$(CXX) $(CXXFLAGS) $< -o $@
 
+.PHONY : clean
 clean:
 	rm -f *.o *~
