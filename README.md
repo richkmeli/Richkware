@@ -5,8 +5,8 @@ Framework for building Windows malwares, written in C++.
 ## Description
 
 It's a library of network and OS functions, that you can use to create a malware.
-The compositions of these functions, according to different logics permit at the application 
-to assume behaviors associable to the following types of malware:
+The composition of these functions permits the application 
+to assume behaviors referable to the following types of malware:
 
 - Virus
 - Worms
@@ -58,8 +58,8 @@ After **main.cpp** implementation, you can compile as follows.
 	make
 
 ### Using Microsoft C++ compiler (Visual Studio)
-- C/C++ > Proprocessor > Proprocessor Definitions, add "\_CRT\_SECURE\_NO\_WARNINGS" 
-- Linker > Input > Additional Dipendencies, add "Ws2_32.lib"
+- C/C++ > Preprocessor > Preprocessor Definitions, add "\_CRT\_SECURE\_NO\_WARNINGS" 
+- Linker > Input > Additional Dependencies, add "Ws2_32.lib"
 
 
 ## Remotely command ececution
