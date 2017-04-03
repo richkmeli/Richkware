@@ -23,8 +23,10 @@
 class Server {
 private:
 	const char* encryptionKey;
+    const char* port;
 	HANDLE hThread;
 	//SharedBool condWhile;
+
 public:
 	Server() {}
 	Server(const char* encryptionKeyArg);
@@ -33,6 +35,7 @@ public:
 	void Start(const char* port, bool encrypted = false);
 	void Stop();
 	HANDLE getHhread();
+    const char* getPort();
 };
 
 class Network {

