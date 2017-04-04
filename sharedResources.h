@@ -10,45 +10,44 @@
 
 class Slock {
 private:
-	CRITICAL_SECTION critical_section;
-	BOOL ret;
+    CRITICAL_SECTION critical_section;
+    BOOL ret;
 public:
+    Slock();
+    ~Slock();
 
 #ifdef _MSC_VER
-	_Acquires_lock_(critical_section)
+    _Acquires_lock_(critical_section)
 #endif
-	void lock();
+    void lock();
 
 
 #ifdef _MSC_VER
-	_Releases_lock_(critical_section)
+    _Releases_lock_(critical_section)
 #endif
-	void unlock();
-
-
-	Slock();
-	~Slock();
+    void unlock();
 };
 
 class SharedBool{
 private:
-	BOOL rBool;
-	Slock sc;
+    bool rBool;
+    Slock sc;
 public:
-	SharedBool& operator=(const BOOL& rBool);
-	BOOL getValue();
+    void operator=(const bool& rBool);
+    SharedBool& operator=(const SharedBool& sb);
+    bool getValue();
 };
 
 template<class T>
 class SharedList {
 private:
-	std::list<T> list;
-	Slock sc;
+    std::list<T> list;
+    Slock sc;
 public:
-	void add(T item);
-	void remove(T item);
-	void clear();
-	std::list<T> getCopy();
+    void add(T item);
+    void remove(T item);
+    void clear();
+    std::list<T> getCopy();
 
 };
 
