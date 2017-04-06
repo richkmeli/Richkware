@@ -151,7 +151,7 @@ bool Network::UploadInfoToRichkwareManagerServer(const char * serverAddress, con
 
     RawRequest(serverAddress, port, ("GET /Richkware-Manager-Server/LoadData?data=" +deviceStr +" HTTP/1.1\r\n"
             "Host: " + serverAddress + "\r\n"+
-            "Connection: keep-alive\r\n"+
+            "Connection: close\r\n"+
             "\r\n").c_str());
 
     return true;
