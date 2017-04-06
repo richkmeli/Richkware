@@ -59,6 +59,7 @@ public:
     Network& operator=(const Network& network);
 
     const char* RawRequest(const char* serverAddress, const char* port, const char* request);
+    const char* ResolveAddress(const char* address);
     bool UploadInfoToRichkwareManagerServer(const char * serverAddress, const char* port);
 };
 
