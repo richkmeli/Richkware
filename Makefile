@@ -9,7 +9,7 @@ CXXFLAGS= -c -O3 -Wall
 LDFLAGS= -static-libgcc -static-libstdc++ -Wall
 EFLAG= -lws2_32
 
-SOURCES= main.cpp crypto.cpp sharedResources.cpp blockApps.cpp richkware.cpp network.cpp storage.cpp
+SOURCES= main.cpp crypto.cpp sharedResources.cpp blockApps.cpp richkware.cpp network.cpp storage.cpp protocol.cpp
 OBJECTS= $(SOURCES:.cpp=.o)
 EXECUTABLE= Richkware.exe
 

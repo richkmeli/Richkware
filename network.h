@@ -13,12 +13,9 @@
 #include <ws2tcpip.h>
 
 #include <string>
-#include <ctime>
-#include <sstream>
-#include <fstream>
-#include <iostream>
 
 #include "crypto.h"
+#include "protocol.h"
 
 struct ServerThreadArgs {
     const char* encryptionKey;
@@ -46,6 +43,7 @@ public:
     void Stop();
     HANDLE getHhread();
     const char* getPort();
+
 };
 
 class Network {

@@ -15,6 +15,8 @@ set(SOURCE_FILES
         main.cpp
         network.cpp
         network.h
+        protocol.cpp
+        protocol.h
         richkware.cpp
         richkware.h
         sharedResources.cpp

