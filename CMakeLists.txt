@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.7)
 project(Richkware)
 
+if (UNIX)
+    set(CMAKE_CXX_COMPILER "x86_64-w64-mingw32-g++")
+endif (UNIX)
+
 set(CMAKE_CXX_STANDARD 98)
 
 set(CMAKE_STATIC_LINKER_FLAGS "-static-libgcc -static-libstdc++")
