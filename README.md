@@ -68,7 +68,7 @@ Call function **StartServer** in the main, that starts server on port 8000.
 
 	int main () {
 		Richkware richkware ;
-		richkware.StartServer ("8000");
+		richkware.network.server.Start("8000");
 		return 0;
 	}
 

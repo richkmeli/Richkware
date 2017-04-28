@@ -313,7 +313,7 @@ DWORD WINAPI ClientSocketThread(void* arg) {
         command.append(recvbuf);
 
         // string decryption
-        if (encryptionKey != NULL) command = EncryptDecrypt(command, encryptionKey);
+        if (encryptionKey != NULL) command = Decrypt(command, encryptionKey);
 
         posSubStr = command.find("\n");
         if (posSubStr != std::string::npos) {
@@ -322,7 +322,7 @@ DWORD WINAPI ClientSocketThread(void* arg) {
 
             std::string response = CommandsDispatcher(command);
             // string encryption
-            if (encryptionKey != NULL) response = EncryptDecrypt(response, encryptionKey);
+            if (encryptionKey != NULL) response = Encrypt(response, encryptionKey);
 
             iSendResult = send(ClientSocket, response.c_str(),
                                (int)strlen(response.c_str()), 0);

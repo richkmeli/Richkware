@@ -44,7 +44,7 @@ void Session::SaveSession(const char* encryptionKey) {
 		sessionString.append(it->first + "," + it->second + "|");
 	}
 
-	sessionString = EncryptDecrypt(sessionString, encryptionKey);
+	sessionString = Encrypt(sessionString, encryptionKey);
 
 	systemStorage.SaveValueReg("Software\\Microsoft\\Windows", appName.c_str(),
 		sessionString.c_str());
@@ -59,7 +59,7 @@ void Session::LoadSession(const char* encryptionKey) {
 		sessionString = systemStorage.LoadValueFromFile();
 	}
 
-	sessionString = EncryptDecrypt(sessionString, encryptionKey);
+	sessionString = Decrypt(sessionString, encryptionKey);
 
 	session.clear();
 

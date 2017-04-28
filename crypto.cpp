@@ -4,14 +4,28 @@
 
 #include "crypto.h"
 
-// XOR
-std::string EncryptDecrypt(std::string input, const char* key) {
-	int ikey = 5;/////////////////////////////////////////////
-	std::string output;
+std::string Encrypt(std::string input, std::string key) {
+    std::string output;
 
-	for (std::string::iterator it = input.begin(); it != input.end(); ++it) {
-		output += (*it) ^ ikey;
-	}
+    for (std::string::iterator it = input.begin(), itk = key.begin() ; it != input.end(); ++it, ++itk) {
+        char c = *itk;
+        output += (*it) ^ c;
 
-	return output;
+        if(itk == key.end()) itk = key.begin();
+    }
+
+    return output;
+}
+
+std::string Decrypt(std::string input, std::string key) {
+    std::string output;
+
+    for (std::string::iterator it = input.begin(), itk = key.begin() ; it != input.end(); ++it, ++itk) {
+        char c = *itk;
+        output += (*it) ^ c;
+
+        if(itk == key.end()) itk = key.begin();
+    }
+
+    return output;
 }

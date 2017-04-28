@@ -7,7 +7,9 @@
 
 #include <string>
 #include <iterator>
+#include <cstdlib>
 
-std::string EncryptDecrypt(std::string input, const char* key);
+std::string Encrypt(std::string input, std::string key);
+std::string Decrypt(std::string input, std::string key);
 
 #endif /* CRYPTO_H_ */
