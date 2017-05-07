@@ -25,7 +25,7 @@ to assume behaviors referable to the following types of malware:
 
 ### Network
 
-- **Server** (*network.h*): module for the managment of a multi-thread server, that allow to receive commands from Internet([Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client)) according to the specific protocol.
+- **Server** (*network.h*): module for the managment of a multi-thread server, that allow to receive commands from Internet([Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client) or console) according to the specific protocol.
     - **Protocol** (*protocol.h*):
         1. **Remotely command execution** (ID 1)
         2. (work in progress)
@@ -76,9 +76,9 @@ After **main.cpp** implementation, you can compile as follows.
 Call function **StartServer** in the main, that starts server on port 8000.
 
 	int main () {
-		Richkware richkware ;
+	    ...
 		richkware.network.server.Start("8000");
-		return 0;
+        ...
 	}
 
 ### Connect from Unix systems
