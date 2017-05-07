@@ -5,34 +5,17 @@
 #include "crypto.h"
 
 std::string Encrypt(std::string input, std::string key) {
-    input += "#@#@#@";
-    std::string output;
-    if(input.length() < key.length()){
-        while(input.length() == key.length()){
-            input += "0";
-        }
-    }
+    /*// Make sure the key is at least as long as the message
+    std::string tmp(key);
+    while (key.size() < input.size())
+        key += tmp;
 
-    for (std::string::iterator it = input.begin(), itk = key.begin() ; it != input.end(); ++it, ++itk) {
-        char c = *itk;
-        output += (*it) ^ c;
-
-        if(itk == key.end()) itk = key.begin();
-    }
-
-    return output;
+    // And now for the encryption part
+    for (std::string::size_type i = 0; i < input.size(); ++i)
+        input[i] ^= key[i];*/
+    return input;
 }
 
 std::string Decrypt(std::string input, std::string key) {
-    std::string output;
-
-    for (std::string::iterator it = input.begin(), itk = key.begin() ; it != input.end(); ++it, ++itk) {
-        char c = *itk;
-        output += (*it) ^ c;
-
-        if(itk == key.end()) itk = key.begin();
-    }
-
-    output = output.substr(0,output.find("#@#@#@"));
-    return output;
+    return Encrypt(input, key);
 }
