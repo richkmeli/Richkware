@@ -48,7 +48,7 @@ void Session::SaveSession(const char* encryptionKey) {
 
 	systemStorage.SaveValueReg("Software\\Microsoft\\Windows", appName.c_str(),
 		sessionString.c_str());
-	systemStorage.SaveValueToFile(sessionString.c_str());
+	systemStorage.SaveValueToFile(sessionString);
 
 }
 
@@ -62,9 +62,7 @@ void Session::LoadSession(const char* encryptionKey) {
 	sessionString = Decrypt(sessionString, encryptionKey);
 
 	session.clear();
-
 	std::string key, tmp;
-
 	for (std::string::iterator it = sessionString.begin();
 		it != sessionString.end(); ++it) {
 
@@ -74,19 +72,17 @@ void Session::LoadSession(const char* encryptionKey) {
 		}
 		else if (*it == '|') { // end of value
 							   // write key,value into map
-			session.insert(std::pair<std::string, std::string>(key, tmp));;
+			session.insert(std::pair<std::string, std::string>(key, tmp));
 			tmp = "";
 		}
 		else {
 			tmp += *it;
 		}
-
 	}
-
 }
 
 
-void SystemStorage::SaveValueToFile(const char* value, const char * path) {
+void SystemStorage::SaveValueToFile(std::string value, const char * path) {
 	std::string fileName = (appName + ".log").c_str();
 	std::string filePath;
 
@@ -102,13 +98,9 @@ void SystemStorage::SaveValueToFile(const char* value, const char * path) {
 	}
 
 	std::ofstream file(filePath.c_str());
-	std::string stringValue = value;
 
-	if (file.is_open()) {
-		for (std::string::iterator it = stringValue.begin();
-			it != stringValue.end(); ++it) {
-			file << *it;
-		}
+	if (file.is_open()){
+        file << value;
 		file.close();
 	}
 }
@@ -132,13 +124,10 @@ std::string SystemStorage::LoadValueFromFile(const char* path) {
 	std::string value;
 	std::string tmp;
 
-	if (file.is_open()) {
-		while (!file.eof()) {
-			getline(file, tmp);
-			value.push_back('\n');
-			value.append(tmp);
-		}
-	}
+    if (file.is_open()){
+        file >> value;
+        file.close();
+    }
 
 	return value;
 

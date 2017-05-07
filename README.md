@@ -25,29 +25,36 @@ to assume behaviors referable to the following types of malware:
 
 ### Network
 
-- **StartServer**: start a server on an arbitrary port, to receive commands from the Internet, 
-thus allowing to run commands or make changes to application state;
-- **RawRequest**: send a request to a server;
+- **Server** (*network.h*): module for the managment of a multi-thread server, that allow to receive commands from Internet([Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client)) according to the specific protocol.
+    - **Protocol** (*protocol.h*):
+        1. **Remotely command execution** (ID 1)
+        2. (work in progress)
+- **Network** (*network.h*):
+    - **RawRequest**: send a request to a server;
+    - **UploadInfoToRichkwareManagerServer**: send information to [Richkware-Manager-Server](https://github.com/richkmeli/Richkware-Manager-Server)
 
 ### System
 
-- **SaveValueReg** and **LoadValueReg**
-- **SaveSession** and **LoadSession**: save the application state(encrypted) in the system;
-- **IsAdmin** and **RequestAdminPrivileges**: check and require administrator privileges;
-- **Persistance**: install itself permanently in the system.
-- **StealthWindow**: hide applications;
-- **OpenApp**: open arbitrary applications;
-- **BlockApps** e **UnBlockApps**: block and Unblock applications (antivirus, ...);
-- **Keylogger**
+- **Storage** (*storage.h*):
+    - **SaveSession** and **LoadSession**: save the application state(encrypted) to:
+        - **Register** (SaveValueReg and LoadValueReg)
+        - **File** (SaveValueToFile and LoadValueFromFile)
+    - **Persistance**: install itself permanently in the system.
+- **IsAdmin** and **RequestAdminPrivileges** (*richkware.h*): check and require administrator privileges;
+
+- **StealthWindow** (*richkware.h*): hide applications;
+- **OpenApp** (*richkware.h*): open arbitrary applications;
+- **Keylogger** (*richkware.h*): stores in a file all pressed keys;
+ - **BlockApps** e **UnBlockApps** (*blockApps.h*): block and unblock applications (antivirus, ...).
 
 ### Cryptography
 
-- **EncryptDecrypt**
+- **Encrypt and Decrypt** (*crypto.h*): (work in progress)
 
 ### Other
 
-- **RandMouse**: move randomly the mouse cursor
-- **Hibernation**: hibernate system;
+- **RandMouse** (*richkware.h*): move randomly the mouse cursor
+- **Hibernation** (*richkware.h*): hibernate system;
 
 ## Compile
 
@@ -62,7 +69,9 @@ After **main.cpp** implementation, you can compile as follows.
 - Linker > Input > Additional Dependencies, add "Ws2_32.lib"
 
 
-## Remotely command ececution
+## Examples of usage
+
+### Remotely command execution
 
 Call function **StartServer** in the main, that starts server on port 8000.
 
@@ -77,9 +86,21 @@ Call function **StartServer** in the main, that starts server on port 8000.
 In Unix systems, you can use **netcat**.
 
 	nc <serverName> 8000
+	
+after the answer from the server about establishment of connection, write:
+    
+    [[1]]COMMAND
+    
+where COMMAND is the command to execute to the pc where server is running.
 
 ### Connect from Windows
 
 In Windows, you can use **telnet**.
 
 	telnet <serverName> 8000
+
+after the answer from the server about establishment of connection, write:
+    
+    [[1]]COMMAND
+    
+where COMMAND is the command to execute to the pc where server is running.

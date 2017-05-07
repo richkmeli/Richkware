@@ -30,7 +30,7 @@ public:
 
 	void SaveValueReg(const char* path, const char* key, const char* value);
 	std::string LoadValueReg(const char* path, const char* key);
-	void SaveValueToFile(const char* value, const char* path = NULL);
+	void SaveValueToFile(std::string value, const char* path = NULL);
 	std::string LoadValueFromFile(const char* path = NULL);
 
 	void Persistance();
