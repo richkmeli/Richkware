@@ -49,7 +49,7 @@ to assume behaviors referable to the following types of malware:
 
 ### Cryptography
 
-- **Encrypt and Decrypt** (*crypto.h*): (work in progress)
+- **Encrypt and Decrypt** (*crypto.h*): XOR (work in progress)
 - **Encode and Decode** (*crypto.h*): Base64 encoding algorithm.
 
 ### Other
