@@ -50,11 +50,12 @@ to assume behaviors referable to the following types of malware:
 ### Cryptography
 
 - **Encrypt and Decrypt** (*crypto.h*): (work in progress)
+- **Encode and Decode** (*crypto.h*): Base64 encoding algorithm.
 
 ### Other
 
-- **RandMouse** (*richkware.h*): move randomly the mouse cursor
-- **Hibernation** (*richkware.h*): hibernate system;
+- **RandMouse** (*richkware.h*): move randomly the mouse cursor;
+- **Hibernation** (*richkware.h*): hibernate system.
 
 ## Compile
 
