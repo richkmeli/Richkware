@@ -4,7 +4,6 @@
 
 #include "protocol.h"
 
-
 std::string CommandsDispatcher(std::string request){
 	std::string response = "";
 	if (request.find("[[") != std::string::npos &&

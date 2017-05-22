@@ -31,10 +31,15 @@
 /Debug/
 /Release/
 /Project1
-/main.cpp
+/main2.cpp
 /Richkware
 /.settings
 /.cproject
 /.project
 /nbproject
 /.idea
+cmake-build-debug/
+cmake-build-default/
+cmake-build-minsizerel/
+cmake-build-release/
+cmake-build-relwithdebinfo/

@@ -2,7 +2,6 @@
 *      Copyright 2016 Riccardo Melioli. All Rights Reserved.
 */
 
-#include <iostream>
 #include "crypto.h"
 
 std::string Encrypt(std::string input, std::string key) {

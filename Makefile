@@ -6,7 +6,7 @@ endif
 
 
 CXXFLAGS= -c -O3 -Wall
-LDFLAGS= -static-libgcc -static-libstdc++ -Wall
+LDFLAGS= -static-libgcc -static-libstdc++ -static -Wall
 EFLAG= -lws2_32
 
 SOURCES= main.cpp crypto.cpp sharedResources.cpp blockApps.cpp richkware.cpp network.cpp storage.cpp protocol.cpp
