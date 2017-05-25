@@ -21,7 +21,7 @@ to assume behaviors referable to the following types of malware:
 
 [Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client): Client of **Richkware-Manager-Server**, that obtains list of all hosts and is able to send commands to do at each of them.
 
-![](http://richk.altervista.org/Richkware.svg)
+![](http://richk.altervista.org/RichkwareDiagram.svg)
 
 ## Functions
 
