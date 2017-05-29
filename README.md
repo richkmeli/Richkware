@@ -1,10 +1,10 @@
 # Richkware
 
-Framework for building Windows malwares, written in C++.
+Framework for building Windows malware, written in C++.
 
 ## Description
 
-It's a library of network and OS functions, that you can use to create a malware.
+It's a library of network and OS functions, that you can use to create malware.
 The composition of these functions permits the application 
 to assume behaviors referable to the following types of malware:
 
