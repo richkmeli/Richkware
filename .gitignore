@@ -3,6 +3,7 @@
 *.lo
 *.o
 *.obj
+/obj
 
 # Precompiled Headers
 *.gch
@@ -27,10 +28,10 @@
 *.exe
 *.out
 *.app
+/bin
 
 /Debug/
 /Release/
-/Project1
 /main2.cpp
 /Richkware
 /.settings
@@ -38,8 +39,4 @@
 /.project
 /nbproject
 /.idea
-cmake-build-debug/
-cmake-build-default/
-cmake-build-minsizerel/
-cmake-build-release/
-cmake-build-relwithdebinfo/
+cmake-build-richk

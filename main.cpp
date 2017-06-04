@@ -1,5 +1,5 @@
 
-#include "richkware.h"
+#include "src/richkware.h"
 
 int main() {
     Richkware richkware("Richk","richktest");
