@@ -1,10 +1,10 @@
 # Richkware
 
-Framework for building Windows malwares, written in C++.
+Framework for building Windows malware, written in C++.
 
 ## Description
 
-It's a library of network and OS functions, that you can use to create a malware.
+It's a library of network and OS functions, that you can use to create malware.
 The composition of these functions permits the application 
 to assume behaviors referable to the following types of malware:
 
@@ -21,7 +21,7 @@ to assume behaviors referable to the following types of malware:
 
 [Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client): Client of **Richkware-Manager-Server**, that obtains list of all hosts and is able to send commands to do at each of them.
 
-![](http://richk.altervista.org/Richkware.svg)
+![](http://richk.altervista.org/RichkwareDiagram.svg)
 
 ## Functions
 
