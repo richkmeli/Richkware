@@ -4,9 +4,13 @@
 TARGET   = Richkware
 
 ifeq ($(OS),Windows_NT)
-    CXX=g++    
+    CXX=g++
+    RM=cmd //C rmdir //Q //S
+    MKDIR=mkdir
 else
     CXX=x86_64-w64-mingw32-g++
+    RM=rm -rf
+    MKDIR=mkdir -p
 endif
 
 # flags
@@ -39,8 +43,8 @@ main.o:
 
 .PHONY : make_directories
 make_directories: 
-	mkdir -p $(OBJDIR) $(BINDIR)
+	$(MKDIR) $(OBJDIR) $(BINDIR)
 
 .PHONY : clean
 clean:
-	rm -rf $(OBJDIR) $(BINDIR)
+	$(RM) $(OBJDIR) $(BINDIR)
