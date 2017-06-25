@@ -5,7 +5,7 @@ TARGET   = Richkware
 
 ifeq ($(OS),Windows_NT)
     CXX=g++
-    RM=cmd //C rmdir //Q //S
+    RM=cmd /C rmdir /Q /S
     MKDIR=mkdir
 else
     CXX=x86_64-w64-mingw32-g++
