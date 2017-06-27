@@ -36,7 +36,7 @@ Network::Network(const char* encryptionKeyArg) {
     server = Server(encryptionKeyArg);
 }
 
-const char* Network::RawRequest(const char* serverAddress, const char* port,	const char* request) {
+std::string Network::RawRequest(const char* serverAddress, const char* port,	const char* request) {
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
     struct addrinfo *result = NULL, *ptr = NULL, hints;
@@ -128,7 +128,7 @@ const char* Network::RawRequest(const char* serverAddress, const char* port,	con
     closesocket(ConnectSocket);
     WSACleanup();
 
-    return response.c_str();
+    return response;
 }
 
 
