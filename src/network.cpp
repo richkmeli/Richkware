@@ -300,6 +300,7 @@ DWORD WINAPI ClientSocketThread(void* arg) {
     int iResult;
 
     std::string command;
+    std::string response;
     int iSendResult;
     char recvbuf[bufferlength];
     int recvbuflen = bufferlength;
@@ -320,7 +321,7 @@ DWORD WINAPI ClientSocketThread(void* arg) {
             // erase escape characters
             //command.erase(posSubStr);
 
-            std::string response = CommandsDispatcher(command);
+            response = CommandsDispatcher(command);
             // string encryption
             if (encryptionKey != NULL) response = Encrypt(response, encryptionKey);
 
@@ -336,7 +337,7 @@ DWORD WINAPI ClientSocketThread(void* arg) {
         command = "";
         command.clear();
 
-    } while (iResult > 0);
+    } while (iResult > 0 && response.compare("***quit***") != 0);
 
     send(ClientSocket, "\nConnection Stopped\n",20, 0);
 

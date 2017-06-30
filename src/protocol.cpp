@@ -21,6 +21,9 @@ std::string CommandsDispatcher(std::string request){
 		std::string command = request.substr(posStartDelimiterCommand,commandLength);
 
 		switch (commandID) {
+            case 0:
+                response = "***quit***";
+                break;
 			case 1:
 				response = CodeExecution(command);
 				break;
