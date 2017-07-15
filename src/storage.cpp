@@ -1,3 +1,7 @@
+/*
+*      Copyright 2016 Riccardo Melioli. All Rights Reserved.
+*/
+
 #include "storage.h"
 
 Session::Session(const char* encryptionKeyArg, std::string appNameArg) {

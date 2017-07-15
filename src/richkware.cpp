@@ -1,6 +1,6 @@
 /*
- *      Copyright 2016 Riccardo Melioli. All Rights Reserved.
- */
+*      Copyright 2016 Riccardo Melioli. All Rights Reserved.
+*/
 
 #include "richkware.h"
 

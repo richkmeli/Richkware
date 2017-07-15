@@ -1,6 +1,6 @@
 /*
- *      Copyright 2016 Riccardo Melioli. All Rights Reserved.
- */
+*      Copyright 2016 Riccardo Melioli. All Rights Reserved.
+*/
 
 #ifndef RICHKWARE_H_
 #define RICHKWARE_H_

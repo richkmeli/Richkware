@@ -1,6 +1,6 @@
 /*
- *      Copyright 2016 Riccardo Melioli. All Rights Reserved.
- */
+*      Copyright 2016 Riccardo Melioli. All Rights Reserved.
+*/
 
 #ifndef SHAREDLIST_H_
 #define SHAREDLIST_H_
