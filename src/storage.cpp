@@ -42,13 +42,14 @@ void Session::RemoveInfo(const char * key) {
 
 void Session::SaveSession(const char* encryptionKey) {
 	std::string sessionString;
+	Crypto crypto(encryptionKey);
 
 	for (std::map<std::string, std::string>::iterator it = session.begin();
 		it != session.end(); ++it) {
 		sessionString.append(it->first + "," + it->second + "|");
 	}
 
-	sessionString = Encrypt(sessionString, encryptionKey);
+	sessionString = crypto.Encrypt(sessionString);
 
 	systemStorage.SaveValueReg("Software\\Microsoft\\Windows", appName.c_str(),
 		sessionString.c_str());
@@ -58,12 +59,13 @@ void Session::SaveSession(const char* encryptionKey) {
 
 void Session::LoadSession(const char* encryptionKey) {
 	std::string sessionString;
+	Crypto crypto(encryptionKey);
 	sessionString = systemStorage.LoadValueReg("Software\\Microsoft\\Windows", appName.c_str());
 	if (sessionString.empty()) {
 		sessionString = systemStorage.LoadValueFromFile();
 	}
 
-	sessionString = Decrypt(sessionString, encryptionKey);
+	sessionString = crypto.Decrypt(sessionString);
 
 	session.clear();
 	std::string key, tmp;

