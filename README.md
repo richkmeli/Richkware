@@ -51,8 +51,8 @@ to assume behaviors referable to the following types of malware:
 
 ### Cryptography
 
-- **Encrypt and Decrypt** (*crypto.h*): XOR (work in progress)
-- **Encode and Decode** (*crypto.h*): Base64 encoding algorithm.
+- **Encrypt and Decrypt** (*crypto.h*): [Blowfish](https://en.wikipedia.org/wiki/Blowfish_(cipher))
+- **Encode and Decode** (*crypto.h*): [Base64](https://en.wikipedia.org/wiki/Base64).
 
 ### Other
 
@@ -76,7 +76,7 @@ After **main.cpp** implementation, you can compile as follows.
 
 ### Remotely command execution
 
-Call function **StartServer** in the main, that starts server on port 8000.
+Call function **StartServer** in the main, it starts server on port 8000.
 
 	int main () {
 	    ...
