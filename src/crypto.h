@@ -12,6 +12,19 @@
 #include <cstddef>
 #include <vector>
 #include <cstring>
+#include <algorithm>
+#include <stdexcept>
+
+class RC4 {
+public:
+    RC4();
+    virtual ~RC4();
+    char *EncryptDecrypt(char *pszText, const char *pszKey);
+private:
+    unsigned char sbox[256];
+    unsigned char key[256], k;
+    int m, n, i, j, ilen;
+};
 
 class Blowfish {
 public:
@@ -31,10 +44,12 @@ private:
     uint32_t sbox_[4][256];
 };
 
+std::string Vigenere(std::string input, std::string key);
+
 class Crypto {
 private:
     std::string encryptionKey;
-    Blowfish blowfish;
+    RC4 rc4;
 public:
     Crypto() {}
     Crypto(const std::string &encryptionKeyArg);
@@ -50,5 +65,8 @@ public:
 
 std::string Base64_encode(unsigned char const *, unsigned int len);
 std::string Base64_decode(std::string const &s);
+
+std::string hex_to_string(const std::string& input);
+std::string string_to_hex(const std::string& input);
 
 #endif /* CRYPTO_H_ */

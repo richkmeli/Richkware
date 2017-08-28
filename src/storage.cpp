@@ -208,7 +208,7 @@ SystemStorage& SystemStorage::operator=(const SystemStorage& systemStorageArg) {
 }
 
 
-void SystemStorage::Persistance() {
+void SystemStorage::Persistence() {
 	// copy value in system
 	HMODULE module_handler = GetModuleHandle(NULL);
 	char file_path[MAX_PATH];
@@ -239,7 +239,7 @@ void SystemStorage::Persistance() {
 }
 
 // verify the existence of malware values created by the persistence function.
-bool SystemStorage::CheckPersistance() {
+bool SystemStorage::CheckPersistence() {
 	bool b = false;
 	HMODULE module_handler = GetModuleHandle(NULL);
 	char system_path[MAX_PATH];

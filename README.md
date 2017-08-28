@@ -17,7 +17,7 @@ to assume behaviors referable to the following types of malware:
 
 ## Related Projects
 
-[Richkware-Manager-Server](https://github.com/richkmeli/Richkware-Manager-Server): Service for management of hosts where is present a malware developped using **Richkware** framework.
+[Richkware-Manager-Server](https://github.com/richkmeli/Richkware-Manager-Server): Service for management of hosts where is present a malware developed using **Richkware** framework.
 
 [Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client): Client of **Richkware-Manager-Server**, that obtains list of all hosts and is able to send commands to do at each of them.
 
@@ -27,7 +27,7 @@ to assume behaviors referable to the following types of malware:
 
 ### Network
 
-- **Server** (*network.h*): module for the managment of a multi-thread server, that allow to receive commands from Internet([Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client) or console) according to the specific protocol.
+- **Server** (*network.h*): module for the management of a multi-thread server, that allow to receive commands from Internet([Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client) or console) according to the specific protocol.
     - **Protocol** (*protocol.h*):
         1. **Remotely command execution** (ID 1)
         2. (work in progress)
@@ -41,7 +41,7 @@ to assume behaviors referable to the following types of malware:
     - **SaveSession** and **LoadSession**: save the application state(encrypted) to:
         - **Register** (SaveValueReg and LoadValueReg)
         - **File** (SaveValueToFile and LoadValueFromFile)
-    - **Persistance**: install itself permanently in the system.
+    - **Persistence**: install itself permanently in the system.
 - **IsAdmin** and **RequestAdminPrivileges** (*richkware.h*): check and require administrator privileges;
 
 - **StealthWindow** (*richkware.h*): hide applications;
@@ -51,13 +51,20 @@ to assume behaviors referable to the following types of malware:
 
 ### Cryptography
 
-- **Encrypt and Decrypt** (*crypto.h*): [Blowfish](https://en.wikipedia.org/wiki/Blowfish_(cipher))
-- **Encode and Decode** (*crypto.h*): [Base64](https://en.wikipedia.org/wiki/Base64).
+- **Encrypt and Decrypt** (*crypto.h*): [RC4](https://en.wikipedia.org/wiki/RC4) (default), [Blowfish](https://en.wikipedia.org/wiki/Blowfish_(cipher)).
+- **Encode and Decode** (*crypto.h*): [Base64](https://en.wikipedia.org/wiki/Base64) (defualt), [Hex](https://en.wikipedia.org/wiki/Hexadecimal#Transfer_encoding).
 
 ### Other
 
 - **RandMouse** (*richkware.h*): move randomly the mouse cursor;
 - **Hibernation** (*richkware.h*): hibernate system.
+
+## Requirements
+These are the base requirements to build and use Richkware:
+
+- Make or CMake
+- [MinGW](http://www.mingw.org/)
+
 
 ## Compile
 
@@ -74,7 +81,7 @@ After **main.cpp** implementation, you can compile as follows.
 
 ## Examples of usage
 
-### Remotely command execution
+### Remotely Command Execution
 
 Call function **StartServer** in the main, it starts server on port 8000.
 
@@ -84,7 +91,10 @@ Call function **StartServer** in the main, it starts server on port 8000.
         ...
 	}
 
-### Connect from Unix systems
+### Connect using [Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client)
+In all systems where the Java Virtual Machine is installed, you can use [Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client)
+
+### Connect using terminal in Unix systems
 
 In Unix systems, you can use **netcat**.
 
@@ -96,7 +106,7 @@ after the answer from the server about establishment of connection, write:
     
 where COMMAND is the command to execute to the pc where server is running.
 
-### Connect from Windows
+### Connect using terminal in Windows
 
 In Windows, you can use **telnet**.
 

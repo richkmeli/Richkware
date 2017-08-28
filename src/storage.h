@@ -33,8 +33,8 @@ public:
 	void SaveValueToFile(std::string value, const char* path = NULL);
 	std::string LoadValueFromFile(const char* path = NULL);
 
-	void Persistance();
-	bool CheckPersistance();
+	void Persistence();
+	bool CheckPersistence();
 
 };
 

@@ -4,41 +4,33 @@
 
 #include "crypto.h"
 
-
 Crypto::Crypto(const std::string &encryptionKeyArg) {
     encryptionKey = encryptionKeyArg;
-    blowfish = Blowfish(encryptionKeyArg);
+    rc4 = RC4();
 }
 
-Crypto::Crypto(const char* serverAddress, const char* port){
+Crypto::Crypto(const char *serverAddress, const char *port) {
 
     // asymmetric key exchange
 
 }
 
-Crypto& Crypto::operator=(const Crypto &crypto) {
+Crypto &Crypto::operator=(const Crypto &crypto) {
     encryptionKey = crypto.encryptionKey;
     return *this;
 }
 
 
-
 std::string Crypto::Encrypt(std::string plaintext) {
     std::string ciphertext;
     plaintext = Base64_encode((const unsigned char *) plaintext.c_str(), plaintext.length());
+    //plaintext = string_to_hex(plaintext);
 
-    ciphertext = blowfish.Encrypt(plaintext);
+    char *in = &plaintext[0u];
+    ciphertext = rc4.EncryptDecrypt(in, encryptionKey.c_str());
 
-   /* // Make sure the key is at least as long as the message
-    std::string tmp(key);
-    while (key.size() < input.size())
-        key += tmp;
-
-    // And now for the encryption part
-    for (std::string::size_type i = 0; i < input.size(); ++i)
-        input[i] ^= key[i];
-*/
     ciphertext = Base64_encode((const unsigned char *) ciphertext.c_str(), ciphertext.length());
+    //ciphertext = string_to_hex(ciphertext);
 
     return ciphertext;
 }
@@ -46,21 +38,26 @@ std::string Crypto::Encrypt(std::string plaintext) {
 std::string Crypto::Decrypt(std::string ciphertext) {
     std::string plaintext;
     ciphertext = Base64_decode(ciphertext);
+    //ciphertext = hex_to_string(ciphertext);
 
-    plaintext = blowfish.Decrypt(ciphertext);
+    char *in = &ciphertext[0u];
+    plaintext = rc4.EncryptDecrypt(in, encryptionKey.c_str());
 
-    /*   // Make sure the key is at least as long as the message
-       std::string tmp(key);
-       while (key.size() < input.size())
-           key += tmp;
-
-       // And now for the encryption part
-       for (std::string::size_type i = 0; i < input.size(); ++i)
-           input[i] ^= key[i];
-   */
 
     plaintext = Base64_decode(plaintext);
+    //plaintext = hex_to_string(plaintext);
     return plaintext;
+}
+
+std::string Vigenere(std::string input, std::string key){
+    std::string tmp(key);
+    while (key.size() < input.size())
+        key += tmp;
+
+    // And now for the encryption part
+    for (std::string::size_type i = 0; i < input.size(); ++i)
+        input[i] ^= key[i];
+    return input;
 }
 
 
@@ -74,7 +71,7 @@ static inline bool is_base64(unsigned char c) {
     return (isalnum(c) || (c == '+') || (c == '/'));
 }
 
-std::string Base64_encode(unsigned char const* bytes_to_encode, unsigned int in_len) {
+std::string Base64_encode(unsigned char const *bytes_to_encode, unsigned int in_len) {
     std::string ret;
     int i = 0;
     int j = 0;
@@ -89,15 +86,14 @@ std::string Base64_encode(unsigned char const* bytes_to_encode, unsigned int in_
             char_array_4[2] = ((char_array_3[1] & 0x0f) << 2) + ((char_array_3[2] & 0xc0) >> 6);
             char_array_4[3] = char_array_3[2] & 0x3f;
 
-            for(i = 0; (i <4) ; i++)
+            for (i = 0; (i < 4); i++)
                 ret += base64_chars[char_array_4[i]];
             i = 0;
         }
     }
 
-    if (i)
-    {
-        for(j = i; j < 3; j++)
+    if (i) {
+        for (j = i; j < 3; j++)
             char_array_3[j] = '\0';
 
         char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
@@ -108,7 +104,7 @@ std::string Base64_encode(unsigned char const* bytes_to_encode, unsigned int in_
         for (j = 0; (j < i + 1); j++)
             ret += base64_chars[char_array_4[j]];
 
-        while((i++ < 3))
+        while ((i++ < 3))
             ret += '=';
 
     }
@@ -117,7 +113,7 @@ std::string Base64_encode(unsigned char const* bytes_to_encode, unsigned int in_
 
 }
 
-std::string Base64_decode(std::string const& encoded_string) {
+std::string Base64_decode(std::string const &encoded_string) {
     size_t in_len = encoded_string.size();
     size_t i = 0;
     size_t j = 0;
@@ -125,10 +121,11 @@ std::string Base64_decode(std::string const& encoded_string) {
     unsigned char char_array_4[4], char_array_3[3];
     std::string ret;
 
-    while (in_len-- && ( encoded_string[in_] != '=') && is_base64(encoded_string[in_])) {
-        char_array_4[i++] = encoded_string[in_]; in_++;
-        if (i ==4) {
-            for (i = 0; i <4; i++)
+    while (in_len-- && (encoded_string[in_] != '=') && is_base64(encoded_string[in_])) {
+        char_array_4[i++] = encoded_string[in_];
+        in_++;
+        if (i == 4) {
+            for (i = 0; i < 4; i++)
                 char_array_4[i] = static_cast<unsigned char>(base64_chars.find(char_array_4[i]));
 
             char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
@@ -142,10 +139,10 @@ std::string Base64_decode(std::string const& encoded_string) {
     }
 
     if (i) {
-        for (j = i; j <4; j++)
+        for (j = i; j < 4; j++)
             char_array_4[j] = 0;
 
-        for (j = 0; j <4; j++)
+        for (j = 0; j < 4; j++)
             char_array_4[j] = static_cast<unsigned char>(base64_chars.find(char_array_4[j]));
 
         char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
@@ -453,7 +450,6 @@ void Blowfish::SetKey(const char *keyT, size_t byte_length) {
 }
 
 std::string Blowfish::Encrypt(const std::string &src) const {
-
     std::vector<char> dst(src.begin(), src.end());
 
     size_t padding_length = dst.size() % sizeof(uint64_t);
@@ -528,4 +524,85 @@ uint32_t Blowfish::Feistel(uint32_t value) const {
     uint8_t d = converter.bit_8.byte3;
 
     return ((sbox_[0][a] + sbox_[1][b]) ^ sbox_[2][c]) + sbox_[3][d];
+}
+
+
+std::string string_to_hex(const std::string &input) {
+    static const char *const lut = "0123456789ABCDEF";
+    size_t len = input.length();
+
+    std::string output;
+    output.reserve(2 * len);
+    for (size_t i = 0; i < len; ++i) {
+        const unsigned char c = input[i];
+        output.push_back(lut[c >> 4]);
+        output.push_back(lut[c & 15]);
+    }
+    return output;
+}
+
+
+std::string hex_to_string(const std::string &input) {
+    static const char *const lut = "0123456789ABCDEF";
+    size_t len = input.length();
+    if (len & 1) throw std::invalid_argument("odd length");
+
+    std::string output;
+    output.reserve(len / 2);
+    for (size_t i = 0; i < len; i += 2) {
+        char a = input[i];
+        const char *p = std::lower_bound(lut, lut + 16, a);
+        if (*p != a) throw std::invalid_argument("not a hex digit");
+
+        char b = input[i + 1];
+        const char *q = std::lower_bound(lut, lut + 16, b);
+        if (*q != b) throw std::invalid_argument("not a hex digit");
+
+        output.push_back(((p - lut) << 4) | (q - lut));
+    }
+    return output;
+}
+
+
+#define SWAP(a, b) ((a) ^= (b), (b) ^= (a), (a) ^= (b))
+
+
+RC4::RC4() {
+    memset(sbox, 0, 256);
+    memset(key, 0, 256);
+}
+
+RC4::~RC4() {
+    memset(sbox, 0, 256);  /* remove Key traces in memory  */
+    memset(key, 0, 256);
+}
+
+char *RC4::EncryptDecrypt(char *pszText, const char *pszKey) {
+    i = 0, j = 0, n = 0;
+    ilen = (int) strlen(pszKey);
+
+    for (m = 0; m < 256; m++)  /* Initialize the key sequence */
+    {
+        *(key + m) = *(pszKey + (m % ilen));
+        *(sbox + m) = m;
+    }
+    for (m = 0; m < 256; m++) {
+        n = (n + *(sbox + m) + *(key + m)) & 0xff;
+        SWAP(*(sbox + m), *(sbox + n));
+    }
+
+    ilen = (int) strlen(pszText);
+    for (m = 0; m < ilen; m++) {
+        i = (i + 1) & 0xff;
+        j = (j + *(sbox + i)) & 0xff;
+        SWAP(*(sbox + i), *(sbox + j));  /* randomly Initialize
+							the key sequence */
+        k = *(sbox + ((*(sbox + i) + *(sbox + j)) & 0xff));
+        if (k == *(pszText + m))       /* avoid '\0' among the
+							encoded text; */
+            k = 0;
+        *(pszText + m) ^= k;
+    }
+
+    return pszText;
 }
