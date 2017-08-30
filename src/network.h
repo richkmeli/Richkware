@@ -58,6 +58,7 @@ public:
 
     std::string RawRequest(const char* serverAddress, const char* port, const char* request);
     const char* ResolveAddress(const char* address);
+    std::string KeyExchange(const char * serverAddress, const char* port);
     bool UploadInfoToRichkwareManagerServer(const char * serverAddress, const char* port);
 };
 

@@ -29,20 +29,18 @@ std::string Crypto::Encrypt(std::string plaintext) {
     char *in = &plaintext[0u];
     ciphertext = rc4.EncryptDecrypt(in, encryptionKey.c_str());
 
-    ciphertext = Base64_encode((const unsigned char *) ciphertext.c_str(), ciphertext.length());
-    //ciphertext = string_to_hex(ciphertext);
-
+    //ciphertext = Base64_encode((const unsigned char *) ciphertext.c_str(), ciphertext.length());
+    ciphertext = string_to_hex(ciphertext);
     return ciphertext;
 }
 
 std::string Crypto::Decrypt(std::string ciphertext) {
     std::string plaintext;
-    ciphertext = Base64_decode(ciphertext);
-    //ciphertext = hex_to_string(ciphertext);
+    //ciphertext = Base64_decode(ciphertext);
+    ciphertext = hex_to_string(ciphertext);
 
     char *in = &ciphertext[0u];
     plaintext = rc4.EncryptDecrypt(in, encryptionKey.c_str());
-
 
     plaintext = Base64_decode(plaintext);
     //plaintext = hex_to_string(plaintext);
