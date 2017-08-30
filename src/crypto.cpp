@@ -381,7 +381,7 @@ namespace {
             return 0;
         char length = data[data.size() - 1];
         if (length > 0 && length <= 8) {
-            for (size_t i = 0; i < length; ++i) {
+            for (size_t i = 0; i < (unsigned int)length; ++i) {
                 if (length != data[data.size() - i - 1]) {
                     return 0;
                 }
@@ -461,7 +461,7 @@ std::string Blowfish::Encrypt(const std::string &src) const {
         dst.push_back(static_cast<char>(padding_length));
     }
 
-    for (int i = 0; i < dst.size() / sizeof(uint64_t); ++i) {
+    for (unsigned int i = 0; i < dst.size() / sizeof(uint64_t); ++i) {
         uint32_t *left = &reinterpret_cast<uint32_t *>(dst.data())[i * 2];
         uint32_t *right = &reinterpret_cast<uint32_t *>(dst.data())[i * 2 + 1];
         EncryptBlock(left, right);
@@ -473,7 +473,7 @@ std::string Blowfish::Encrypt(const std::string &src) const {
 std::string Blowfish::Decrypt(const std::string &src) const {
     std::vector<char> dst(src.begin(), src.end());
 
-    for (int i = 0; i < dst.size() / sizeof(uint64_t); ++i) {
+    for (unsigned int i = 0; i < dst.size() / sizeof(uint64_t); ++i) {
         uint32_t *left = &reinterpret_cast<uint32_t *>(dst.data())[i * 2];
         uint32_t *right = &reinterpret_cast<uint32_t *>(dst.data())[i * 2 + 1];
         DecryptBlock(left, right);

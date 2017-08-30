@@ -150,7 +150,7 @@ Richkware::Richkware(const char *AppNameArg, const char *defaultEncryptionKey, c
         Network network1(defaultEncryptionKey);
         encKey = network1.KeyExchange(serverAddress, port);
 
-        if (encKey.empty()) {
+        if (encKey.empty() || (encKey.compare("Error") == 0)) {
             // Key Exchange failed
             encryptionKey = defaultEncryptionKey;
         } else {
