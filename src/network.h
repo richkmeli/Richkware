@@ -58,8 +58,9 @@ public:
 
     std::string RawRequest(const char* serverAddress, const char* port, const char* request);
     const char* ResolveAddress(const char* address);
-    std::string KeyExchange(const char * serverAddress, const char* port);
-    bool UploadInfoToRichkwareManagerServer(const char * serverAddress, const char* port);
+    std::string GetEncryptionKeyFromRMS(const char * serverAddress, const char* port);
+    // upload info to Richkware-Manager-Server
+    bool UploadInfoToRMS(const char * serverAddress, const char* port);
 };
 
 class Device {

