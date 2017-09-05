@@ -18,25 +18,26 @@
 #include "protocol.h"
 
 struct ServerThreadArgs {
-    const char* encryptionKey;
+    std::string encryptionKey;
     SOCKET ListenSocket;
 };
 
 struct ClientSocketThreadArgs {
+    std::string encryptionKey;
     SOCKET ClientSocket;
-    const char* encryptionKey;
+
 };
 
 class Server {
 private:
-    const char* encryptionKey;
-    const char* port;
+    std::string encryptionKey;
+    const char *port;
     HANDLE hThread;
     SOCKET listenSocket;
     ServerThreadArgs sta;
 public:
     Server() {}
-    Server(const char* encryptionKeyArg);
+    Server(std::string encryptionKeyArg);
     Server& operator=(const Server& server);
 
     void Start(const char* port, bool encrypted = false);
@@ -48,12 +49,12 @@ public:
 
 class Network {
 private:
-    const char* encryptionKey;
+    std::string encryptionKey;
 public:
     Server server;
 
     Network() {}
-    Network(const char* encryptionKeyArg);
+    Network(std::string encryptionKeyArg);
     Network& operator=(const Network& network);
 
     std::string RawRequest(const char* serverAddress, const char* port, const char* request);

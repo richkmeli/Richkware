@@ -5,7 +5,7 @@
 #include "src/richkware.h"
 
 int main() {
-    Richkware richkware("Richk","richktest","rms-richk.rhcloud.com", "80");
+    Richkware richkware("Richk","richktest","192.168.99.100", "8080");
 
     // PUT YOUR CODE HERE
 

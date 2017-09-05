@@ -108,7 +108,7 @@ void Richkware::Hibernation() {
 }
 
 
-Richkware::Richkware(const char *AppNameArg, const char *EncryptionKeyArg) {
+Richkware::Richkware(const char *AppNameArg, std::string EncryptionKeyArg) {
     appName = AppNameArg;
     ShowWindow(GetConsoleWindow(), 0);
     encryptionKey = EncryptionKeyArg;
@@ -135,7 +135,7 @@ Richkware::Richkware(const char *AppNameArg, const char *EncryptionKeyArg) {
 
 }
 
-Richkware::Richkware(const char *AppNameArg, const char *defaultEncryptionKey, const char *serverAddress,
+Richkware::Richkware(const char *AppNameArg, std::string defaultEncryptionKey, const char *serverAddress,
                      const char *port) {
     appName = AppNameArg;
     ShowWindow(GetConsoleWindow(), 0);

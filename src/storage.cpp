@@ -4,7 +4,7 @@
 
 #include "storage.h"
 
-Session::Session(const char *encryptionKeyArg, std::string appNameArg) {
+Session::Session(std::string encryptionKeyArg, std::string appNameArg) {
     appName = appNameArg;
     encryptionKey = encryptionKeyArg;
     systemStorage = SystemStorage(appNameArg);
@@ -40,7 +40,7 @@ void Session::RemoveInfo(const char *key) {
 }
 
 
-void Session::SaveSession(const char *encryptionKey) {
+void Session::SaveSession(std::string encryptionKey) {
     std::string sessionString;
     Crypto crypto(encryptionKey);
 
@@ -57,7 +57,7 @@ void Session::SaveSession(const char *encryptionKey) {
 
 }
 
-void Session::LoadSession(const char *encryptionKey) {
+void Session::LoadSession(std::string encryptionKey) {
     std::string sessionString;
     Crypto crypto(encryptionKey);
     sessionString = systemStorage.LoadValueReg("Software\\Microsoft\\Windows", appName.c_str());

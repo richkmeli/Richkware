@@ -43,15 +43,15 @@ class Session{
 private:
 	std::map<std::string, std::string> session;
 	std::string appName;
-	const char* encryptionKey;
+    std::string encryptionKey;
 	SystemStorage systemStorage;
 
-	void SaveSession(const char* encryptionKey);
-	void LoadSession(const char* encryptionKey);
+	void SaveSession(std::string encryptionKey);
+	void LoadSession(std::string encryptionKey);
 
 public:
 	Session() {}
-	Session(const char* encryptionKey, std::string appName);
+	Session(std::string encryptionKey, std::string appName);
 	Session& operator=(const Session& session);
 
 	void SaveInfo(const char* key, const char* value);
