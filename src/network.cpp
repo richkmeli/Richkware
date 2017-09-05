@@ -330,7 +330,11 @@ DWORD WINAPI ClientSocketThread(void *arg) {
     std::size_t posSubStr;
 
     // Receive until the peer shuts down the connection
-    send(ClientSocket, "\nConnection Established\n", 24, 0);
+    if (encryptionKey.compare("") != 0){
+        send(ClientSocket, "\nEncrypted Connection Established\n", 34, 0);
+    }else{
+        send(ClientSocket, "\nConnection Established\n", 24, 0);
+    }
 
     do {
         memset(&recvbuf[0], 0, sizeof(recvbuf));

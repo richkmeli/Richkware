@@ -73,7 +73,7 @@ Open main.cpp, and create instance of Richkware.
 if you deployed [RMS](https://github.com/richkmeli/Richkware-Manager-Server), you could use:
 
         int main() {
-               Richkware richkware("Richk","DefaultPass","192.168.99.100", "8080");
+               Richkware richkware("Richk","DefaultPassword","192.168.99.100", "8080");
                 ...
                 return 0;
             }
@@ -82,7 +82,7 @@ that get secure key from Richkware-Manager-Server and set it as encryption key.
 DefaultPass is used as temporary encryption key to ensure a safety communication with RMS and if this app cannot reach the RMS, then it will use DefaultPass as encryption key.
 
 
-###Without [Richkware-Manager-Server](https://github.com/richkmeli/Richkware-Manager-Server)
+### Without [Richkware-Manager-Server](https://github.com/richkmeli/Richkware-Manager-Server)
 
 Else, if you didn't deploy [RMS](https://github.com/richkmeli/Richkware-Manager-Server), you could use: 
          
