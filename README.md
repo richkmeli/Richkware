@@ -54,6 +54,8 @@ to assume behaviors referable to the following types of malware:
 - **Encrypt and Decrypt** (*crypto.h*): [RC4](https://en.wikipedia.org/wiki/RC4) (default), [Blowfish](https://en.wikipedia.org/wiki/Blowfish_(cipher)).
 - **Encode and Decode** (*crypto.h*): [Base64](https://en.wikipedia.org/wiki/Base64) (defualt), [Hex](https://en.wikipedia.org/wiki/Hexadecimal#Transfer_encoding).
 
+![](http://richk.altervista.org/RichkwareCryptographyDiagram.svg)
+
 ### Other
 
 - **RandMouse** (*richkware.h*): move randomly the mouse cursor;
