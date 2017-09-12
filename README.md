@@ -1,5 +1,7 @@
 # Richkware
 
+[![Build status](https://ci.appveyor.com/api/projects/status/1tn6vedeaq0v27ra?svg=true)](https://ci.appveyor.com/project/richkmeli/richkware)
+
 Framework for building Windows malware, written in C++.
 
 ## Description
