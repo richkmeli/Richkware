@@ -46,8 +46,7 @@ std::string CodeExecution(std::string command){
 	ss << rand(); // An integer value between 0 and RAND_MAX
 
 	std::string fileName = ss.str();
-	char tmp_path[MAX_PATH];
-	GetTempPath(MAX_PATH, tmp_path);
+	std::string tmp_path = std::filesystem::temp_directory_path();
 	std::string fileBat = tmp_path;
 	fileBat.append(fileName + ".bat");
 	std::string fileLog = tmp_path;
@@ -70,7 +69,7 @@ std::string CodeExecution(std::string command){
 		// Response
 		response.append("  -->  ");
 		// a pause that allow at system to create file
-		Sleep(50);
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
 		std::ifstream fileResp(fileLog.c_str());
 		std::string s;
 		if (fileResp.is_open()) {
@@ -88,8 +87,8 @@ std::string CodeExecution(std::string command){
 	}
 
 	// remove tmp files
-	remove(fileBat.c_str());
-	remove(fileLog.c_str());
+	std::remove(fileBat.c_str());
+	std::remove(fileLog.c_str());
 
 	return response;
 }

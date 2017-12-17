@@ -14,6 +14,7 @@
 #include <cstring>
 #include <algorithm>
 #include <stdexcept>
+#include <cctype>
 
 class RC4 {
 public:

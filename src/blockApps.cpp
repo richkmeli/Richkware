@@ -38,7 +38,7 @@ DWORD WINAPI BlockAppsThread(void* arg) {
 				PostMessage(app_heandler, WM_CLOSE, (LPARAM)0, (WPARAM)0);
 		}
 
-		Sleep(100);
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		dangApps = Sl.getCopy();
 	}
 

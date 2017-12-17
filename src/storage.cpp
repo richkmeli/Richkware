@@ -92,9 +92,8 @@ void SystemStorage::SaveValueToFile(std::string name, std::string value, const c
 
     // save in temp folder
     if (path == NULL) {
-        char tmpPath[MAX_PATH];
-        GetTempPath(MAX_PATH, tmpPath);
-        filePath = tmpPath + fileName;
+        std::string tmp_path = std::filesystem::temp_directory_path();
+        filePath = tmp_path + fileName;
 
     } else {
         filePath = path + fileName;
@@ -114,9 +113,8 @@ std::string SystemStorage::LoadValueFromFile(std::string name, const char *path)
 
     // save in temp folder
     if (path == NULL) {
-        char tmpPath[MAX_PATH];
-        GetTempPath(MAX_PATH, tmpPath);
-        filePath = tmpPath + fileName;
+        std::string tmp_path = std::filesystem::temp_directory_path();
+        filePath = tmp_path + fileName;
 
     } else {
         filePath = path + fileName;
@@ -240,7 +238,7 @@ void SystemStorage::RemovePersistence() {
     char tmp_path_reg[MAX_PATH] = "\"";
 
     GetModuleFileName(module_handler, file_path, MAX_PATH);
-    GetTempPath(MAX_PATH, tmp_path);
+    GetTempPath(MAX_PATH, tmp_path); //TODO substitute with tmp_path = std::filesystem::temp_directory_path();
     strcat(tmp_path_reg, tmp_path);
 
     strcat(tmp_path_reg, (appName + ".exe\" /noshow").c_str());
