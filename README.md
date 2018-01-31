@@ -75,7 +75,7 @@ Open main.cpp, and create instance of Richkware.
 if you deployed [RMS](https://github.com/richkmeli/Richkware-Manager-Server), you could use:
 
         int main() {
-               Richkware richkware("Richk","DefaultPassword","192.168.99.100", "8080");
+               Richkware richkware("Richk","DefaultPassword","192.168.99.100", "8080", "userAssociated");
                 ...
                 return 0;
             }

