@@ -5,7 +5,10 @@
 #include "src/richkware.h"
 
 int main() {
-    Richkware richkware("Richk","richktest","192.168.99.100", "8080", "richk@richk.me");
+    // with RichkwareManagerServer
+    //Richkware richkware("Richk","richktest","<RichkwareManagerServer IP>", "<RichkwareManagerServer PORT>", "userAssociated");
+    // without RichkwareManagerServer
+    Richkware richkware("Richk","richktest");
 
     // PUT YOUR CODE HERE
 

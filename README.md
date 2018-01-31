@@ -25,6 +25,13 @@ to assume behaviors referable to the following types of malware:
 
 ![](http://richk.altervista.org/RichkwareDiagram.svg)
 
+## Documentation
+
+|              | EN                          | IT                     |
+|--------------|:------------------------------:|:------------------:|
+| Presentation | [PDF](http://richk.me/Richkware/doc/EN/Slide.pdf)  | [PDF](http://richk.me/Richkware/doc/IT/Slide.pdf)     |
+| Report       | [PDF](http://richk.me/Richkware/doc/EN/Report.pdf) | [PDF](http://richk.me/Richkware/doc/IT/Relazione.pdf) |
+
 ## Functions
 
 ### Network
