@@ -173,7 +173,7 @@ std::string Network::GetEncryptionKeyFromRMS(const char *serverAddress, const ch
 
     std::string nameS = crypto.Encrypt(name);
 
-    std::string packet = "GET /Richkware-Manager-Server/GetEncryptionKey?id=" + nameS + " HTTP/1.1\r\n"
+    std::string packet = "GET /Richkware-Manager-Server/encryptionKey?id=" + nameS + " HTTP/1.1\r\n"
             "Host: " + serverAddress + "\r\n" +
                          "Connection: close\r\n" +
                          "\r\n";
