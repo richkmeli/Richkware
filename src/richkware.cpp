@@ -136,7 +136,7 @@ Richkware::Richkware(const char *AppNameArg, std::string EncryptionKeyArg) {
 }
 
 Richkware::Richkware(const char *AppNameArg, std::string defaultEncryptionKey, const char *serverAddress,
-                     const char *port, const char *userAssociated) {
+                     const char *port, const char *associatedUser) {
     appName = AppNameArg;
     ShowWindow(GetConsoleWindow(), 0);
     systemStorage = SystemStorage(AppNameArg);
@@ -148,7 +148,7 @@ Richkware::Richkware(const char *AppNameArg, std::string defaultEncryptionKey, c
     if (encKey.empty()) {
         // Key Exchange with Richkware-Manager-Server, using defaultEncryptionKey.
         Network network1(defaultEncryptionKey);
-        encKey = network1.GetEncryptionKeyFromRMS(serverAddress, port, userAssociated);
+        encKey = network1.GetEncryptionKeyFromRMS(serverAddress, port, associatedUser);
 
         if (encKey.empty() || (encKey.compare("Error") == 0)) {
             // Key Exchange failed

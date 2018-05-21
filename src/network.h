@@ -60,9 +60,9 @@ public:
 
     std::string RawRequest(const char* serverAddress, const char* port, const char* request);
     const char* ResolveAddress(const char* address);
-    std::string GetEncryptionKeyFromRMS(const char * serverAddress, const char* port, const char *userAssociated);
+    std::string GetEncryptionKeyFromRMS(const char * serverAddress, const char* port, const char *associatedUser);
     // upload info to Richkware-Manager-Server
-    bool UploadInfoToRMS(const char * serverAddress, const char* port, const char *userAssociated);
+    bool UploadInfoToRMS(const char * serverAddress, const char* port, const char *associatedUser);
 };
 
 class Device {
