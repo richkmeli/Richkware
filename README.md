@@ -115,7 +115,7 @@ After **main.cpp** implementation, you can compile as follows.
 ## Examples of usage
 In the following example, we call "**server**", a malware developed using Richkware framework and in which it has been enabled the function for creating a server, and "**client**", the creator(Hacker) of the malware that is trying to establish a connection with the infected PC.
 
-###Server-side
+### Server-side
 
 #### Remotely Command Execution
 
@@ -127,7 +127,7 @@ Call framework function **StartServer** in the main, it starts server on a port,
         ...
 	}
 
-###Client-side
+### Client-side
 
 #### Connect using [Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client)
 In all systems where the Java Virtual Machine is installed, you can use [Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client), otherwise if it's not present you can easily use a terminal.
