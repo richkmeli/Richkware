@@ -28,8 +28,8 @@ The composition of these functions permits the application to assume behaviors r
 
 |              | EN                          | IT                     |
 |--------------|:------------------------------:|:------------------:|
-| Presentation | [PDF](http://richk.me/Richkware/doc/EN/Slide.pdf)  | [PDF](http://richk.me/Richkware/doc/IT/Slide.pdf)     |
-| Report       | [PDF](http://richk.me/Richkware/doc/EN/Report.pdf) | [PDF](http://richk.me/Richkware/doc/IT/Relazione.pdf) |
+| Presentation | [PDF](https://github.com/richkmeli/Richkware/blob/master/doc/EN/Slide.pdf)  | [PDF](https://github.com/richkmeli/Richkware/blob/master/doc/IT/Slide.pdf)     |
+| Report       | [PDF](https://github.com/richkmeli/Richkware/blob/master/doc/EN/Report.pdf) | [PDF](https://github.com/richkmeli/Richkware/blob/master/doc/IT/Relazione.pdf) |
 
 ## Functions
 
