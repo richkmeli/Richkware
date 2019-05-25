@@ -27,8 +27,8 @@ install:
 build_script:
   - ps: |
       if ($env:Compiler -eq "mingw") {
-        mingw32-make
-        }
+          mingw32-make build
+      }
         
 artifacts:
 - path: /bin/
