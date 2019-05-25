@@ -30,21 +30,24 @@ OBJECTS  := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 EXECUTABLE= $(BINDIR)/$(TARGET).exe
 
 .PHONY : all
-all: make_directories $(EXECUTABLE)
+all: clean make_directories $(EXECUTABLE)
 
-$(EXECUTABLE): $(OBJECTS) main.o
-	$(CXX) $(LDFLAGS) $(OBJECTS) $(OBJDIR)/main.o $(EFLAG) -o $@
+.PHONY : build
+build: $(EXECUTABLE)
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $< -o $@
+
+$(EXECUTABLE): $(OBJECTS) main.o
+	$(CXX) $(LDFLAGS) $(OBJECTS) $(OBJDIR)/main.o $(EFLAG) -o $@
 
 main.o: 
 	$(CXX) $(CXXFLAGS) main.cpp -o $(OBJDIR)/main.o
 
 .PHONY : make_directories
-make_directories: 
+make_directories:
 	$(MKDIR) $(OBJDIR) $(BINDIR)
 
 .PHONY : clean
 clean:
-	$(RM) $(OBJDIR) $(BINDIR)
+	-$(RM) $(OBJDIR) $(BINDIR)
