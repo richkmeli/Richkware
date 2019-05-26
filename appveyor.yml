@@ -27,6 +27,7 @@ install:
 build_script:
   - ps: |
       if ($env:Compiler -eq "mingw") {
+          mingw32-make make_directories
           mingw32-make build
       }
         
