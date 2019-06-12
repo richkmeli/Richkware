@@ -13,6 +13,7 @@
 #include <ws2tcpip.h>
 
 #include <string>
+#include <iostream>
 
 #include "crypto.h"
 #include "protocol.h"
@@ -59,6 +60,8 @@ public:
     Network& operator=(const Network& network);
 
     std::string RawRequest(const char* serverAddress, const char* port, const char* request);
+
+    void fetchCommand(const char *serverAddress, const char *port, const char *associatedUser, std::string appName);
     const char* ResolveAddress(const char* address);
     std::string GetEncryptionKeyFromRMS(const char * serverAddress, const char* port, const char *associatedUser);
     // upload info to Richkware-Manager-Server

