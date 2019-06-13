@@ -5,7 +5,7 @@
 #include <iostream>
 #include "utils.h"
 
-static std::vector<std::string> utils::split(std::string s, std::string delimiter) {
+std::vector<std::string> utils::split(std::string s, std::string delimiter) {
     std::vector<std::string> result;
 
     size_t pos = 0;
@@ -16,4 +16,12 @@ static std::vector<std::string> utils::split(std::string s, std::string delimite
         s.erase(0, pos + delimiter.length());
     }
     return result;
+}
+
+std::string utils::concatVector(std::vector<std::string> vec, std::string delimiter) {
+    std::string accumulator = "";
+    for (size_t i = 0; i < vec.size()-1; ++i) {
+        accumulator += vec.at(i) + delimiter;
+    }
+    return accumulator + vec.at(vec.size()-1);
 }

