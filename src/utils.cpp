@@ -15,6 +15,7 @@ std::vector<std::string> utils::split(std::string s, std::string delimiter) {
         result.push_back(token);
         s.erase(0, pos + delimiter.length());
     }
+    result.push_back(s);
     return result;
 }
 
