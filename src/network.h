@@ -38,13 +38,18 @@ private:
     ServerThreadArgs sta;
 public:
     Server() {}
-    Server(std::string encryptionKeyArg);
-    Server& operator=(const Server& server);
 
-    void Start(const char* port, bool encrypted = false);
+    Server(std::string encryptionKeyArg);
+
+    Server &operator=(const Server &server);
+
+    void Start(const char *port, bool encrypted = false);
+
     void Stop();
+
     HANDLE getHhread();
-    const char* getPort();
+
+    const char *getPort();
 
 };
 
@@ -55,14 +60,19 @@ public:
     Server server;
 
     Network() {}
-    Network(std::string encryptionKeyArg);
-    Network& operator=(const Network& network);
 
-    std::string RawRequest(const char* serverAddress, const char* port, const char* request);
-    const char* ResolveAddress(const char* address);
-    std::string GetEncryptionKeyFromRMS(const char * serverAddress, const char* port, const char *associatedUser);
+    Network(std::string encryptionKeyArg);
+
+    Network &operator=(const Network &network);
+
+    std::string RawRequest(const char *serverAddress, const char *port, const char *request);
+
+    const char *ResolveAddress(const char *address);
+
+    std::string GetEncryptionKeyFromRMS(const char *serverAddress, const char *port, const char *associatedUser);
+
     // upload info to Richkware-Manager-Server
-    bool UploadInfoToRMS(const char * serverAddress, const char* port, const char *associatedUser);
+    bool UploadInfoToRMS(const char *serverAddress, const char *port, const char *associatedUser);
 };
 
 class Device {
@@ -71,16 +81,22 @@ private:
     std::string serverPort;
 public:
     Device() {}
+
     Device(std::string nameArg, std::string serverPort);
-    Device& operator=(const Device& device);
+
+    Device &operator=(const Device &device);
 
     std::string getName();
+
     std::string getServerPort();
+
     void setName(std::string nameArg);
+
     void setServerPort(std::string serverPort);
 };
 
-DWORD WINAPI ServerThread(void* arg);
-DWORD WINAPI ClientSocketThread(void* arg);
+DWORD WINAPI ServerThread(void *arg);
+
+DWORD WINAPI ClientSocketThread(void *arg);
 
 #endif /* NETWORK_H_ */

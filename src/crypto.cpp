@@ -47,7 +47,7 @@ std::string Crypto::Decrypt(std::string ciphertext) {
     return plaintext;
 }
 
-std::string Vigenere(std::string input, std::string key){
+std::string Vigenere(std::string input, std::string key) {
     std::string tmp(key);
     while (key.size() < input.size())
         key += tmp;
@@ -61,8 +61,8 @@ std::string Vigenere(std::string input, std::string key){
 
 static const std::string base64_chars =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                "abcdefghijklmnopqrstuvwxyz"
-                "0123456789+/";
+        "abcdefghijklmnopqrstuvwxyz"
+        "0123456789+/";
 
 
 static inline bool is_base64(unsigned char c) {
@@ -381,7 +381,7 @@ namespace {
             return 0;
         char length = data[data.size() - 1];
         if (length > 0 && length <= 8) {
-            for (size_t i = 0; i < (unsigned int)length; ++i) {
+            for (size_t i = 0; i < (unsigned int) length; ++i) {
                 if (length != data[data.size() - i - 1]) {
                     return 0;
                 }

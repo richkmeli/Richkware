@@ -5,10 +5,10 @@ environment:
   CTEST_OUTPUT_ON_FAILURE: 1
   TargetPath: /bin/Richkware.exe
   matrix:
-  - Compiler: mingw
-    Build: static
-  - Compiler: mingw
-    Build: shared
+    - Compiler: mingw
+      Build: static
+    - Compiler: mingw
+      Build: shared
 
 cache:
   - C:\mingw64
@@ -30,7 +30,7 @@ build_script:
           mingw32-make make_directories
           mingw32-make build
       }
-        
+
 artifacts:
-- path: /bin/
-  name: Richkware.exe
+  - path: /bin/
+    name: Richkware.exe

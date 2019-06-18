@@ -7,6 +7,7 @@
 #ifdef _MSC_VER
 _Acquires_lock_(critical_section)
 #endif
+
 void Slock::lock() {
     EnterCriticalSection(&critical_section);
 }
@@ -14,6 +15,7 @@ void Slock::lock() {
 #ifdef _MSC_VER
 _Releases_lock_(critical_section)
 #endif
+
 void Slock::unlock() {
     LeaveCriticalSection(&critical_section);
 }
@@ -21,17 +23,18 @@ void Slock::unlock() {
 Slock::Slock() {
     ret = InitializeCriticalSectionAndSpinCount(&critical_section, 0x80000400);
 }
+
 Slock::~Slock() {
     DeleteCriticalSection(&critical_section);
 }
 
-void SharedBool::operator=(const bool& rBoolArg) {
+void SharedBool::operator=(const bool &rBoolArg) {
     sc.lock();
     rBool = rBoolArg;
     sc.unlock();
 }
 
-SharedBool& SharedBool::operator=(const SharedBool& sb){
+SharedBool &SharedBool::operator=(const SharedBool &sb) {
     sc = sb.sc;
     rBool = sb.rBool;
     return *this;

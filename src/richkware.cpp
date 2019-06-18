@@ -143,7 +143,7 @@ Richkware::Richkware(const char *AppNameArg, std::string defaultEncryptionKey, c
 
     // **encryptionKey**: check presence of encryption key in the system
     Crypto crypto(defaultEncryptionKey);
-    std::string encKey = systemStorage.LoadValueFromFile(appName+"_encKey.richk");
+    std::string encKey = systemStorage.LoadValueFromFile(appName + "_encKey.richk");
 
     if (encKey.empty()) {
         // Key Exchange with Richkware-Manager-Server, using defaultEncryptionKey.
@@ -158,7 +158,7 @@ Richkware::Richkware(const char *AppNameArg, std::string defaultEncryptionKey, c
             encryptionKey = encKey.c_str();
             // save the encryption key(obtained from the RMS), encrypted with default password
             encKey = crypto.Encrypt(encKey);
-            systemStorage.SaveValueToFile(appName+"_encKey.richk", encKey);
+            systemStorage.SaveValueToFile(appName + "_encKey.richk", encKey);
         }
     } else {
         // Encryption Key already present
