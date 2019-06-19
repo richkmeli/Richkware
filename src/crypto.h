@@ -15,25 +15,15 @@
 #include <algorithm>
 #include <stdexcept>
 
-class RC4 {
-public:
-    RC4();
 
-    virtual ~RC4();
+char *RC4EncryptDecrypt(char *pszText, const char *pszKey);
 
-    char *EncryptDecrypt(char *pszText, const char *pszKey);
-
-private:
-    unsigned char sbox[256];
-    unsigned char key[256], k;
-    int m, n, i, j, ilen;
-};
 
 class Blowfish {
 public:
     Blowfish() {};
 
-    Blowfish(const std::string &key);
+    explicit Blowfish(const std::string &key);
 
     std::string Encrypt(const std::string &src) const;
 
@@ -57,11 +47,10 @@ std::string Vigenere(std::string input, std::string key);
 class Crypto {
 private:
     std::string encryptionKey;
-    RC4 rc4;
 public:
     Crypto() {}
 
-    Crypto(const std::string &encryptionKeyArg);
+    explicit Crypto(const std::string &encryptionKeyArg);
 
     // get EncryptionKey value from RichkwareManagerServer (asymmetric)
     Crypto(const char *serverAddress, const char *port);

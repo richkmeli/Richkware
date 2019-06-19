@@ -6,7 +6,6 @@
 
 Crypto::Crypto(const std::string &encryptionKeyArg) {
     encryptionKey = encryptionKeyArg;
-    rc4 = RC4();
 }
 
 Crypto::Crypto(const char *serverAddress, const char *port) {
@@ -27,7 +26,7 @@ std::string Crypto::Encrypt(std::string plaintext) {
     //plaintext = string_to_hex(plaintext);
 
     char *in = &plaintext[0u];
-    ciphertext = rc4.EncryptDecrypt(in, encryptionKey.c_str());
+    ciphertext = RC4EncryptDecrypt(in, encryptionKey.c_str());
 
     //ciphertext = Base64_encode((const unsigned char *) ciphertext.c_str(), ciphertext.length());
     ciphertext = string_to_hex(ciphertext);
@@ -40,7 +39,7 @@ std::string Crypto::Decrypt(std::string ciphertext) {
     ciphertext = hex_to_string(ciphertext);
 
     char *in = &ciphertext[0u];
-    plaintext = rc4.EncryptDecrypt(in, encryptionKey.c_str());
+    plaintext = RC4EncryptDecrypt(in, encryptionKey.c_str());
 
     plaintext = Base64_decode(plaintext);
     //plaintext = hex_to_string(plaintext);
@@ -565,17 +564,14 @@ std::string hex_to_string(const std::string &input) {
 #define SWAP(a, b) ((a) ^= (b), (b) ^= (a), (a) ^= (b))
 
 
-RC4::RC4() {
+char *RC4EncryptDecrypt(char *pszText, const char *pszKey) {
+    unsigned char sbox[256];
+    unsigned char key[256], k;
+    int m, n, i, j, ilen;
+
     memset(sbox, 0, 256);
     memset(key, 0, 256);
-}
 
-RC4::~RC4() {
-    memset(sbox, 0, 256);  /* remove Key traces in memory  */
-    memset(key, 0, 256);
-}
-
-char *RC4::EncryptDecrypt(char *pszText, const char *pszKey) {
     i = 0, j = 0, n = 0;
     ilen = (int) strlen(pszKey);
 
@@ -601,6 +597,10 @@ char *RC4::EncryptDecrypt(char *pszText, const char *pszKey) {
             k = 0;
         *(pszText + m) ^= k;
     }
+
+    /* remove Key traces in memory  */
+    memset(sbox, 0, 256);
+    memset(key, 0, 256);
 
     return pszText;
 }
