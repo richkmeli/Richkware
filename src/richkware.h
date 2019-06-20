@@ -11,6 +11,7 @@
 #include <winbase.h>
 #include <winreg.h>
 #include <winuser.h>
+//#include <ws2tcpip.h>
 
 #include <fstream>
 #include <stdio.h>

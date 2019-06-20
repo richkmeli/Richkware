@@ -16,7 +16,7 @@
 #include <stdexcept>
 
 
-char *RC4EncryptDecrypt(char *pszText, const char *pszKey);
+char *RC4EncryptDecrypt(const char *pszText, const char *pszKey);
 
 
 class Blowfish {

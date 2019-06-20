@@ -47,11 +47,11 @@ Network::Network(const std::string& serverAddressArg, std::string portArg,
     server = Server(encryptionKeyArg);
 }
 
-std::string Network::RawRequest(const std::string& serverAddress, const std::string& port, const std::string& request) {
+std::string Network::RawRequest(const std::string& serverAddress,  const std::string& port,  const std::string& request) {
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
     struct addrinfo *result = NULL, *ptr = NULL, hints;
-    std::string sendbuf = request;
+    const char *sendbuf = request.c_str();
     const int bufferlength = 512;
     char recvbuf[bufferlength];
     int iResult;
@@ -103,7 +103,7 @@ std::string Network::RawRequest(const std::string& serverAddress, const std::str
     }
 
     // Send an initial buffer
-    iResult = send(ConnectSocket, sendbuf.c_str(), (int) strlen(sendbuf.c_str()), 0);
+    iResult = send(ConnectSocket, sendbuf, (int) strlen(sendbuf), 0);
     if (iResult == SOCKET_ERROR) {
         closesocket(ConnectSocket);
         WSACleanup();
@@ -169,8 +169,10 @@ Network::UploadInfoToRMS(const std::string &serverAddress, const std::string &po
                          "Connection: close\r\n" +
                          "\r\n";
 
-    RawRequest(serverAddress, port, packet);
 
+    std::string response = RawRequest(serverAddress, port, packet);
+    std::cout<<response<<std::endl;
+    std::cout<<packet<<std::endl;
     return true;
 }
 
@@ -198,7 +200,7 @@ std::string Network::GetEncryptionKeyFromRMS(const std::string &serverAddress, c
                          "Connection: close\r\n" +
                          "\r\n";
 
-    key = RawRequest(serverAddress, port, packet);
+    key = RawRequest(serverAddress.c_str(), port.c_str(), packet.c_str());
     // If no matches were found, the function "find" returns string::npos
     if (key.find('$') != std::string::npos) {
         key = key.substr(key.find('$') + 1, (key.find('#') - key.find('$')) - 1);

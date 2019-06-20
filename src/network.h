@@ -12,6 +12,8 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
+//TODO REMOVE
+#include <iostream>
 #include <string>
 
 #include "crypto.h"
@@ -73,7 +75,7 @@ public:
     Network &operator=(const Network &network);
 
     static std::string
-    RawRequest(const std::string &serverAddress, const std::string &port, const std::string &request);
+    RawRequest( const std::string& serverAddress,  const std::string& port,  const std::string& request);
 
     static std::string ResolveAddress(const std::string &address);
 

@@ -138,7 +138,8 @@ Richkware::Richkware(const char *AppNameArg, std::string EncryptionKeyArg) {
 Richkware::Richkware(const char *AppNameArg, const std::string &defaultEncryptionKey, const char *serverAddress,
                      const char *port, const char *associatedUser) {
     appName = AppNameArg;
-    ShowWindow(GetConsoleWindow(), 0);
+    // TODO UNCOMMENT
+    //ShowWindow(GetConsoleWindow(), 0);
     systemStorage = SystemStorage(AppNameArg);
 
     // **encryptionKey**: check presence of encryption key in the system

@@ -4,6 +4,9 @@
 
 #include "crypto.h"
 
+// TODO REMOVE
+#include <iostream>
+
 Crypto::Crypto(const std::string &encryptionKeyArg) {
     encryptionKey = encryptionKeyArg;
 }
@@ -38,8 +41,8 @@ std::string Crypto::Decrypt(std::string ciphertext) {
     //ciphertext = Base64_decode(ciphertext);
     ciphertext = hex_to_string(ciphertext);
 
-    char *in = &ciphertext[0u];
-    plaintext = RC4EncryptDecrypt(in, encryptionKey.c_str());
+    //char *in = &ciphertext[0u];
+    plaintext = RC4EncryptDecrypt(ciphertext.c_str(), encryptionKey.c_str());
 
     plaintext = Base64_decode(plaintext);
     //plaintext = hex_to_string(plaintext);
@@ -564,10 +567,15 @@ std::string hex_to_string(const std::string &input) {
 #define SWAP(a, b) ((a) ^= (b), (b) ^= (a), (a) ^= (b))
 
 
-char *RC4EncryptDecrypt(char *pszText, const char *pszKey) {
+char *RC4EncryptDecrypt(const char *pszText, const char *pszKey) {
     unsigned char sbox[256];
     unsigned char key[256], k;
     int m, n, i, j, ilen;
+
+    // TODO RC4 error
+    std::cout<< pszText << std::endl;
+    char * res = new char(*pszText);
+    std::cout<< res << std::endl;
 
     memset(sbox, 0, 256);
     memset(key, 0, 256);
@@ -595,12 +603,12 @@ char *RC4EncryptDecrypt(char *pszText, const char *pszKey) {
         if (k == *(pszText + m))       /* avoid '\0' among the
 							encoded text; */
             k = 0;
-        *(pszText + m) ^= k;
+        *(res + m) ^= k;
     }
 
     /* remove Key traces in memory  */
     memset(sbox, 0, 256);
     memset(key, 0, 256);
 
-    return pszText;
+    return res;
 }
