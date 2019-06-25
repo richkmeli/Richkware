@@ -43,7 +43,8 @@ std::string CodeExecution(std::string command){
 	// write the output of command in a file
 	srand((unsigned int)time(0));
 	std::stringstream ss;
-	ss << rand(); // An integer value between 0 and RAND_MAX
+    std::stringstream stringStream;
+    ss << rand(); // An integer value between 0 and RAND_MAX
 
 	std::string fileName = ss.str();
 	char tmp_path[MAX_PATH];
@@ -79,6 +80,9 @@ std::string CodeExecution(std::string command){
             fileResp.open(fileLog.c_str());
             std::string s;
             if (fileResp.is_open()) {
+                stringStream << i + 1;
+                response.append("Attempt " + stringStream.str() + ": Success!\n");
+                stringStream.flush();
                 while (!fileResp.eof()) {
                     getline(fileResp, s);
                     response.push_back('\n');
@@ -87,9 +91,9 @@ std::string CodeExecution(std::string command){
                 fileResp.close();
                 break;
             } else {
-                std::stringstream stringStream;
                 stringStream << i + 1;
                 response.append("Attempt " + stringStream.str() + ": could not open out file\n");
+                stringStream.flush();
             }
         }
 	} else {
