@@ -13,8 +13,8 @@ else
     MKDIR=mkdir -p
 endif
 
-# flags   #-std=c++11
-CXXFLAGS= -c -O3 -Wall
+# flags
+CXXFLAGS= -c -std=c++11 -O3 -Wall
 LDFLAGS= -static-libgcc -static-libstdc++ -static -Wall
 EFLAG= -lws2_32
 
