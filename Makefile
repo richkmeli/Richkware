@@ -22,27 +22,22 @@ EFLAG= -lws2_32
 SRCDIR   = src
 OBJDIR   = obj
 BINDIR   = bin
+TESTDIR	 = test
 
 # files
 SOURCES  := $(wildcard $(SRCDIR)/*.cpp)
 INCLUDES := $(wildcard $(SRCDIR)/*.h)
 OBJECTS  := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
-EXECUTABLE= $(BINDIR)/$(TARGET).exe
+EXECUTABLE := $(BINDIR)/$(TARGET).exe
+TESTS	 := $(wildcard $(TESTDIR)/*.cpp)
+TEST_OBJECTS  := $(TESTS:$(TESTDIR)/%.cpp=$(TESTDIR)/$(OBJDIR)/%.o)
+TEST_EXECUTABLE := $(TESTDIR)/$(BINDIR)/$(TARGET_TEST).exe
 
 .PHONY : all
-all: clean make_directories $(EXECUTABLE)
+all: clean make_directories build
 
 .PHONY : build
 build: $(EXECUTABLE)
-
-$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
-	$(CXX) $(CXXFLAGS) $< -o $@
-
-$(EXECUTABLE): $(OBJECTS) main.o
-	$(CXX) $(LDFLAGS) $(OBJECTS) $(OBJDIR)/main.o $(EFLAG) -o $@
-
-main.o: 
-	$(CXX) $(CXXFLAGS) main.cpp -o $(OBJDIR)/main.o
 
 .PHONY : make_directories
 make_directories:
@@ -51,3 +46,25 @@ make_directories:
 .PHONY : clean
 clean:
 	-$(RM) $(OBJDIR) $(BINDIR)
+
+.PHONY : test
+test: $(EXECUTABLE_TEST)
+
+$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
+	$(CXX) $(CXXFLAGS) $< -o $@
+
+$(EXECUTABLE): $(OBJECTS) main.o
+	$(CXX) $(LDFLAGS) $(OBJECTS) $(OBJDIR)/main.o $(EFLAG) -o $@
+
+main.o:
+	$(CXX) $(CXXFLAGS) main.cpp -o $(OBJDIR)/main.o
+
+$(EXECUTABLE_TEST): $(OBJECTS_TEST) test.o
+	$(CXX) $(LDFLAGS) $(TESTDIR)/$(OBJDIR) $(TESTDIR)/$(OBJDIR)/test.o $(EFLAG) -o $@
+
+$(OBJECTS_TEST): $(TESTDIR)/$(OBJDIR)/%.o : $(TESTDIR)/%.cpp
+	$(CXX) $(CXXFLAGS) $< -o $@
+
+test.o:
+	$(CXX) $(CXXFLAGS) $(TESTDIR)/test.cpp -o $(TESTDIR)/$(OBJDIR)/test.o
+
