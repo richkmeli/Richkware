@@ -68,14 +68,14 @@ public:
 
     //Network(const std::string &encryptionKeyArg);
 
-    Network(const std::string &serverAddress, std::string port,
+    Network(const std::string &serverAddress, const std::string &port,
             const std::string &associatedUser,
             const std::string &encryptionKey);
 
     Network &operator=(const Network &network);
 
     static std::string
-    RawRequest( const std::string& serverAddress,  const std::string& port,  const std::string& request);
+    RawRequest(const std::string &serverAddress, const std::string &port, const std::string &request);
 
     static std::string ResolveAddress(const std::string &address);
 
