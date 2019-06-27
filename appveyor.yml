@@ -27,10 +27,12 @@ install:
 build_script:
   - ps: |
       if ($env:Compiler -eq "mingw") {
-          mingw32-make make_directories
-          mingw32-make build
+          mingw32-make all
+          mingw32-make test
       }
 
 artifacts:
   - path: /bin/
     name: Richkware.exe
+  - path: /test/
+    name: Richkware_TEST.exe

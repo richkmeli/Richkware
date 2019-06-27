@@ -308,12 +308,12 @@ bool Network::uploadCommand(std::string commandsOutput) {
 //        //TODO: manage KO from server
 //        return false;
 //    }
-    std::string response = RawRequest(serverAddress, port, packet);
-    //std::cout<<response<<std::endl;
-    if (response.find("Error") != std::string::npos){
-        return false;
-    }
-    return true;
+//    std::string response = RawRequest(serverAddress, port, packet);
+//    //std::cout<<response<<std::endl;
+//    if (response.find("Error") != std::string::npos){
+//        return false;
+//    }
+//    return true;
 }
 
 std::string Network::GetEncryptionKeyFromRMS() {
@@ -481,7 +481,7 @@ DWORD WINAPI ServerThread(void *arg) {
             csa->encryptionKey = encryptionKey;
 
             //hClientThreadArray[i] =
-            HANDLE hThreadC = CreateThread(0, 0, &ClientSocketThread, (void *) /*&*/csa, 0, NULL);
+            /*HANDLE hThreadC = */CreateThread(0, 0, &ClientSocketThread, (void *) /*&*/csa, 0, NULL);
             // detach
 //            CloseHandle(hThreadC);
         }
