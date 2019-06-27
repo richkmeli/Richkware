@@ -14,27 +14,32 @@ private:
     BOOL ret;
 public:
     Slock();
+
     ~Slock();
 
 #ifdef _MSC_VER
     _Acquires_lock_(critical_section)
 #endif
+
     void lock();
 
 
 #ifdef _MSC_VER
     _Releases_lock_(critical_section)
 #endif
+
     void unlock();
 };
 
-class SharedBool{
+class SharedBool {
 private:
     bool rBool;
     Slock sc;
 public:
-    void operator=(const bool& rBool);
-    SharedBool& operator=(const SharedBool& sb);
+    void operator=(const bool &rBool);
+
+    SharedBool &operator=(const SharedBool &sb);
+
     bool getValue();
 };
 
@@ -45,8 +50,11 @@ private:
     Slock sc;
 public:
     void add(T item);
+
     void remove(T item);
+
     void clear();
+
     std::list<T> getCopy();
 
 };

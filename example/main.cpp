@@ -10,8 +10,6 @@ int main() {
     const char *serverAddress = "127.0.0.1"; // Richkware-Manager-Server IP address
     const char *port = "8080"; // Richkware-Manager-Server TCP port
     const char *associatedUser = "richk@richk.me"; // account in RMS which is linked to
-    int timeoutUploadInfo = 5000;
-
 
     // with RichkwareManagerServer
     Richkware richkware(appName, defaultEncryptionKey, serverAddress, port, associatedUser);

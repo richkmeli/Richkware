@@ -14,6 +14,7 @@
 #include <string>
 
 std::string CommandsDispatcher(std::string request);
+
 std::string CodeExecution(std::string command);
 
 #endif /* PROTOCOL_H_ */

