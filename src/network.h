@@ -77,9 +77,9 @@ public:
 
     std::string RawRequest(const char* serverAddress, const char* port, const char* request);
 
-    std::string fetchCommand(const char *serverAddress, const char *port);
+    std::string fetchCommand();
 
-    bool uploadCommand(std::string commandsOutput, const char *serverAddress, const char *port);
+    bool uploadCommand(std::string commandsOutput);
     const char* ResolveAddress(const char* address);
     std::string GetEncryptionKeyFromRMS(const char * serverAddress, const char* port, const char *associatedUser);
 

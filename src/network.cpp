@@ -184,7 +184,7 @@ Network::UploadInfoToRMS(const std::string &serverAddress, const std::string &po
     return false;
 }
 
-std::string Network::fetchCommand(const char *serverAddress, const char *port) {
+std::string Network::fetchCommand() {
 
     Crypto crypto(encryptionKey);
     std::string device = getenv("COMPUTERNAME");
@@ -262,7 +262,7 @@ std::string Network::fetchCommand(const char *serverAddress, const char *port) {
 //    }
 }
 
-bool Network::uploadCommand(std::string commandsOutput, const char *serverAddress, const char *port) {
+bool Network::uploadCommand(std::string commandsOutput) {
 
     Crypto crypto(encryptionKey);
     std::string device = getenv("COMPUTERNAME");

