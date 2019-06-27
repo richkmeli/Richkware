@@ -4,9 +4,6 @@
 
 #include "crypto.h"
 
-// TODO REMOVE
-#include <iostream>
-
 Crypto::Crypto(const std::string &encryptionKeyArg) {
     encryptionKey = encryptionKeyArg;
 }

@@ -12,8 +12,6 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
-//TODO REMOVE
-#include <iostream>
 #include <string>
 
 #include "crypto.h"

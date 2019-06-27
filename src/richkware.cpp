@@ -138,7 +138,8 @@ Richkware::Richkware(const char *AppNameArg, std::string EncryptionKeyArg) {
 Richkware::Richkware(const char *AppNameArg, const std::string &defaultEncryptionKey, const char *serverAddress,
                      const char *port, const char *associatedUser) {
     appName = AppNameArg;
-    // TODO UNCOMMENT
+    // TODO RELEASE UNCOMMENT before release
+    // Hide console
     //ShowWindow(GetConsoleWindow(), 0);
     systemStorage = SystemStorage(AppNameArg);
 
