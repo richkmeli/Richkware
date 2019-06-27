@@ -30,8 +30,7 @@ INCLUDES := $(wildcard $(SRCDIR)/*.h)
 OBJECTS  := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 EXECUTABLE := $(BINDIR)/$(TARGET).exe
 TESTS	 := $(wildcard $(TESTDIR)/*.cpp)
-TEST_OBJECTS  := $(TESTS:$(TESTDIR)/%.cpp=$(TESTDIR)/$(OBJDIR)/%.o)
-TEST_EXECUTABLE := $(TESTDIR)/$(BINDIR)/$(TARGET_TEST).exe
+EXECUTABLE_TEST := $(TESTDIR)/$(TARGET)_TEST.exe
 
 .PHONY : all
 all: clean make_directories build
@@ -48,7 +47,7 @@ clean:
 	-$(RM) $(OBJDIR) $(BINDIR)
 
 .PHONY : test
-test: $(EXECUTABLE_TEST)
+test: clean make_directories $(EXECUTABLE_TEST)
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $< -o $@
@@ -59,12 +58,9 @@ $(EXECUTABLE): $(OBJECTS) main.o
 main.o:
 	$(CXX) $(CXXFLAGS) main.cpp -o $(OBJDIR)/main.o
 
-$(EXECUTABLE_TEST): $(OBJECTS_TEST) test.o
-	$(CXX) $(LDFLAGS) $(TESTDIR)/$(OBJDIR) $(TESTDIR)/$(OBJDIR)/test.o $(EFLAG) -o $@
-
-$(OBJECTS_TEST): $(TESTDIR)/$(OBJDIR)/%.o : $(TESTDIR)/%.cpp
-	$(CXX) $(CXXFLAGS) $< -o $@
+$(EXECUTABLE_TEST): $(OBJECTS) test.o
+	$(CXX) $(LDFLAGS) $(OBJECTS) $(TESTDIR)/test.o $(EFLAG) -o $@
 
 test.o:
-	$(CXX) $(CXXFLAGS) $(TESTDIR)/test.cpp -o $(TESTDIR)/$(OBJDIR)/test.o
+	$(CXX) $(CXXFLAGS) $(TESTDIR)/test.cpp -o $(TESTDIR)/test.o
 
