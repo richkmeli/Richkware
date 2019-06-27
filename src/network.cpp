@@ -179,6 +179,9 @@ Network::UploadInfoToRMS(const std::string &serverAddress, const std::string &po
 
     std::string response = RawRequest(serverAddress, port, packet);
     //std::cout<<response<<std::endl;
+    if (response.find("Error") != std::string::npos){
+        return false;
+    }
     return true;
 }
 
@@ -306,7 +309,6 @@ void Server::Start(std::string portArg, bool encrypted) {
 
     hThread = CreateThread(0, 0, &ServerThread,
                            (void *) &sta, 0, &dwThreadId);
-
 }
 
 void Server::Stop() {
@@ -348,7 +350,9 @@ DWORD WINAPI ServerThread(void *arg) {
             csa->encryptionKey = encryptionKey;
 
             //hClientThreadArray[i] =
-            CreateThread(0, 0, &ClientSocketThread, (void *) /*&*/csa, 0, NULL);
+            HANDLE hThreadC = CreateThread(0, 0, &ClientSocketThread, (void *) /*&*/csa, 0, NULL);
+            // detach
+            CloseHandle(hThreadC);
         }
     }
     return 0;
