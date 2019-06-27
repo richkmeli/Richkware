@@ -14,7 +14,7 @@
 
 #include <string>
 
-#include "../include/HTTPRequest.hpp"
+#include <HTTPRequest.hpp>
 
 #include "utils.h"
 #include "crypto.h"

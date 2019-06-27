@@ -17,5 +17,5 @@ set(PROJECT_SOURCE_DIR src)
 
 file(GLOB SOURCE_FILES ${PROJECT_SOURCE_DIR}/*.cpp ${PROJECT_SOURCE_DIR}/*.h main.cpp)
 
-add_executable(Richkware.exe ${SOURCE_FILES})
+add_executable(Richkware ${SOURCE_FILES})
 #add_executable(Richkware ${SOURCE_FILES} test/test.cpp)

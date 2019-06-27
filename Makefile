@@ -13,16 +13,13 @@ else
     MKDIR=mkdir -p
 endif
 
-# flags
-CXXFLAGS= -c -std=c++11 -O3 -Wall
-LDFLAGS= -static-libgcc -static-libstdc++ -static -Wall
-EFLAG= -lws2_32
-
 # directories
 SRCDIR   = src
 OBJDIR   = obj
 BINDIR   = bin
 TESTDIR	 = test
+INCLUDES = -I($(HOME)/include
+LIBINCLUDES = -L $(HOME)/lib
 
 # files
 SOURCES  := $(wildcard $(SRCDIR)/*.cpp)
@@ -31,6 +28,13 @@ OBJECTS  := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 EXECUTABLE := $(BINDIR)/$(TARGET).exe
 TESTS	 := $(wildcard $(TESTDIR)/*.cpp)
 EXECUTABLE_TEST := $(TESTDIR)/$(TARGET)_TEST.exe
+INC = $(INCLUDES) $(LIBINCLUDES)
+
+# flags
+CXXFLAGS= -c -std=c++11 -O3 -Wall $(INC)
+LDFLAGS= -static-libgcc -static-libstdc++ -static -Wall
+EFLAG= -lws2_32
+
 
 .PHONY : all
 all: clean make_directories build
