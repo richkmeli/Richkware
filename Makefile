@@ -31,7 +31,7 @@ EXECUTABLE_TEST := $(TESTDIR)/$(TARGET)_TEST.exe
 INC = $(INCLUDES) $(LIBINCLUDES)
 
 # flags
-CXXFLAGS= -c -std=c++11 -O3 -Wall $(INC)
+CXXFLAGS= -c -std=c++11 -O3 -Wall  -I include/
 LDFLAGS= -static-libgcc -static-libstdc++ -static -Wall
 EFLAG= -lws2_32
 
