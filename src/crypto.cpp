@@ -27,15 +27,15 @@ std::string Crypto::Encrypt(std::string plaintext, const std::string &encryption
     char *in = &plaintext[0u];
     ciphertext = RC4EncryptDecrypt(in, encryptionKey);
 
-    //ciphertext = Base64_encode((const unsigned char *) ciphertext.c_str(), ciphertext.length());
-    ciphertext = string_to_hex(ciphertext);
+    ciphertext = Base64_urlencode(ciphertext);
+//    ciphertext = string_to_hex(ciphertext);
     return ciphertext;
 }
 
 std::string Crypto::Decrypt(std::string ciphertext, const std::string &encryptionKey) {
     std::string plaintext;
-    //ciphertext = Base64_decode(ciphertext);
-    ciphertext = hex_to_string(ciphertext);
+    ciphertext = Base64_urldecode(ciphertext);
+//    ciphertext = hex_to_string(ciphertext);
 
     //char *in = &ciphertext[0u];
     plaintext = RC4EncryptDecrypt(ciphertext, encryptionKey);
@@ -74,6 +74,30 @@ static const std::string base64_chars =
 static inline bool is_base64(unsigned char c) {
     return (isalnum(c) || (c == '+') || (c == '/'));
 }
+
+void replace(std::string &str, const std::string &from, const std::string &to) {
+    size_t start_pos = str.find(from);
+    if (start_pos != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        replace(str,from,to);
+    }
+}
+
+std::string Base64_urlencode(std::string string_to_encode) {
+    std::string s = Base64_encode((const unsigned char *) string_to_encode.c_str(), string_to_encode.length());
+    replace(s, "/", "_");
+    replace(s, "+", "-");
+    return s;
+}
+
+std::string Base64_urldecode(std::string const &encoded_string) {
+    std::string s = encoded_string;
+    replace(s, "_", "/");
+    replace(s, "-", "+");
+    s = Base64_decode(s);
+    return s;
+}
+
 
 std::string Base64_encode(const unsigned char *bytes_to_encode, unsigned int in_len) {
     std::string ret;
@@ -164,7 +188,6 @@ std::string Base64_decode(std::string const &encoded_string) {
 const std::string &Crypto::getEncryptionKey() const {
     return encryptionKey;
 }
-
 
 
 #if !defined(__LITTLE_ENDIAN__) and !defined(__BIG_ENDIAN__)

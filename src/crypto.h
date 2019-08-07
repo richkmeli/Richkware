@@ -66,6 +66,10 @@ public:
     const std::string &getEncryptionKey() const;
 };
 
+std::string Base64_urlencode(std::string string_to_encode);
+
+std::string Base64_urldecode(std::string const &s);
+
 std::string Base64_encode(const unsigned char *bytes_to_encode, unsigned int in_len);
 
 std::string Base64_decode(std::string const &s);
