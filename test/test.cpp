@@ -101,14 +101,6 @@ void testFalse(bool actual) {
     }
 }
 
-void test(bool b) {
-    if (b) {
-        return;
-    } else {
-        throw "boolean false";
-    }
-}
-
 void TEST_ReverseCommand() {
     const char *appName = "Richk";
     const char *defaultEncryptionKey = "richktest"; // pre-shared key with RMS, to enable encryption before receiving a server-side generated key
