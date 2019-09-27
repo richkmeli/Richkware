@@ -2,8 +2,6 @@
 *      Copyright 2016 Riccardo Melioli.
 */
 
-#include <iostream>
-
 #include "network.h"
 
 Server::Server(std::string encryptionKeyArg) {
