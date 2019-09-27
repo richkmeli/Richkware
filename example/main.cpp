@@ -19,6 +19,5 @@ int main() {
     // PUT YOUR CODE HERE
 
     return 0;
-
 }
 

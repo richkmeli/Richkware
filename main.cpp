@@ -1,8 +1,12 @@
 /*
 *      Copyright 2016 Riccardo Melioli. All Rights Reserved.
+*      Created by bladez on 13/06/19.
 */
+#include <iostream>
 
 #include "src/richkware.h"
+#include "src/utils.h"
+
 
 int main() {
     const char *appName = "Richk";
@@ -19,6 +23,6 @@ int main() {
     // PUT YOUR CODE HERE
 
     return 0;
-
 }
+
 

