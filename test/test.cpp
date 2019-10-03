@@ -1,4 +1,9 @@
 //
+//TODO aggiungere le seguenti linee in appveyor.yml build-script
+//mingw32-make test
+//TODO aggiungere le seguenti linee in appveyor.yml artifacts
+//- path: /test/
+//name: Richkware_TEST.exe
 //#include "../src/richkware.h"
 //#include <assert.h>
 //#include <iostream>
