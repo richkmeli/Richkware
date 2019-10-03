@@ -23,7 +23,7 @@ The composition of these functions permits the application to assume behaviors r
 
 [Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client): Client of **Richkware-Manager-Server**, that it obtains the list of all hosts from the server and it's able to send any kind of commands to them.
 
-![](http://richk.altervista.org/RichkwareDiagram.svg)
+![](https://raw.githubusercontent.com/richkmeli/richkmeli.github.io/master/Richkware/Diagram/RichkwareDiagram1.2.png)
 
 ## Documentation
 
@@ -63,7 +63,7 @@ The composition of these functions permits the application to assume behaviors r
 - **Encrypt and Decrypt** (*crypto.h*): [RC4](https://en.wikipedia.org/wiki/RC4) (default), [Blowfish](https://en.wikipedia.org/wiki/Blowfish_(cipher)).
 - **Encode and Decode** (*crypto.h*): [Base64](https://en.wikipedia.org/wiki/Base64) (defualt), [Hex](https://en.wikipedia.org/wiki/Hexadecimal#Transfer_encoding).
 
-![](http://richk.altervista.org/RichkwareCryptographyDiagram.svg)
+![](https://raw.githubusercontent.com/richkmeli/richkmeli.github.io/master/Richkware/Diagram/RichkwareCryptographyDiagram1.1.png)
 
 ### Other
 

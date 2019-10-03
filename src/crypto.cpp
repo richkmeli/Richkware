@@ -6,7 +6,6 @@
 
 Crypto::Crypto(const std::string &encryptionKeyArg) {
     encryptionKey = encryptionKeyArg;
-    rc4 = RC4();
 }
 
 Crypto::Crypto(const char *serverAddress, const char *port) {
@@ -20,34 +19,41 @@ Crypto &Crypto::operator=(const Crypto &crypto) {
     return *this;
 }
 
-
-std::string Crypto::Encrypt(std::string plaintext) {
+std::string Crypto::Encrypt(std::string plaintext, const std::string &encryptionKey) {
     std::string ciphertext;
     plaintext = Base64_encode((const unsigned char *) plaintext.c_str(), plaintext.length());
     //plaintext = string_to_hex(plaintext);
 
     char *in = &plaintext[0u];
-    ciphertext = rc4.EncryptDecrypt(in, encryptionKey.c_str());
+    ciphertext = RC4EncryptDecrypt(in, encryptionKey);
 
-    //ciphertext = Base64_encode((const unsigned char *) ciphertext.c_str(), ciphertext.length());
-    ciphertext = string_to_hex(ciphertext);
+    ciphertext = Base64_urlencode(ciphertext);
+//    ciphertext = string_to_hex(ciphertext);
     return ciphertext;
 }
 
-std::string Crypto::Decrypt(std::string ciphertext) {
+std::string Crypto::Decrypt(std::string ciphertext, const std::string &encryptionKey) {
     std::string plaintext;
-    //ciphertext = Base64_decode(ciphertext);
-    ciphertext = hex_to_string(ciphertext);
+    ciphertext = Base64_urldecode(ciphertext);
+//    ciphertext = hex_to_string(ciphertext);
 
-    char *in = &ciphertext[0u];
-    plaintext = rc4.EncryptDecrypt(in, encryptionKey.c_str());
+    //char *in = &ciphertext[0u];
+    plaintext = RC4EncryptDecrypt(ciphertext, encryptionKey);
 
     plaintext = Base64_decode(plaintext);
     //plaintext = hex_to_string(plaintext);
     return plaintext;
 }
 
-std::string Vigenere(std::string input, std::string key){
+std::string Crypto::Encrypt(const std::string &plaintext) {
+    return Encrypt(plaintext, encryptionKey);
+}
+
+std::string Crypto::Decrypt(const std::string &ciphertext) {
+    return Decrypt(ciphertext, encryptionKey);
+}
+
+std::string Vigenere(std::string input, std::string key) {
     std::string tmp(key);
     while (key.size() < input.size())
         key += tmp;
@@ -61,23 +67,49 @@ std::string Vigenere(std::string input, std::string key){
 
 static const std::string base64_chars =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                "abcdefghijklmnopqrstuvwxyz"
-                "0123456789+/";
+        "abcdefghijklmnopqrstuvwxyz"
+        "0123456789+/";
 
 
 static inline bool is_base64(unsigned char c) {
     return (isalnum(c) || (c == '+') || (c == '/'));
 }
 
-std::string Base64_encode(unsigned char const *bytes_to_encode, unsigned int in_len) {
+void replace(std::string &str, const std::string &from, const std::string &to) {
+    size_t start_pos = str.find(from);
+    if (start_pos != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        replace(str,from,to);
+    }
+}
+
+std::string Base64_urlencode(std::string string_to_encode) {
+    std::string s = Base64_encode((const unsigned char *) string_to_encode.c_str(), string_to_encode.length());
+    replace(s, "/", "_");
+    replace(s, "+", "-");
+    return s;
+}
+
+std::string Base64_urldecode(std::string const &encoded_string) {
+    std::string s = encoded_string;
+    replace(s, "_", "/");
+    replace(s, "-", "+");
+    s = Base64_decode(s);
+    return s;
+}
+
+
+std::string Base64_encode(const unsigned char *bytes_to_encode, unsigned int in_len) {
     std::string ret;
     int i = 0;
     int j = 0;
     unsigned char char_array_3[3];
     unsigned char char_array_4[4];
 
+    int text_length = 0;
     while (in_len--) {
-        char_array_3[i++] = *(bytes_to_encode++);
+        char_array_3[i++] = bytes_to_encode[text_length];
+        text_length++;
         if (i == 3) {
             char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
             char_array_4[1] = ((char_array_3[0] & 0x03) << 4) + ((char_array_3[1] & 0xf0) >> 4);
@@ -381,7 +413,7 @@ namespace {
             return 0;
         char length = data[data.size() - 1];
         if (length > 0 && length <= 8) {
-            for (size_t i = 0; i < (unsigned int)length; ++i) {
+            for (size_t i = 0; i < (unsigned int) length; ++i) {
                 if (length != data[data.size() - i - 1]) {
                     return 0;
                 }
@@ -565,23 +597,21 @@ std::string hex_to_string(const std::string &input) {
 #define SWAP(a, b) ((a) ^= (b), (b) ^= (a), (a) ^= (b))
 
 
-RC4::RC4() {
+std::string RC4EncryptDecrypt(const std::string &pszText, const std::string &pszKey) {
+    unsigned char sbox[256];
+    unsigned char key[256], k;
+    int m, n, i, j, ilen;
+    std::string res = pszText;
+
     memset(sbox, 0, 256);
     memset(key, 0, 256);
-}
 
-RC4::~RC4() {
-    memset(sbox, 0, 256);  /* remove Key traces in memory  */
-    memset(key, 0, 256);
-}
-
-char *RC4::EncryptDecrypt(char *pszText, const char *pszKey) {
     i = 0, j = 0, n = 0;
-    ilen = (int) strlen(pszKey);
+    ilen = pszKey.length();
 
     for (m = 0; m < 256; m++)  /* Initialize the key sequence */
     {
-        *(key + m) = *(pszKey + (m % ilen));
+        *(key + m) = pszKey[(m % ilen)];
         *(sbox + m) = m;
     }
     for (m = 0; m < 256; m++) {
@@ -589,18 +619,23 @@ char *RC4::EncryptDecrypt(char *pszText, const char *pszKey) {
         SWAP(*(sbox + m), *(sbox + n));
     }
 
-    ilen = (int) strlen(pszText);
+    ilen = pszText.length();
     for (m = 0; m < ilen; m++) {
         i = (i + 1) & 0xff;
         j = (j + *(sbox + i)) & 0xff;
         SWAP(*(sbox + i), *(sbox + j));  /* randomly Initialize
 							the key sequence */
         k = *(sbox + ((*(sbox + i) + *(sbox + j)) & 0xff));
-        if (k == *(pszText + m))       /* avoid '\0' among the
+        if (k == pszText[m])       /* avoid '\0' among the
 							encoded text; */
             k = 0;
-        *(pszText + m) ^= k;
+        //*(res + m) ^= k;
+        res[m] = (res[m]) ^ k;
     }
 
-    return pszText;
+    /* remove Key traces in memory  */
+    memset(sbox, 0, 256);
+    memset(key, 0, 256);
+
+    return res;
 }

