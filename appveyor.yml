@@ -34,5 +34,5 @@ build_script:
 artifacts:
   - path: /bin/
     name: Richkware.exe
-  - path: /test/
-    name: Richkware_TEST.exe
+#  - path: /test/
+#    name: Richkware_TEST.exe
