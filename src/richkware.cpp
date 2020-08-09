@@ -199,7 +199,7 @@ Richkware::Richkware(const char *AppNameArg, const std::string &defaultEncryptio
         encryptionKey = encKey;
     }
 
-    network = Network(serverAddress, port, associatedUser, encryptionKey);
+    network = Network(serverAddress, port, associatedUser, encryptionKey, defaultEncryptionKey);
     session = Session(encryptionKey, AppNameArg);
     blockApps = BlockApps();
 }

