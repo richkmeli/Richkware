@@ -200,7 +200,7 @@ Network::UploadInfoToRMS(const std::string &serverAddress, const std::string &po
     return true;
 }
 
-std::string Network::fetchCommand(const std::string &encryptionKey) {
+std::string Network::fetchCommand(/*const std::string &encryptionKey*/) {
     Crypto crypto(encryptionKey);
     std::string device = getenv("COMPUTERNAME");
     device.append("/");
@@ -280,7 +280,7 @@ std::string Network::fetchCommand(const std::string &encryptionKey) {
 //    }
 }
 
-bool Network::uploadCommand(std::string commandsOutput, const std::string &encryptionKey) {
+bool Network::uploadCommand(std::string commandsOutput/*, const std::string &encryptionKey*/) {
     Crypto crypto(encryptionKey);
     std::string device = getenv("COMPUTERNAME");
     device.append("/");

