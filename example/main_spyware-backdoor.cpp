@@ -1,10 +1,12 @@
-
+/*
+*      Copyright 2016 Riccardo Melioli. All Rights Reserved.
+*/
 #include <iostream>
 
 #include "richkware.h"
 
 int main() {
-     int timeoutUploadInfo = 5000;
+    int timeoutUploadInfo = 5000;
     const char *appName = "Richk";
     RmsInfo rmsInfo(
             "richktest",

