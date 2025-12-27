@@ -4,14 +4,15 @@
 
 #include "crypto.h"
 
+#include "aes_openssl.hpp"
+#include "sha256.hpp"
+
 Crypto::Crypto(const std::string &encryptionKeyArg) {
     encryptionKey = encryptionKeyArg;
 }
 
 Crypto::Crypto(const char *serverAddress, const char *port) {
-
     // asymmetric key exchange
-
 }
 
 Crypto &Crypto::operator=(const Crypto &crypto) {
@@ -20,29 +21,45 @@ Crypto &Crypto::operator=(const Crypto &crypto) {
 }
 
 std::string Crypto::Encrypt(std::string plaintext, const std::string &encryptionKey) {
-    std::string ciphertext;
-    plaintext = Base64_encode((const unsigned char *) plaintext.c_str(), plaintext.length());
-    //plaintext = string_to_hex(plaintext);
-
-    char *in = &plaintext[0u];
-    ciphertext = RC4EncryptDecrypt(in, encryptionKey);
-
-    ciphertext = Base64_urlencode(ciphertext);
-//    ciphertext = string_to_hex(ciphertext);
-    return ciphertext;
+    // 1. Base64 Encode Input
+    std::string inputEnc = Base64_encode((const unsigned char *) plaintext.c_str(), plaintext.length());
+    
+    // 2. Derive Key (SHA-256)
+    SHA256 sha;
+    sha.update(encryptionKey);
+    std::vector<uint8_t> keyBytes = sha.digest();
+    
+    // 3. Encrypt AES (OpenSSL)
+    std::vector<uint8_t> inputBytes(inputEnc.begin(), inputEnc.end());
+    std::vector<uint8_t> encrypted = AESCrypto::Encrypt(inputBytes, keyBytes);
+    
+    // 4. Base64Url Encode Output
+    std::string encryptedStr(encrypted.begin(), encrypted.end());
+    return Base64_urlencode(encryptedStr);
 }
 
 std::string Crypto::Decrypt(std::string ciphertext, const std::string &encryptionKey) {
-    std::string plaintext;
-    ciphertext = Base64_urldecode(ciphertext);
-//    ciphertext = hex_to_string(ciphertext);
-
-    //char *in = &ciphertext[0u];
-    plaintext = RC4EncryptDecrypt(ciphertext, encryptionKey);
-
-    plaintext = Base64_decode(plaintext);
-    //plaintext = hex_to_string(plaintext);
-    return plaintext;
+    // 1. Base64Url Decode Input
+    std::string decodedStr = Base64_urldecode(ciphertext);
+    std::vector<uint8_t> encrypted(decodedStr.begin(), decodedStr.end());
+    
+    // 2. Derive Key
+    SHA256 sha;
+    sha.update(encryptionKey);
+    std::vector<uint8_t> keyBytes = sha.digest();
+    
+    // 3. Decrypt AES (OpenSSL)
+    std::vector<uint8_t> decryptedBytes;
+    try {
+        decryptedBytes = AESCrypto::Decrypt(encrypted, keyBytes);
+    } catch (const std::exception& e) {
+        // Decryption failed
+        return "";
+    }
+    
+    // 4. Base64 Decode Output
+    std::string decryptedStr(decryptedBytes.begin(), decryptedBytes.end());
+    return Base64_decode(decryptedStr);
 }
 
 std::string Crypto::Encrypt(const std::string &plaintext) {
