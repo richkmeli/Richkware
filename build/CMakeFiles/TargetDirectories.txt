@@ -1,3 +1,0 @@
-/home/richk/Projects/Richkware/build/CMakeFiles/Richkware.dir
-/home/richk/Projects/Richkware/build/CMakeFiles/edit_cache.dir
-/home/richk/Projects/Richkware/build/CMakeFiles/rebuild_cache.dir
