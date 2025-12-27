@@ -69,45 +69,47 @@ The Richkware framework includes a set of modules and functions that enable you 
 - **Hibernation** (*richkware.h*): Hibernates the system.
 
 ## Requirements
-
-To build and use **Richkware**, you will need:
-
-- **Make** or **CMake**
-- [MinGW](http://www.mingw.org/)
-
-## Getting Started
-
-### With **Richkware-Manager-Server** (RMS)
-
-If you have deployed **RMS**, initialize the malware as follows:
-
-```cpp
-int main() {
-    Richkware richkware("Richk", "DefaultPassword", "192.168.99.100", "8080", "associatedUser");
-    ...
-    return 0;
-}
-```
-
-This will retrieve a secure key from **RMS** and use it for encryption. **DefaultPassword** is used as a fallback encryption key if the malware cannot reach the RMS.
-
-### Without **Richkware-Manager-Server**
-
-If you have not deployed **RMS**, you can use:
-
-```cpp
-Richkware richkware("Richk", "richktest");
-```
-
-This will use **richktest** as the encryption key.
-
-## Compile
-
-### Using MinGW (for Windows or cross-compiling for Linux)
-
-```bash
-make
-```
+ 
+ To build and use **Richkware**, you will need:
+ 
+ - **Make** or **CMake**
+ - **C++17** compliant compiler (e.g., GCC 7+, Clang 5+, MSVC 2017+)
+ - [MinGW-w64](http://www.mingw.org/) (if compiling for Windows from Linux)
+ 
+ ## Getting Started
+ 
+ ### With **Richkware-Manager-Server** (RMS)
+ 
+ If you have deployed **RMS**, initialize the malware as follows:
+ 
+ ```cpp
+ int main() {
+     // Richkware richkware(appName, defaultEncryptionKey, serverAddress, serverPort, associatedUser);
+     Richkware richkware("Richk", "DefaultPassword", "192.168.99.100", "8080", "associatedUser");
+     ...
+     return 0;
+ }
+ ```
+ 
+ This will retrieve a secure key from **RMS** and use it for encryption. **DefaultPassword** is used as a fallback encryption key if the malware cannot reach the RMS.
+ 
+ ### Without **Richkware-Manager-Server**
+ 
+ If you have not deployed **RMS**, you can use:
+ 
+ ```cpp
+ Richkware richkware("Richk", "richktest");
+ ```
+ 
+ This will use **richktest** as the encryption key.
+ 
+ ## Compile
+ 
+ ### Using Make (Linux/MinGW)
+ 
+ ```bash
+ make
+ ```
 
 ### Using Microsoft C++ Compiler (Visual Studio)
 

