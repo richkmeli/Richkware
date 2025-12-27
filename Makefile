@@ -37,7 +37,24 @@ EFLAG= -lws2_32
 
 
 .PHONY : all
-all: clean make_directories build
+# Check for required headers (OpenSSL)
+.PHONY : check_openssl
+check_openssl:
+	@printf 'Checking OpenSSL headers... ';
+	@printf '#include <openssl/evp.h>\nint main(){return 0;}\n' > /tmp/check_openssl.c; \
+	if $(CXX) -c /tmp/check_openssl.c -o /dev/null >/dev/null 2>&1 ; then \
+		echo ok; \
+		rm -f /tmp/check_openssl.c; \
+	else \
+		echo; \
+		echo "ERROR: OpenSSL headers not found."; \
+		echo "- For native Linux builds (Debian/Ubuntu): sudo apt install build-essential libssl-dev pkg-config"; \
+		echo "- For cross-compiling with MinGW: sudo apt install mingw-w64  (and provide OpenSSL for MinGW/MSYS2)"; \
+		rm -f /tmp/check_openssl.c; \
+		exit 1; \
+	fi
+
+all: check_openssl clean make_directories build
 
 .PHONY : build
 build: $(EXECUTABLE)

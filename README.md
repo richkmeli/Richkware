@@ -5,6 +5,8 @@
 
 **Richkware** is a C++ framework designed for building Windows malware for educational and research purposes. It provides a comprehensive library of network and system functions to create various types of malware, including viruses, worms, bots, spyware, keyloggers, and scareware.
 
+> **Disclaimer / Ethical use**: This project is intended **only** for educational and research purposes. Do not use the code to harm, compromise, or access systems without explicit permission. The author and contributors are not responsible for misuse.
+
 ## Description
 
 The Richkware framework offers a modular set of functions enabling the creation of malware with diverse capabilities, such as network communication, system manipulation, and cryptography.
@@ -76,6 +78,22 @@ To build and use **Richkware**, you need:
 - **C++17** compliant compiler (e.g., GCC 7+, Clang 5+, MSVC 2017+)
 - [MinGW-w64](http://www.mingw.org/) (if cross-compiling for Windows from Linux)
 
+### Dependencies
+
+- **OpenSSL headers and libraries** (required by `aes_openssl.cpp`):
+
+    - Debian/Ubuntu (native build):
+
+        ```bash
+        sudo apt update && sudo apt install build-essential libssl-dev pkg-config
+        ```
+
+    - Cross-compiling to Windows (MinGW):
+        - Install MinGW: `sudo apt install mingw-w64`.
+        - Provide OpenSSL headers/libs for the MinGW target (MSYS2 on Windows makes this easier), or cross-compile OpenSSL for MinGW and point the Makefile to the include/lib paths.
+
+    - `pkg-config` can help discover OpenSSL include/lib paths, if available.
+
 ## Getting Started
 
 ### Data Initialization
@@ -87,23 +105,24 @@ If you have deployed **RMS**, initialize the malware as follows:
 ```cpp
 int main() {
     // Richkware richkware(appName, defaultEncryptionKey, serverAddress, serverPort, associatedUser);
-    Richkware richkware("Richk", "DefaultPassword", "192.168.99.100", "8080", "associatedUser");
+    // SECURITY: Use environment variables or secure configuration in production
+    Richkware richkware("Richk", "TempPassword", "192.168.99.100", "8080", "associatedUser");
     // ...
     return 0;
 }
 ```
 
-This retrieves a secure key from **RMS** for encryption. **DefaultPassword** is used as a fallback if the RMS is unreachable.
+This retrieves a secure key from **RMS** for encryption. The temporary password is used as a fallback if the RMS is unreachable.
+
+**WARNING**: Never hardcode production credentials in source code.
 
 #### Without Richkware-Manager-Server
 
 If you are not using **RMS**, initialize it simply:
 
 ```cpp
-Richkware richkware("Richk", "richktest");
+Richkware richkware("Richk", "YourSecureKey");
 ```
-
-This uses **richktest** as the static encryption key.
 
 ## Compilation
 
@@ -112,6 +131,18 @@ This uses **richktest** as the static encryption key.
 ```bash
 make
 ```
+
+If you want to build natively on Linux (not cross-compile to Windows) you can override the compiler:
+
+```bash
+make CXX=g++
+```
+
+### Troubleshooting
+
+- If the build fails with an error about `openssl/evp.h` missing, install the OpenSSL development headers (see Dependencies above). The `Makefile` now performs a pre-check and will print guidance when OpenSSL headers are missing.
+
+- For cross-compilation: ensure `mingw-w64` is installed and that you provide OpenSSL headers/libs for the MinGW target (or build OpenSSL for MinGW yourself). Using MSYS2 on Windows often simplifies this.
 
 ### Using Microsoft C++ Compiler (Visual Studio)
 
