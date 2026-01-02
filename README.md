@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/richkmeli/Richkware/actions/workflows/ci.yml/badge.svg)](https://github.com/richkmeli/Richkware/actions/workflows/ci.yml)
 [![Build status](https://ci.appveyor.com/api/projects/status/1tn6vedeaq0v27ra?svg=true)](https://ci.appveyor.com/project/richkmeli/richkware)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e6b4a003d5e7404c80225391bfe34f45)](https://app.codacy.com/app/richkmeli/Richkware?utm_source=github.com&utm_medium=referral&utm_content=richkmeli/Richkware&utm_campaign=Badge_Grade_Dashboard)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d0698be43d9044c3839f11f3817d42c3)](https://app.codacy.com/gh/richkmeli/Richkware?utm_source=github.com&utm_medium=referral&utm_content=richkmeli/Richkware&utm_campaign=Badge_Grade)
 
 **Richkware** is a modern C++20 framework for building educational malware agents. It provides a comprehensive, secure, and modular architecture for understanding malware mechanics and cybersecurity defense strategies.
 
