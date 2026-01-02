@@ -188,3 +188,4 @@ Once connected, you can send commands following the protocol:
 ```plaintext
 [[1]]COMMAND
 ```
+
