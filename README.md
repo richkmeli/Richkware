@@ -391,30 +391,44 @@ This project is licensed under the terms specified in the LICENSE file.
 
 **This software is for educational purposes only.** Using this software for unauthorized access to computer systems is illegal and unethical. The authors are not responsible for misuse of this software.
 
-## Project Status
+## Features
 
-### ✅ Implemented Features
-- **Core Agent**: Complete lifecycle management
-- **Cryptography**: AES-256-GCM, PBKDF2 key derivation
-- **Network**: HTTPS client, TLS 1.3, C2 protocol with encryption
-- **Command Execution**: Cross-platform shell execution
-- **File Operations**: Complete file management (read/write/search/upload/download)
-- **Persistence**: Registry keys (Windows), autostart (Linux)
-- **JSON Utilities**: Full parser/serializer with object/array support
-- **Logging**: Thread-safe logging framework with multiple levels
-- **Build System**: Interactive scripts for easy configuration
+### Core Capabilities
+- **Modern C++20**: Uses latest C++ standards with concepts, coroutines, and smart pointers
+- **Memory Safety**: RAII principles, smart pointers, and bounds checking
+- **Type Safety**: Strong typing with std::expected for error handling
+- **Thread Safety**: Concurrent operations with proper synchronization
 
-### 🚧 Partially Implemented
-- **Stealth Features**: Basic console hiding (advanced features placeholder)
-- **Privilege Management**: Basic privilege detection (escalation placeholder)
-- **HTTP Upload/Download**: Framework ready, actual HTTP transfer placeholder
+### Security
+- **AES-256-GCM Encryption**: Modern authenticated encryption
+- **TLS 1.3 Communications**: Secure C2 channel with certificate pinning
+- **Key Derivation**: PBKDF2/Argon2 for secure key generation
+- **Secure Random**: Cryptographically secure random number generation
 
-### 📋 Planned Features
-- **Keylogger**: Keyboard input capture
-- **Screenshot**: Screen capture functionality
-- **Process Enumeration**: List and manipulate running processes
-- **Anti-Analysis**: Debugger/VM detection
-- **Self-Deletion**: Secure agent removal
+### System Integration
+- **Multi-Method Persistence**: Registry, services, scheduled tasks, WMI
+- **Privilege Management**: UAC bypass and privilege escalation
+- **Stealth Operations**: Process hiding and anti-analysis techniques
+- **Command Execution**: Multiple backends (CMD, PowerShell, WMI)
+
+### Network Operations
+- **Asynchronous I/O**: Non-blocking network operations
+- **HTTP/HTTPS Client**: Modern HTTP client with connection pooling
+- **C2 Protocol**: Encrypted command and control communications
+- **Resilient Connections**: Automatic retry and failover logic
+
+### Advanced Modules
+- **File Management**: Read, write, delete, and search files with encryption support
+- **Keylogger**: Cross-platform keyboard input capture with real-time callbacks
+- **Screenshot**: Screen capture for entire desktop or specific windows
+- **Process Management**: Enumerate, start, terminate, and inject into processes
+- **Anti-Analysis**: Detect debuggers, virtual machines, and sandbox environments
+- **Self-Deletion**: Secure agent removal and cleanup
+
+### Utilities
+- **Advanced JSON**: Complete JSON parser/serializer with object/array support
+- **Logging Framework**: Thread-safe logging with multiple levels and timestamps
+- **Error Handling**: Consistent Result<T> pattern throughout the codebase
 
 ## Related Projects
 

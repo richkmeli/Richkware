@@ -97,10 +97,24 @@ CMakeFiles/richkware_lib.dir/src/crypto/cipher.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/richkware_lib.dir/src/crypto/cipher.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/richk/Projects/Richkware/src/crypto/cipher.cpp -o CMakeFiles/richkware_lib.dir/src/crypto/cipher.cpp.s
 
+CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.o: CMakeFiles/richkware_lib.dir/flags.make
+CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.o: /home/richk/Projects/Richkware/src/modules/anti_analysis.cpp
+CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.o: CMakeFiles/richkware_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/richk/Projects/Richkware/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.o -MF CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.o.d -o CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.o -c /home/richk/Projects/Richkware/src/modules/anti_analysis.cpp
+
+CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/richk/Projects/Richkware/src/modules/anti_analysis.cpp > CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.i
+
+CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/richk/Projects/Richkware/src/modules/anti_analysis.cpp -o CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.s
+
 CMakeFiles/richkware_lib.dir/src/modules/command_executor.cpp.o: CMakeFiles/richkware_lib.dir/flags.make
 CMakeFiles/richkware_lib.dir/src/modules/command_executor.cpp.o: /home/richk/Projects/Richkware/src/modules/command_executor.cpp
 CMakeFiles/richkware_lib.dir/src/modules/command_executor.cpp.o: CMakeFiles/richkware_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/richk/Projects/Richkware/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/richkware_lib.dir/src/modules/command_executor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/richk/Projects/Richkware/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/richkware_lib.dir/src/modules/command_executor.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/richkware_lib.dir/src/modules/command_executor.cpp.o -MF CMakeFiles/richkware_lib.dir/src/modules/command_executor.cpp.o.d -o CMakeFiles/richkware_lib.dir/src/modules/command_executor.cpp.o -c /home/richk/Projects/Richkware/src/modules/command_executor.cpp
 
 CMakeFiles/richkware_lib.dir/src/modules/command_executor.cpp.i: cmake_force
@@ -114,7 +128,7 @@ CMakeFiles/richkware_lib.dir/src/modules/command_executor.cpp.s: cmake_force
 CMakeFiles/richkware_lib.dir/src/modules/file_manager.cpp.o: CMakeFiles/richkware_lib.dir/flags.make
 CMakeFiles/richkware_lib.dir/src/modules/file_manager.cpp.o: /home/richk/Projects/Richkware/src/modules/file_manager.cpp
 CMakeFiles/richkware_lib.dir/src/modules/file_manager.cpp.o: CMakeFiles/richkware_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/richk/Projects/Richkware/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/richkware_lib.dir/src/modules/file_manager.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/richk/Projects/Richkware/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/richkware_lib.dir/src/modules/file_manager.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/richkware_lib.dir/src/modules/file_manager.cpp.o -MF CMakeFiles/richkware_lib.dir/src/modules/file_manager.cpp.o.d -o CMakeFiles/richkware_lib.dir/src/modules/file_manager.cpp.o -c /home/richk/Projects/Richkware/src/modules/file_manager.cpp
 
 CMakeFiles/richkware_lib.dir/src/modules/file_manager.cpp.i: cmake_force
@@ -125,10 +139,66 @@ CMakeFiles/richkware_lib.dir/src/modules/file_manager.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/richkware_lib.dir/src/modules/file_manager.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/richk/Projects/Richkware/src/modules/file_manager.cpp -o CMakeFiles/richkware_lib.dir/src/modules/file_manager.cpp.s
 
+CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.o: CMakeFiles/richkware_lib.dir/flags.make
+CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.o: /home/richk/Projects/Richkware/src/modules/keylogger.cpp
+CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.o: CMakeFiles/richkware_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/richk/Projects/Richkware/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.o -MF CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.o.d -o CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.o -c /home/richk/Projects/Richkware/src/modules/keylogger.cpp
+
+CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/richk/Projects/Richkware/src/modules/keylogger.cpp > CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.i
+
+CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/richk/Projects/Richkware/src/modules/keylogger.cpp -o CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.s
+
+CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.o: CMakeFiles/richkware_lib.dir/flags.make
+CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.o: /home/richk/Projects/Richkware/src/modules/process_manager.cpp
+CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.o: CMakeFiles/richkware_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/richk/Projects/Richkware/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.o -MF CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.o.d -o CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.o -c /home/richk/Projects/Richkware/src/modules/process_manager.cpp
+
+CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/richk/Projects/Richkware/src/modules/process_manager.cpp > CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.i
+
+CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/richk/Projects/Richkware/src/modules/process_manager.cpp -o CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.s
+
+CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.o: CMakeFiles/richkware_lib.dir/flags.make
+CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.o: /home/richk/Projects/Richkware/src/modules/screenshot.cpp
+CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.o: CMakeFiles/richkware_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/richk/Projects/Richkware/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.o -MF CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.o.d -o CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.o -c /home/richk/Projects/Richkware/src/modules/screenshot.cpp
+
+CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/richk/Projects/Richkware/src/modules/screenshot.cpp > CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.i
+
+CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/richk/Projects/Richkware/src/modules/screenshot.cpp -o CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.s
+
+CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.o: CMakeFiles/richkware_lib.dir/flags.make
+CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.o: /home/richk/Projects/Richkware/src/modules/self_deletion.cpp
+CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.o: CMakeFiles/richkware_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/richk/Projects/Richkware/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.o -MF CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.o.d -o CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.o -c /home/richk/Projects/Richkware/src/modules/self_deletion.cpp
+
+CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/richk/Projects/Richkware/src/modules/self_deletion.cpp > CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.i
+
+CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/richk/Projects/Richkware/src/modules/self_deletion.cpp -o CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.s
+
 CMakeFiles/richkware_lib.dir/src/network/client.cpp.o: CMakeFiles/richkware_lib.dir/flags.make
 CMakeFiles/richkware_lib.dir/src/network/client.cpp.o: /home/richk/Projects/Richkware/src/network/client.cpp
 CMakeFiles/richkware_lib.dir/src/network/client.cpp.o: CMakeFiles/richkware_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/richk/Projects/Richkware/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/richkware_lib.dir/src/network/client.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/richk/Projects/Richkware/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/richkware_lib.dir/src/network/client.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/richkware_lib.dir/src/network/client.cpp.o -MF CMakeFiles/richkware_lib.dir/src/network/client.cpp.o.d -o CMakeFiles/richkware_lib.dir/src/network/client.cpp.o -c /home/richk/Projects/Richkware/src/network/client.cpp
 
 CMakeFiles/richkware_lib.dir/src/network/client.cpp.i: cmake_force
@@ -142,7 +212,7 @@ CMakeFiles/richkware_lib.dir/src/network/client.cpp.s: cmake_force
 CMakeFiles/richkware_lib.dir/src/system/persistence.cpp.o: CMakeFiles/richkware_lib.dir/flags.make
 CMakeFiles/richkware_lib.dir/src/system/persistence.cpp.o: /home/richk/Projects/Richkware/src/system/persistence.cpp
 CMakeFiles/richkware_lib.dir/src/system/persistence.cpp.o: CMakeFiles/richkware_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/richk/Projects/Richkware/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/richkware_lib.dir/src/system/persistence.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/richk/Projects/Richkware/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/richkware_lib.dir/src/system/persistence.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/richkware_lib.dir/src/system/persistence.cpp.o -MF CMakeFiles/richkware_lib.dir/src/system/persistence.cpp.o.d -o CMakeFiles/richkware_lib.dir/src/system/persistence.cpp.o -c /home/richk/Projects/Richkware/src/system/persistence.cpp
 
 CMakeFiles/richkware_lib.dir/src/system/persistence.cpp.i: cmake_force
@@ -157,8 +227,13 @@ CMakeFiles/richkware_lib.dir/src/system/persistence.cpp.s: cmake_force
 richkware_lib_OBJECTS = \
 "CMakeFiles/richkware_lib.dir/src/core/agent.cpp.o" \
 "CMakeFiles/richkware_lib.dir/src/crypto/cipher.cpp.o" \
+"CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.o" \
 "CMakeFiles/richkware_lib.dir/src/modules/command_executor.cpp.o" \
 "CMakeFiles/richkware_lib.dir/src/modules/file_manager.cpp.o" \
+"CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.o" \
+"CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.o" \
+"CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.o" \
+"CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.o" \
 "CMakeFiles/richkware_lib.dir/src/network/client.cpp.o" \
 "CMakeFiles/richkware_lib.dir/src/system/persistence.cpp.o"
 
@@ -167,13 +242,18 @@ richkware_lib_EXTERNAL_OBJECTS =
 
 lib/librichkware_lib.a: CMakeFiles/richkware_lib.dir/src/core/agent.cpp.o
 lib/librichkware_lib.a: CMakeFiles/richkware_lib.dir/src/crypto/cipher.cpp.o
+lib/librichkware_lib.a: CMakeFiles/richkware_lib.dir/src/modules/anti_analysis.cpp.o
 lib/librichkware_lib.a: CMakeFiles/richkware_lib.dir/src/modules/command_executor.cpp.o
 lib/librichkware_lib.a: CMakeFiles/richkware_lib.dir/src/modules/file_manager.cpp.o
+lib/librichkware_lib.a: CMakeFiles/richkware_lib.dir/src/modules/keylogger.cpp.o
+lib/librichkware_lib.a: CMakeFiles/richkware_lib.dir/src/modules/process_manager.cpp.o
+lib/librichkware_lib.a: CMakeFiles/richkware_lib.dir/src/modules/screenshot.cpp.o
+lib/librichkware_lib.a: CMakeFiles/richkware_lib.dir/src/modules/self_deletion.cpp.o
 lib/librichkware_lib.a: CMakeFiles/richkware_lib.dir/src/network/client.cpp.o
 lib/librichkware_lib.a: CMakeFiles/richkware_lib.dir/src/system/persistence.cpp.o
 lib/librichkware_lib.a: CMakeFiles/richkware_lib.dir/build.make
 lib/librichkware_lib.a: CMakeFiles/richkware_lib.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/richk/Projects/Richkware/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX static library lib/librichkware_lib.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/richk/Projects/Richkware/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX static library lib/librichkware_lib.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/richkware_lib.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/richkware_lib.dir/link.txt --verbose=$(VERBOSE)
 

