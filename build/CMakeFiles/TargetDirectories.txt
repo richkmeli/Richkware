@@ -1,0 +1,10 @@
+/home/richk/Projects/Richkware/build/CMakeFiles/richkware_lib.dir
+/home/richk/Projects/Richkware/build/CMakeFiles/richkware.dir
+/home/richk/Projects/Richkware/build/CMakeFiles/package.dir
+/home/richk/Projects/Richkware/build/CMakeFiles/package_source.dir
+/home/richk/Projects/Richkware/build/CMakeFiles/edit_cache.dir
+/home/richk/Projects/Richkware/build/CMakeFiles/rebuild_cache.dir
+/home/richk/Projects/Richkware/build/CMakeFiles/list_install_components.dir
+/home/richk/Projects/Richkware/build/CMakeFiles/install.dir
+/home/richk/Projects/Richkware/build/CMakeFiles/install/local.dir
+/home/richk/Projects/Richkware/build/CMakeFiles/install/strip.dir

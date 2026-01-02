@@ -1,0 +1,2 @@
+/usr/bin/ar qc lib/librichkware_lib.a CMakeFiles/richkware_lib.dir/src/core/agent.cpp.o CMakeFiles/richkware_lib.dir/src/crypto/cipher.cpp.o CMakeFiles/richkware_lib.dir/src/modules/command_executor.cpp.o CMakeFiles/richkware_lib.dir/src/modules/file_manager.cpp.o CMakeFiles/richkware_lib.dir/src/network/client.cpp.o CMakeFiles/richkware_lib.dir/src/system/persistence.cpp.o
+/usr/bin/ranlib lib/librichkware_lib.a
