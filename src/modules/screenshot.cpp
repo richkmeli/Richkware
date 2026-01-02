@@ -2,6 +2,7 @@
 #include "richkware/utils/logger.hpp"
 #include <vector>
 #include <cstring>
+#include <fstream>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -38,6 +39,7 @@ public:
     core::Result<void> save_screenshot(const core::Bytes& image_data,
                                      const std::filesystem::path& filepath,
                                      const ScreenshotConfig& config) {
+        (void)config;
         try {
             std::ofstream file(filepath, std::ios::binary);
             if (!file.is_open()) {
@@ -276,6 +278,7 @@ private:
 
 #else
     core::Result<core::Bytes> capture_screen_linux(const ScreenshotConfig& config) {
+        (void)config;
         // Linux implementation using X11
         Display* display = XOpenDisplay(NULL);
         if (!display) {
@@ -305,11 +308,16 @@ private:
     }
 
     core::Result<core::Bytes> capture_window_linux(const std::string& window_title, const ScreenshotConfig& config) {
+        (void)window_title;
+        (void)config;
         // Simplified implementation - capture entire screen for now
         return capture_screen_linux(config);
     }
 
     core::Bytes ximage_to_png(XImage* image, int width, int height) {
+        (void)image;
+        (void)width;
+        (void)height;
         // Simplified PNG creation - in real implementation use libpng properly
         core::Bytes data;
 

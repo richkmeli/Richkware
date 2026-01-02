@@ -63,6 +63,10 @@ endif()
 # Find dependencies
 find_package(OpenSSL REQUIRED)
 find_package(Threads REQUIRED)
+if(UNIX AND NOT APPLE)
+    find_package(X11 REQUIRED)
+    find_package(PNG REQUIRED)
+endif()
 
 # Include directories
 include_directories(include)
@@ -120,6 +124,13 @@ if(WIN32)
             shell32
             user32
             kernel32
+    )
+elseif(UNIX AND NOT APPLE)
+    target_link_libraries(richkware_lib
+        PUBLIC
+            X11::X11
+            Xtst
+            PNG::PNG
     )
 endif()
 

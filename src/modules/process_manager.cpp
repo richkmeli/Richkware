@@ -93,6 +93,8 @@ public:
 #ifdef _WIN32
         return inject_dll_windows(pid, dll_path);
 #else
+        (void)pid;
+        (void)dll_path;
         return core::RichkwareError{core::ErrorCode::SystemError, "DLL injection not supported on Linux"};
 #endif
     }
@@ -436,9 +438,7 @@ private:
         }
     }
 
-    core::Result<void> inject_dll(std::uint32_t pid, const std::string& dll_path) {
-        return core::RichkwareError{core::ErrorCode::SystemError, "DLL injection not supported on Linux"};
-    }
+
 #endif
 };
 

@@ -1,12 +1,15 @@
 #include "richkware/modules/self_deletion.hpp"
 #include "richkware/utils/logger.hpp"
 #include <filesystem>
+#include <fstream>
 
 #ifdef _WIN32
 #include <windows.h>
 #else
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/stat.h>
+#include <linux/limits.h>
 #endif
 
 namespace fs = std::filesystem;

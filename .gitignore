@@ -29,6 +29,7 @@
 *.out
 *.app
 /bin
+/build
 
 /Debug/
 /Release/
@@ -39,4 +40,24 @@
 /.project
 /nbproject
 /.idea
-cmake-build-richk
+cmake-build-*
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+# CLion
+.idea/
+
+# VS Code
+.vscode/
+
+# Temporary files
+*.tmp
+*.temp
+*~

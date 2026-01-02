@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/richkware.dir/main.cpp.o -o bin/richkware  lib/librichkware_lib.a /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/x86_64-linux-gnu/libcrypto.so 

