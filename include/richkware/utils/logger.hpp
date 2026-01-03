@@ -5,6 +5,7 @@
 #include <chrono>
 #include <sstream>
 #include <mutex>
+#include <iomanip>
 
 namespace richkware::utils {
 
@@ -40,9 +41,9 @@ public:
         // Timestamp
         auto now = std::chrono::system_clock::now();
         auto time_t = std::chrono::system_clock::to_time_t(now);
-        oss << std::ctime(&time_t);
-        oss.seekp(-1, std::ios_base::end); // Remove newline from ctime
-        oss << " ";
+        oss << std::put_time(std::localtime(&time_t), "%c") << " ";
+
+
 
         // Level
         switch (level) {
