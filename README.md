@@ -97,10 +97,20 @@ To build and use **Richkware**, you need:
 - **Google Test** (for unit testing, optional)
 
 ### Platform Support
-- **Windows 10+**: Full support (MSVC + MinGW)
-- **Linux**: Full support (GCC + Clang)
-- **macOS**: Full support (Clang)
-- **Cross-compilation**: MinGW-w64 for Windows targets from Linux
+
+| Platform | Compiler | Build Status |
+|----------|----------|--------------|
+| **Linux** | GCC 11+, Clang 13+ | ✅ CI Passing |
+| **macOS** | Clang (Xcode 16+) | ✅ CI Passing |
+| **Windows** | MSVC 2022 | ✅ CI Passing |
+| **Cross-compilation** | MinGW-w64 | ❌ Not supported |
+
+**Current CI Build Matrix:**
+- Ubuntu 24.04: GCC 11, Clang 13
+- macOS 14: Clang (latest)
+- Windows 2022: MSVC 2022
+
+All platforms are tested and supported through GitHub Actions CI with automated builds.
 
 ## Getting Started
 
