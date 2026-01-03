@@ -206,6 +206,7 @@ private:
         bmi.bmiHeader.biCompression = BI_RGB;
 
         HDC hDC = GetDC(NULL);
+        core::Bytes bmp_data;
         void* pBits;
         HBITMAP hDIB = CreateDIBSection(hDC, &bmi, DIB_RGB_COLORS, &pBits, NULL, 0);
 
@@ -219,7 +220,7 @@ private:
             GetDIBits(hMemDC, hBitmap, 0, height, pBits, &bmi, DIB_RGB_COLORS);
 
             // Create BMP file in memory
-            core::Bytes bmp_data = create_bmp_from_pixels(static_cast<uint8_t*>(pBits), width, height);
+            bmp_data = create_bmp_from_pixels(static_cast<uint8_t*>(pBits), width, height);
 
             SelectObject(hMemDC, hOld);
             DeleteDC(hMemDC);

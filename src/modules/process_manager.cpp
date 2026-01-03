@@ -244,7 +244,7 @@ private:
         }
 
         if (!CreateProcessW(NULL, cmd_line_w.data(), NULL, NULL, FALSE, 0, NULL,
-                           work_dir_w.empty() ? NULL : work_dir_w.data(), &si, &pi)) {
+                           work_dir_w.empty() ? NULL : work_dir_w.data(), reinterpret_cast<STARTUPINFOW*>(&si), &pi)) {
             return core::RichkwareError{core::ErrorCode::SystemError, "Cannot create process"};
         }
 

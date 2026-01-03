@@ -143,7 +143,7 @@ std::string base64_encode(const core::Bytes& data) {
     BIO_write(bio, data.data(), static_cast<int>(data.size()));
     BIO_flush(bio);
     BIO_get_mem_ptr(bio, &bufferPtr);
-    std::string encoded(bufferPtr->data, bufferPtr->length);
+    std::string encoded(bufferPtr->data, static_cast<size_t>(bufferPtr->length));
     BIO_free_all(bio);
 
     return encoded;
