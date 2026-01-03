@@ -429,7 +429,7 @@ private:
         if (pid == 0) {
             // Child process
             if (!working_directory.empty()) {
-                chdir(working_directory.c_str());
+                (void)chdir(working_directory.c_str());
             }
 
             // Prepare arguments for execvp
