@@ -18,7 +18,7 @@
 #include <pwd.h>
 #include <signal.h>
 #include <spawn.h>
-#include <wait.h>
+#include <sys/wait.h>
 #endif
 
 namespace richkware::modules {
@@ -29,24 +29,30 @@ public:
     core::Result<std::vector<ProcessInfo>> enumerate_processes(const ProcessConfig& config) {
 #ifdef _WIN32
         return enumerate_processes_windows(config);
-#else
+#elif defined(__linux__)
         return enumerate_processes_linux(config);
+#else
+        return core::RichkwareError{core::ErrorCode::SystemError, "Process enumeration not supported on this platform"};
 #endif
     }
 
     core::Result<ProcessInfo> get_process_info(std::uint32_t pid) {
 #ifdef _WIN32
         return get_process_info_windows(pid);
-#else
+#elif defined(__linux__)
         return get_process_info_linux(pid);
+#else
+        return core::RichkwareError{core::ErrorCode::SystemError, "Process info not supported on this platform"};
 #endif
     }
 
     core::Result<void> terminate_process(std::uint32_t pid) {
 #ifdef _WIN32
         return terminate_process_windows(pid);
-#else
+#elif defined(__linux__)
         return terminate_process_linux(pid);
+#else
+        return core::RichkwareError{core::ErrorCode::SystemError, "Process termination not supported on this platform"};
 #endif
     }
 
@@ -55,8 +61,10 @@ public:
                                             const std::string& working_directory) {
 #ifdef _WIN32
         return start_process_windows(executable_path, arguments, working_directory);
-#else
+#elif defined(__linux__)
         return start_process_linux(executable_path, arguments, working_directory);
+#else
+        return core::RichkwareError{core::ErrorCode::SystemError, "Process starting not supported on this platform"};
 #endif
     }
 
@@ -301,7 +309,7 @@ private:
         return pid < 100 || pid == 4; // System, SMSS, etc.
     }
 
-#else
+#elif defined(__linux__)
     core::Result<std::vector<ProcessInfo>> enumerate_processes_linux(const ProcessConfig& config) {
         std::vector<ProcessInfo> processes;
 
