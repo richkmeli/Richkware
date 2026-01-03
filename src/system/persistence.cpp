@@ -232,12 +232,14 @@ public:
             ShowWindow(console, SW_HIDE);
         }
         return core::Result<void>{};
-#else
+#elif defined(__linux__)
         // On Linux, detach from terminal
         if (daemon(0, 0) == -1) {
             return core::RichkwareError{core::ErrorCode::SystemError, "Failed to daemonize"};
         }
         return core::Result<void>{};
+#else
+        return core::RichkwareError{core::ErrorCode::SystemError, "Console hiding not supported on this platform"};
 #endif
     }
     
