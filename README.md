@@ -1,8 +1,7 @@
 # Richkware
 
 [![CI](https://github.com/richkmeli/Richkware/actions/workflows/ci.yml/badge.svg)](https://github.com/richkmeli/Richkware/actions/workflows/ci.yml)
-[![Build status](https://ci.appveyor.com/api/projects/status/1tn6vedeaq0v27ra?svg=true)](https://ci.appveyor.com/project/richkmeli/richkware)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d0698be43d9044c3839f11f3817d42c3)](https://app.codacy.com/gh/richkmeli/Richkware?utm_source=github.com&utm_medium=referral&utm_content=richkmeli/Richkware&utm_campaign=Badge_Grade)
+[![CodeQL](https://github.com/richkmeli/Richkware/workflows/CodeQL/badge.svg)](https://github.com/richkmeli/Richkware/actions?query=workflow%3ACodeQL)
 
 **Richkware** is a modern C++20 framework for building educational malware agents. It provides a comprehensive, secure, and modular architecture for understanding malware mechanics and cybersecurity defense strategies.
 
@@ -75,14 +74,10 @@ Richkware operates as part of a three-component ecosystem:
 
 ## CI/CD
 
-Richkware uses multiple CI systems for comprehensive testing:
-
-- **GitHub Actions**: Primary CI with Linux, Windows, and macOS builds
-- **AppVeyor**: Legacy Windows CI with MSVC and MinGW support
+Richkware uses GitHub Actions for comprehensive cross-platform CI testing.
 
 ### Build Status
-- **GitHub Actions**: ![CI](https://github.com/richkmeli/Richkware/actions/workflows/ci.yml/badge.svg)
-- **AppVeyor**: ![Build status](https://ci.appveyor.com/api/projects/status/1tn6vedeaq0v27ra?svg=true)
+![CI](https://github.com/richkmeli/Richkware/actions/workflows/ci.yml/badge.svg)
 
 ## Requirements
 
