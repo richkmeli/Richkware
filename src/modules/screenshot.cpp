@@ -8,7 +8,7 @@
 #include <windows.h>
 #include <wingdi.h>
 #include <tlhelp32.h>
-#else
+#elif defined(__linux__)
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <png.h>
@@ -23,16 +23,20 @@ public:
     core::Result<core::Bytes> capture_screen(const ScreenshotConfig& config) {
 #ifdef _WIN32
         return capture_screen_windows(config);
-#else
+#elif defined(__linux__)
         return capture_screen_linux(config);
+#else
+        return core::RichkwareError{core::ErrorCode::SystemError, "Screenshot not supported on this platform"};
 #endif
     }
 
     core::Result<core::Bytes> capture_window(const std::string& window_title, const ScreenshotConfig& config) {
 #ifdef _WIN32
         return capture_window_windows(window_title, config);
-#else
+#elif defined(__linux__)
         return capture_window_linux(window_title, config);
+#else
+        return core::RichkwareError{core::ErrorCode::SystemError, "Screenshot not supported on this platform"};
 #endif
     }
 
@@ -60,16 +64,20 @@ public:
     core::Result<std::pair<int, int>> get_screen_size() {
 #ifdef _WIN32
         return get_screen_size_windows();
-#else
+#elif defined(__linux__)
         return get_screen_size_linux();
+#else
+        return core::RichkwareError{core::ErrorCode::SystemError, "Screenshot not supported on this platform"};
 #endif
     }
 
     core::Result<std::vector<std::string>> list_windows() {
 #ifdef _WIN32
         return list_windows_windows();
-#else
+#elif defined(__linux__)
         return list_windows_linux();
+#else
+        return std::vector<std::string>{};
 #endif
     }
 
@@ -276,7 +284,7 @@ private:
         return windows;
     }
 
-#else
+#elif defined(__linux__)
     core::Result<core::Bytes> capture_screen_linux(const ScreenshotConfig& config) {
         (void)config;
         // Linux implementation using X11
