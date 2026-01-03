@@ -41,9 +41,12 @@ public:
         // Timestamp
         auto now = std::chrono::system_clock::now();
         auto time_t = std::chrono::system_clock::to_time_t(now);
-        oss << std::put_time(std::localtime(&time_t), "%c") << " ";
-
-
+        std::tm* tm_ptr = std::localtime(&time_t);
+        if (tm_ptr != nullptr) {
+            oss << std::put_time(tm_ptr, "%a %b %d %H:%M:%S %Y") << " ";
+        } else {
+            oss << "unknown-time ";
+        }
 
         // Level
         switch (level) {
@@ -70,9 +73,12 @@ public:
         // Timestamp
         auto now = std::chrono::system_clock::now();
         auto time_t = std::chrono::system_clock::to_time_t(now);
-        oss << std::ctime(&time_t);
-        oss.seekp(-1, std::ios_base::end); // Remove newline from ctime
-        oss << " ";
+        std::tm* tm_ptr = std::localtime(&time_t);
+        if (tm_ptr != nullptr) {
+            oss << std::put_time(tm_ptr, "%a %b %d %H:%M:%S %Y") << " ";
+        } else {
+            oss << "unknown-time ";
+        }
 
         // Level
         switch (level) {
