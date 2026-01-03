@@ -26,6 +26,7 @@ public:
 #elif defined(__linux__)
         return capture_screen_linux(config);
 #else
+        (void)config;
         return core::RichkwareError{core::ErrorCode::SystemError, "Screenshot not supported on this platform"};
 #endif
     }
@@ -36,6 +37,8 @@ public:
 #elif defined(__linux__)
         return capture_window_linux(window_title, config);
 #else
+        (void)window_title;
+        (void)config;
         return core::RichkwareError{core::ErrorCode::SystemError, "Screenshot not supported on this platform"};
 #endif
     }

