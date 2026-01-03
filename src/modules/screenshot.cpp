@@ -86,7 +86,7 @@ public:
 
 private:
 #ifdef _WIN32
-    core::Result<core::Bytes> capture_screen_windows(const ScreenshotConfig& config) {
+    core::Result<core::Bytes> capture_screen_windows(const ScreenshotConfig& /*config*/) {
         // Get screen dimensions
         int width = GetSystemMetrics(SM_CXSCREEN);
         int height = GetSystemMetrics(SM_CYSCREEN);
@@ -135,7 +135,7 @@ private:
         return image_data;
     }
 
-    core::Result<core::Bytes> capture_window_windows(const std::string& window_title, const ScreenshotConfig& config) {
+    core::Result<core::Bytes> capture_window_windows(const std::string& window_title, const ScreenshotConfig& /*config*/) {
         // Find window by title
         HWND hwnd = FindWindow(NULL, window_title.c_str());
         if (!hwnd) {
@@ -236,26 +236,26 @@ private:
         const int image_size = width * height * 4; // 32-bit RGBA
         const int file_size = header_size + image_size;
 
-        core::Bytes data(file_size);
+        core::Bytes bmp_data(file_size);
 
         // BMP header
-        data[0] = 'B'; data[1] = 'M'; // Signature
-        *reinterpret_cast<uint32_t*>(&data[2]) = file_size; // File size
-        *reinterpret_cast<uint32_t*>(&data[10]) = header_size; // Data offset
+        bmp_data[0] = 'B'; bmp_data[1] = 'M'; // Signature
+        *reinterpret_cast<uint32_t*>(&bmp_data[2]) = file_size; // File size
+        *reinterpret_cast<uint32_t*>(&bmp_data[10]) = header_size; // Data offset
 
         // DIB header
-        *reinterpret_cast<uint32_t*>(&data[14]) = 40; // Header size
-        *reinterpret_cast<int32_t*>(&data[18]) = width; // Width
-        *reinterpret_cast<int32_t*>(&data[22]) = height; // Height
-        *reinterpret_cast<uint16_t*>(&data[26]) = 1; // Planes
-        *reinterpret_cast<uint16_t*>(&data[28]) = 32; // Bits per pixel
-        *reinterpret_cast<uint32_t*>(&data[30]) = 0; // Compression
-        *reinterpret_cast<uint32_t*>(&data[34]) = image_size; // Image size
+        *reinterpret_cast<uint32_t*>(&bmp_data[14]) = 40; // Header size
+        *reinterpret_cast<int32_t*>(&bmp_data[18]) = width; // Width
+        *reinterpret_cast<int32_t*>(&bmp_data[22]) = height; // Height
+        *reinterpret_cast<uint16_t*>(&bmp_data[26]) = 1; // Planes
+        *reinterpret_cast<uint16_t*>(&bmp_data[28]) = 32; // Bits per pixel
+        *reinterpret_cast<uint32_t*>(&bmp_data[30]) = 0; // Compression
+        *reinterpret_cast<uint32_t*>(&bmp_data[34]) = image_size; // Image size
 
         // Copy pixel data
-        std::memcpy(&data[header_size], pixels, image_size);
+        std::memcpy(&bmp_data[header_size], pixels, image_size);
 
-        return data;
+        return bmp_data;
     }
 
     core::Result<std::pair<int, int>> get_screen_size_windows() {

@@ -10,6 +10,7 @@
 #include <openssl/err.h>
 
 #ifdef _WIN32
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #pragma comment(lib, "ws2_32.lib")
@@ -74,7 +75,7 @@ public:
         }
 #endif
 
-        socket_ = socket(AF_INET, SOCK_STREAM, 0);
+        socket_ = (int)socket(AF_INET, SOCK_STREAM, 0);
         if (socket_ < 0) {
             return core::RichkwareError{core::ErrorCode::NetworkError, "Socket creation failed"};
         }
@@ -144,7 +145,7 @@ public:
             return core::RichkwareError{core::ErrorCode::NetworkError, "Not connected"};
         }
 
-        if (SSL_write(ssl_, request.c_str(), request.length()) < 0) {
+        if ((int)SSL_write(ssl_, request.c_str(), request.length()) < 0) {
             return core::RichkwareError{core::ErrorCode::NetworkError, "SSL_write failed"};
         }
 
@@ -174,7 +175,7 @@ std::future<core::Result<HttpResponse>> HttpsClient::send_request(const HttpRequ
             case HttpMethod::GET: method_str = "GET"; break;
             case HttpMethod::POST: method_str = "POST"; break;
             case HttpMethod::PUT: method_str = "PUT"; break;
-            case HttpMethod::DELETE: method_str = "DELETE"; break;
+            default: method_str = "GET"; break;
         }
         
         oss << method_str << " " << request.url << " HTTP/1.1\r\n";

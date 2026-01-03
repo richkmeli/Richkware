@@ -124,9 +124,17 @@ public:
         }
 
         // Check for limited resources
+#ifdef _WIN32
+        SYSTEM_INFO sysinfo;
+        GetSystemInfo(&sysinfo);
+        if (sysinfo.dwNumberOfProcessors < 2) {
+            return true;  // Likely sandboxed with limited CPU
+        }
+#else
         if (sysconf(_SC_NPROCESSORS_ONLN) < 2) {
             return true;  // Likely sandboxed with limited CPU
         }
+#endif
 
         return false;
     }
