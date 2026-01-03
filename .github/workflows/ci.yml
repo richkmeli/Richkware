@@ -28,10 +28,6 @@ jobs:
             compiler: msvc
             version: 2022
             cmake_gen: "Visual Studio 17 2022"
-          - os: windows-latest
-            compiler: mingw
-            mingw_url: https://github.com/brechtsanders/winlibs_mingw/releases/download/13.1.0-16.0.5-11.0.0-ucrt-r2/winlibs-x86_64-posix-seh-gcc-13.1.0-mingw-w64ucrt-11.0.0-r2.7z
-            cmake_gen: "MinGW Makefiles"
 
           # macOS build
           - os: macos-latest
@@ -52,6 +48,16 @@ jobs:
       if: runner.os == 'macOS'
       run: |
         brew install cmake openssl googletest
+
+    - name: Set vcpkg triplet (Windows)
+      if: runner.os == 'Windows'
+      shell: powershell
+      run: |
+        if ("${{ matrix.compiler }}" -eq "msvc") {
+          echo "VCPKG_TRIPLET=x64-windows" | Out-File -FilePath $env:GITHUB_ENV -Append
+        } else {
+          echo "VCPKG_TRIPLET=x64-mingw-dynamic" | Out-File -FilePath $env:GITHUB_ENV -Append
+        }
 
     - name: Setup MinGW on Windows
       if: matrix.compiler == 'mingw' && runner.os == 'Windows'
@@ -76,20 +82,15 @@ jobs:
     - name: Install dependencies (Windows)
       if: runner.os == 'Windows'
       run: |
-        C:\vcpkg\vcpkg install --triplet x64-windows openssl
-        C:\vcpkg\vcpkg install --triplet x64-windows gtest
+        C:\vcpkg\vcpkg install --triplet ${{ env.VCPKG_TRIPLET }} openssl
+        C:\vcpkg\vcpkg install --triplet ${{ env.VCPKG_TRIPLET }} gtest
 
     - name: Create build directory
       run: mkdir build
 
     - name: Configure CMake
       working-directory: build
-      run: |
-        cmake .. ^
-        -DCMAKE_BUILD_TYPE=Release ^
-        -DRICHKWARE_BUILD_TESTS=ON ^
-        -DCMAKE_TOOLCHAIN_FILE="${{ env.CMAKE_TOOLCHAIN_FILE }}" ^
-        -G "${{ matrix.cmake_gen }}"
+      run: cmake .. -DCMAKE_BUILD_TYPE=Release -DRICHKWARE_BUILD_TESTS=ON -DCMAKE_TOOLCHAIN_FILE="${{ env.CMAKE_TOOLCHAIN_FILE }}" -G "${{ matrix.cmake_gen }}"
 
     - name: Build
       working-directory: build
