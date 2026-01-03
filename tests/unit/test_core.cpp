@@ -75,9 +75,13 @@ TEST_F(ConfigTest, DefaultValues) {
 TEST_F(ConfigTest, CustomValues) {
     core::Config config{
         .app_name = "TestAgent",
+        .encryption_key = "test_key",
         .server_address = "192.168.1.100",
         .server_port = 9999,
+        .user_id = "test_user",
+        .connection_timeout = std::chrono::milliseconds(30000),
         .enable_encryption = false,
+        .enable_stealth = true,
         .log_level = "debug"
     };
     
