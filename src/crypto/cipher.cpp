@@ -24,7 +24,7 @@ public:
         }
 
         core::Bytes iv(12);
-        if (RAND_bytes(iv.data(), iv.size()) != 1) {
+        if (RAND_bytes(iv.data(), static_cast<int>(iv.size())) != 1) {
             return core::RichkwareError{core::ErrorCode::CryptoError, "Failed to generate IV"};
         }
 
@@ -42,7 +42,7 @@ public:
 
         core::Bytes ciphertext(plaintext.size());
         int len;
-        if (1 != EVP_EncryptUpdate(ctx.ctx, ciphertext.data(), &len, plaintext.data(), plaintext.size())) {
+        if (1 != EVP_EncryptUpdate(ctx.ctx, ciphertext.data(), &len, plaintext.data(), static_cast<int>(plaintext.size()))) {
             return core::RichkwareError{core::ErrorCode::CryptoError, "EVP_EncryptUpdate failed"};
         }
 
@@ -91,7 +91,7 @@ public:
 
         core::Bytes plaintext(encrypted_data.size());
         int len;
-        if (1 != EVP_DecryptUpdate(ctx.ctx, plaintext.data(), &len, encrypted_data.data(), encrypted_data.size())) {
+        if (1 != EVP_DecryptUpdate(ctx.ctx, plaintext.data(), &len, encrypted_data.data(), static_cast<int>(encrypted_data.size()))) {
             return core::RichkwareError{core::ErrorCode::CryptoError, "EVP_DecryptUpdate failed"};
         }
 
@@ -123,7 +123,7 @@ core::Result<core::Bytes> AesGcmCipher::decrypt(const std::vector<uint8_t>& ciph
 // Pbkdf2KeyDerivation implementation
 core::Result<core::Bytes> Pbkdf2KeyDerivation::derive_key(const std::string& password, const std::vector<uint8_t>& salt, uint32_t iterations, std::size_t key_length) const {
     core::Bytes key(key_length);
-    if (1 != PKCS5_PBKDF2_HMAC(password.c_str(), password.length(), salt.data(), salt.size(), iterations, EVP_sha256(), key_length, key.data())) {
+    if (1 != PKCS5_PBKDF2_HMAC(password.c_str(), static_cast<int>(password.length()), salt.data(), static_cast<int>(salt.size()), iterations, EVP_sha256(), static_cast<int>(key_length), key.data())) {
         return core::RichkwareError{core::ErrorCode::CryptoError, "PKCS5_PBKDF2_HMAC failed"};
     }
     return key;
@@ -140,7 +140,7 @@ std::string base64_encode(const core::Bytes& data) {
     bio = BIO_push(b64, bio);
 
     BIO_set_flags(bio, BIO_FLAGS_BASE64_NO_NL);
-    BIO_write(bio, data.data(), data.size());
+    BIO_write(bio, data.data(), static_cast<int>(data.size()));
     BIO_flush(bio);
     BIO_get_mem_ptr(bio, &bufferPtr);
     std::string encoded(bufferPtr->data, bufferPtr->length);
@@ -159,7 +159,7 @@ core::Result<core::Bytes> base64_decode(const std::string& data) {
     bio = BIO_push(b64, bio);
 
     BIO_set_flags(bio, BIO_FLAGS_BASE64_NO_NL);
-    decoded_size = BIO_read(bio, decoded.data(), decoded.size());
+    decoded_size = BIO_read(bio, decoded.data(), static_cast<int>(decoded.size()));
     BIO_free_all(bio);
 
     if (decoded_size < 0) {

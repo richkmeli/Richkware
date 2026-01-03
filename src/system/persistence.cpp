@@ -31,8 +31,8 @@ public:
         }
         
         std::string exe_path = executable_path.string();
-        if (RegSetValueEx(hKey, app_name_.c_str(), 0, REG_SZ, 
-                         (const BYTE*)exe_path.c_str(), exe_path.length() + 1) != ERROR_SUCCESS) {
+        if (RegSetValueEx(hKey, app_name_.c_str(), 0, REG_SZ,
+                         (const BYTE*)exe_path.c_str(), static_cast<DWORD>(exe_path.length() + 1)) != ERROR_SUCCESS) {
             RegCloseKey(hKey);
             return core::RichkwareError{core::ErrorCode::SystemError, "Failed to set registry value"};
         }
