@@ -155,7 +155,7 @@ core::Result<core::Bytes> base64_decode(const std::string& data) {
     int decoded_size = 0;
 
     b64 = BIO_new(BIO_f_base64());
-    bio = BIO_new_mem_buf(data.c_str(), data.length());
+    bio = BIO_new_mem_buf(data.c_str(), static_cast<int>(data.length()));
     bio = BIO_push(b64, bio);
 
     BIO_set_flags(bio, BIO_FLAGS_BASE64_NO_NL);

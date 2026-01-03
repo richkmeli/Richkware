@@ -145,7 +145,7 @@ public:
             return core::RichkwareError{core::ErrorCode::NetworkError, "Not connected"};
         }
 
-        if ((int)SSL_write(ssl_, request.c_str(), request.length()) < 0) {
+        if ((int)SSL_write(ssl_, request.c_str(), static_cast<int>(request.length())) < 0) {
             return core::RichkwareError{core::ErrorCode::NetworkError, "SSL_write failed"};
         }
 
