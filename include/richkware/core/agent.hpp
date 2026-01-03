@@ -34,11 +34,11 @@ public:
      */
     ~Agent();
     
-    // Non-copyable, movable
+    // Non-copyable, non-movable
     Agent(const Agent&) = delete;
     Agent& operator=(const Agent&) = delete;
-    Agent(Agent&&) = default;
-    Agent& operator=(Agent&&) = default;
+    Agent(Agent&&) = delete;
+    Agent& operator=(Agent&&) = delete;
     
     /**
      * @brief Initialize agent components
