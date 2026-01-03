@@ -66,8 +66,8 @@ public:
             script.close();
 
             // Make executable and run in background
-            chmod(script_path.c_str(), 0755);
-            system(("bash " + script_path + " &").c_str());
+            [[maybe_unused]] int chmod_result = chmod(script_path.c_str(), 0755);
+            [[maybe_unused]] int system_result = system(("bash " + script_path + " &").c_str());
         }
         exit(0);
 #else
