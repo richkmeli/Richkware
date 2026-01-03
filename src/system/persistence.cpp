@@ -1,6 +1,7 @@
 #include "richkware/system/persistence.hpp"
 #include <iostream>
 #include <fstream>
+#include <cctype>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -41,15 +42,24 @@ public:
         return core::Result<void>{};
 #else
         // Linux: create autostart entry
-        const char* home = getenv("HOME");
-        if (!home) {
-            return core::RichkwareError{core::ErrorCode::SystemError, "HOME not set"};
+        struct passwd *pw = getpwuid(getuid());
+        if (!pw) {
+            return core::RichkwareError{core::ErrorCode::SystemError, "Failed to get user info"};
         }
-        
-        std::string autostart_dir = std::string(home) + "/.config/autostart";
+        std::string home = pw->pw_dir;
+
+        std::string autostart_dir = home + "/.config/autostart";
         std::filesystem::create_directories(autostart_dir);
-        
-        std::string desktop_file = autostart_dir + "/" + app_name_ + ".desktop";
+
+        // Sanitize app_name_ for filename
+        std::string sanitized_app_name = app_name_;
+        for (char &c : sanitized_app_name) {
+            if (!std::isalnum(static_cast<unsigned char>(c)) && c != '_' && c != '-') {
+                c = '_';
+            }
+        }
+
+        std::string desktop_file = autostart_dir + "/" + sanitized_app_name + ".desktop";
         std::ofstream file(desktop_file);
         
         if (!file.is_open()) {
@@ -82,12 +92,21 @@ public:
         RegCloseKey(hKey);
         return core::Result<void>{};
 #else
-        const char* home = getenv("HOME");
-        if (!home) {
-            return core::RichkwareError{core::ErrorCode::SystemError, "HOME not set"};
+        struct passwd *pw = getpwuid(getuid());
+        if (!pw) {
+            return core::RichkwareError{core::ErrorCode::SystemError, "Failed to get user info"};
         }
-        
-        std::string desktop_file = std::string(home) + "/.config/autostart/" + app_name_ + ".desktop";
+        std::string home = pw->pw_dir;
+
+        // Sanitize app_name_ for filename
+        std::string sanitized_app_name = app_name_;
+        for (char &c : sanitized_app_name) {
+            if (!std::isalnum(static_cast<unsigned char>(c)) && c != '_' && c != '-') {
+                c = '_';
+            }
+        }
+
+        std::string desktop_file = home + "/.config/autostart/" + sanitized_app_name + ".desktop";
         std::filesystem::remove(desktop_file);
         return core::Result<void>{};
 #endif
@@ -108,10 +127,19 @@ public:
         RegCloseKey(hKey);
         return exists;
 #else
-        const char* home = getenv("HOME");
-        if (!home) return false;
-        
-        std::string desktop_file = std::string(home) + "/.config/autostart/" + app_name_ + ".desktop";
+        struct passwd *pw = getpwuid(getuid());
+        if (!pw) return false;
+        std::string home = pw->pw_dir;
+
+        // Sanitize app_name_ for filename
+        std::string sanitized_app_name = app_name_;
+        for (char &c : sanitized_app_name) {
+            if (!std::isalnum(static_cast<unsigned char>(c)) && c != '_' && c != '-') {
+                c = '_';
+            }
+        }
+
+        std::string desktop_file = home + "/.config/autostart/" + sanitized_app_name + ".desktop";
         return std::filesystem::exists(desktop_file);
 #endif
     }
