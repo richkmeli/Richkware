@@ -22,15 +22,15 @@ TEST_F(CryptoTest, EncryptDecryptString) {
     
     // Encrypt
     auto encrypt_result = cipher_manager_->encrypt_string(plaintext);
-    ASSERT_TRUE(encrypt_result.has_value());
-    
+    ASSERT_TRUE(encrypt_result);
+
     const std::string ciphertext = encrypt_result.value();
     EXPECT_NE(plaintext, ciphertext);
     EXPECT_FALSE(ciphertext.empty());
-    
+
     // Decrypt
     auto decrypt_result = cipher_manager_->decrypt_string(ciphertext);
-    ASSERT_TRUE(decrypt_result.has_value());
+    ASSERT_TRUE(decrypt_result);
     
     const std::string decrypted = decrypt_result.value();
     EXPECT_EQ(plaintext, decrypted);
@@ -40,11 +40,11 @@ TEST_F(CryptoTest, GenerateRandomBytes) {
     const std::size_t size = 32;
     
     auto result1 = crypto::CipherManager::generate_random(size);
-    ASSERT_TRUE(result1.has_value());
+    ASSERT_TRUE(result1);
     EXPECT_EQ(size, result1.value().size());
-    
+
     auto result2 = crypto::CipherManager::generate_random(size);
-    ASSERT_TRUE(result2.has_value());
+    ASSERT_TRUE(result2);
     EXPECT_EQ(size, result2.value().size());
     
     // Random bytes should be different
@@ -55,7 +55,7 @@ TEST_F(CryptoTest, InvalidPassword) {
     const std::string empty_password = "";
     
     auto result = cipher_manager_->set_password(empty_password);
-    EXPECT_FALSE(result.has_value());
+    EXPECT_FALSE(result);
     EXPECT_EQ(core::ErrorCode::InvalidArgument, result.error().code());
 }
 
