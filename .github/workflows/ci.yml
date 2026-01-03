@@ -42,7 +42,7 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential cmake libssl-dev libgtest-dev libx11-dev libpng-dev
+        sudo apt-get install -y build-essential cmake libssl-dev libgtest-dev libx11-dev libpng-dev libxtst-dev
 
     - name: Install macOS dependencies
       if: runner.os == 'macOS'
