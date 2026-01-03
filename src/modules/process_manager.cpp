@@ -32,6 +32,7 @@ public:
 #elif defined(__linux__)
         return enumerate_processes_linux(config);
 #else
+        (void)config;
         return core::RichkwareError{core::ErrorCode::SystemError, "Process enumeration not supported on this platform"};
 #endif
     }
@@ -42,6 +43,7 @@ public:
 #elif defined(__linux__)
         return get_process_info_linux(pid);
 #else
+        (void)pid;
         return core::RichkwareError{core::ErrorCode::SystemError, "Process info not supported on this platform"};
 #endif
     }
@@ -52,6 +54,7 @@ public:
 #elif defined(__linux__)
         return terminate_process_linux(pid);
 #else
+        (void)pid;
         return core::RichkwareError{core::ErrorCode::SystemError, "Process termination not supported on this platform"};
 #endif
     }
@@ -64,6 +67,9 @@ public:
 #elif defined(__linux__)
         return start_process_linux(executable_path, arguments, working_directory);
 #else
+        (void)executable_path;
+        (void)arguments;
+        (void)working_directory;
         return core::RichkwareError{core::ErrorCode::SystemError, "Process starting not supported on this platform"};
 #endif
     }
