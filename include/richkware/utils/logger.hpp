@@ -6,6 +6,7 @@
 #include <sstream>
 #include <mutex>
 #include <iomanip>
+#include <ctime>
 
 namespace richkware::utils {
 
@@ -41,7 +42,24 @@ public:
         // Timestamp
         auto now = std::chrono::system_clock::now();
         auto time_t = std::chrono::system_clock::to_time_t(now);
-        std::tm* tm_ptr = std::localtime(&time_t);
+        std::tm tm_buf{};
+        std::tm* tm_ptr = nullptr;
+
+#if defined(_WIN32) || defined(_WIN64)
+        // Use thread-safe localtime_s on Windows
+        if (::localtime_s(&tm_buf, &time_t) == 0) {
+            tm_ptr = &tm_buf;
+        }
+#elif defined(__unix__) || defined(__APPLE__)
+        // Use thread-safe localtime_r on POSIX
+        if (::localtime_r(&time_t, &tm_buf) != nullptr) {
+            tm_ptr = &tm_buf;
+        }
+#else
+        // Fallback to potentially non-thread-safe std::localtime
+        tm_ptr = std::localtime(&time_t);
+#endif
+
         if (tm_ptr != nullptr) {
             oss << std::put_time(tm_ptr, "%a %b %d %H:%M:%S %Y") << " ";
         } else {
