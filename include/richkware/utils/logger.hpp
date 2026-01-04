@@ -6,8 +6,21 @@
 #include <sstream>
 #include <mutex>
 #include <iomanip>
+#include <ctime>
 
 namespace richkware::utils {
+
+inline std::tm* safeLocalTime(const std::time_t* timep, std::tm& out) {
+#if defined(_POSIX_THREAD_SAFE_FUNCTIONS) || defined(__unix__) || defined(__APPLE__)
+    if (localtime_r(timep, &out) == nullptr) {
+        return nullptr;
+    }
+    return &out;
+#else
+    (void)out;
+    return std::localtime(timep);
+#endif
+}
 
 enum class LogLevel {
     DEBUG,
@@ -41,7 +54,8 @@ public:
         // Timestamp
         auto now = std::chrono::system_clock::now();
         auto time_t = std::chrono::system_clock::to_time_t(now);
-        std::tm* tm_ptr = std::localtime(&time_t);
+        std::tm tm_buf{};
+        std::tm* tm_ptr = safeLocalTime(&time_t, tm_buf);
         if (tm_ptr != nullptr) {
             oss << std::put_time(tm_ptr, "%a %b %d %H:%M:%S %Y") << " ";
         } else {
@@ -73,7 +87,8 @@ public:
         // Timestamp
         auto now = std::chrono::system_clock::now();
         auto time_t = std::chrono::system_clock::to_time_t(now);
-        std::tm* tm_ptr = std::localtime(&time_t);
+        std::tm tm_buf{};
+        std::tm* tm_ptr = safeLocalTime(&time_t, tm_buf);
         if (tm_ptr != nullptr) {
             oss << std::put_time(tm_ptr, "%a %b %d %H:%M:%S %Y") << " ";
         } else {
